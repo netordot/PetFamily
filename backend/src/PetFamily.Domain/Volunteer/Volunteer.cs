@@ -11,16 +11,24 @@ public class Volunteer
     public string Description { get; }
     public int Experience { get;}
     public int PhoneNumber { get; }
-
-    public int PetsRequireHome { get; }
-    public int PetsAdopted { get; } 
-    public int PetsOnTreatment { get; }
-
     public List<Pet> Pets { get; } = [];
     public List<Requisite> Requisites { get; } = [];
     public List<Social> Socials { get; } = [];
+
+    public int PetsRequireHome()
+    {
+        return Pets.Count(p => p.Status ==PetStatus.SearchesForHome);
+    }
+
+    public int PetsRequireHelp()
+    {
+        return Pets.Count(p => p.Status == PetStatus.NeedsHelp);
+    }
+
+    public int PetsAdopted()
+    {
+        return Pets.Count(p => p.Status ==PetStatus.Adopted);
+    }
     
-
-
 
 }
