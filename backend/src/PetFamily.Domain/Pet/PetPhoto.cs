@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain;
 
-public class PetPhoto : ValueObject
+public record PetPhoto 
 {
     public string Path { get; }
     public bool IsMain { get; }
@@ -21,11 +21,5 @@ public class PetPhoto : ValueObject
             return Result.Failure<PetPhoto>("Path cannot be null");
         }
         return new PetPhoto(path, isMain);  
-    }
-    
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Path;
-        yield return IsMain;
     }
 }
