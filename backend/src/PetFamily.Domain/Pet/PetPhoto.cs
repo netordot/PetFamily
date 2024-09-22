@@ -3,25 +3,27 @@ using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain;
 
-public class PetPhoto : ValueObject
+public class PetPhoto 
 {
+    public Guid Id { get; }
     public string Path { get; }
     public bool isMain { get; }
 
-    private  PetPhoto(string path, bool isMain)
+    private PetPhoto()
     {
+        
+    }
+
+    private  PetPhoto(string path, bool isMain, Guid id)
+    {
+        Id = id;
         Path = path;
         this.isMain = isMain; 
     }
 
     public static Result<PetPhoto> Create(string path, bool isMain)
     {
-        return new PetPhoto(path, isMain);  
+        return new PetPhoto(path, isMain, Guid.NewGuid());  
     }
     
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Path;
-        yield return isMain;
-    }
 }

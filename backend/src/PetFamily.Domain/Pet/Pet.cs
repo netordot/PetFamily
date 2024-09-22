@@ -1,4 +1,5 @@
 ﻿using System.Security.AccessControl;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain;
 
@@ -30,7 +31,7 @@ public class Pet
     public DateTime DateOfBirth { get; }
     public DateTime CreatedAt { get; }
 
-    public List<Requisite> Requisites { get; } = [];
+    public Requisites? Requisites { get; }
     public List<PetPhoto> Photos { get; } = [];
 
 }

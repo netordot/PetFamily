@@ -1,7 +1,12 @@
 ﻿namespace PetFamily.Domain.Volunteer;
 
-public class Social
+public record Social
 {
-    public string Name { get; }
-    public string Link { get; }
+    public Social(string name, string link)
+    {
+        Name = name;
+        Link = link;
+    }
+    public string Name { get; private set; }
+    public string Link { get; private set; }
 }
