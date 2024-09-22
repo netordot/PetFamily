@@ -9,7 +9,13 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 {
     public void Configure(EntityTypeBuilder<Pet> builder)
     {
+        builder.ToTable("pets");
         builder.HasKey(p => p.Id);
+        
+        builder.Property(p => p.Id)
+            .HasConversion(
+                Id => Id.Value,
+                value => PetId.Create(value));
 
         builder.Property(p => p.Description)
             .HasMaxLength(Constants.MAX_DESCRIPTION_SIZE);
@@ -19,7 +25,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
-            pbuilder.ToJson();
+            pbuilder.ToJson("pet_requisites");
 
             pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
             {

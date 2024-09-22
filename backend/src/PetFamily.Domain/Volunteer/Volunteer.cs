@@ -1,12 +1,12 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Volunteer;
 
 
-public class Volunteer
+public class Volunteer : Shared.Entity<VolunteerId>
 {
-    public Guid Id { get;}
-
+    public VolunteerId Id { get; }
     public string FullName { get; }
 
     public string Email { get; }
@@ -17,6 +17,13 @@ public class Volunteer
     
     public Requisites? Requisites { get; }
     public VolunteerDetails Details { get; }
+
+    private Volunteer(VolunteerId id) : base(id)
+    {
+        
+    }
+    
+    // добавить ctor и result 
 
     public int PetsRequireHome()
     {

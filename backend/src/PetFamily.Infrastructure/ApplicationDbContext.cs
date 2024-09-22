@@ -9,8 +9,8 @@ namespace PetFamily.Infrastructure;
 
 public class ApplicationDbContext(IConfiguration _configuration) : DbContext
 {
-    public DbSet<Pet> Pets => Set<Pet>();
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
+    
     private const string Database = nameof(Database);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,6 +23,7 @@ public class ApplicationDbContext(IConfiguration _configuration) : DbContext
         optionsBuilder.UseNpgsql(_configuration.GetConnectionString(Database));
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+        optionsBuilder.EnableSensitiveDataLogging();
     }
     
     private ILoggerFactory CreateLoggerFactory()

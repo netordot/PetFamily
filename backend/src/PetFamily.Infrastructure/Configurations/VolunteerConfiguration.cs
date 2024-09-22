@@ -10,22 +10,20 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 {
     public void Configure(EntityTypeBuilder<Volunteer> builder)
     {
+        builder.ToTable("volunteers");
         builder.HasKey(v => v.Id);
+        
+        builder.Property(v => v.Id)
+            .HasConversion(
+                Id => Id.Value,
+                value => VolunteerId.Create(value));
         
         builder.Property(v => v.Description)
             .HasMaxLength(Constants.MAX_DESCRIPTION_SIZE);
         
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
-            pbuilder.ToJson();
-        
-            // pbuilder.OwnsOne(pb => pb.Description);
-            // pbuilder.OwnsOne(pb => pb.Title);
-        });
-
-        builder.OwnsOne(p => p.Requisites, pbuilder =>
-        {
-            pbuilder.ToJson();
+            pbuilder.ToJson("volunteer_requisites");
 
             pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
             {

@@ -1,29 +1,30 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain;
 
-public class PetPhoto 
+public class PetPhoto : Shared.Entity<PetPhotoId>
 {
-    public Guid Id { get; }
     public string Path { get; }
-    public bool isMain { get; }
+    public bool IsMain { get; }
 
-    private PetPhoto()
+    private PetPhoto(PetPhotoId id) : base(id)
     {
-        
     }
 
-    private  PetPhoto(string path, bool isMain, Guid id)
+    private  PetPhoto(string path, bool isMain, PetPhotoId petPhotoId) : base(petPhotoId)
     {
-        Id = id;
         Path = path;
-        this.isMain = isMain; 
+        IsMain = isMain; 
     }
 
-    public static Result<PetPhoto> Create(string path, bool isMain)
+    public static Result<PetPhoto> Create(string path, bool isMain, PetPhotoId petPhotoId)
     {
-        return new PetPhoto(path, isMain, Guid.NewGuid());  
+        if (string.IsNullOrEmpty(path))
+        {
+            return Result.Failure<PetPhoto>("Path cannot be null or empty.");
+        }
+        
+        return new PetPhoto(path, isMain, petPhotoId);  
     }
     
 }

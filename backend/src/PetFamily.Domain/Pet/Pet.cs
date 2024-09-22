@@ -1,16 +1,16 @@
 ﻿using System.Security.AccessControl;
+using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain;
 
-public class Pet
+public class Pet : Shared.Entity<PetId>
 { 
     // for ef core
-    private Pet()
+    private Pet(PetId id) : base(id)
     {
         
     }
-    public Guid Id { get; }
     
     public string Name { get; }
     public string Species { get; }

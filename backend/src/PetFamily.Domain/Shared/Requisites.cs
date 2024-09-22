@@ -2,5 +2,5 @@
 
 public class Requisites
 {
-    public List<Requisite> Value { get; private set; }
+    public IReadOnlyList<Requisite> Value { get; private set; }
 }
