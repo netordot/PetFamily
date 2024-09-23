@@ -12,7 +12,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public string Email { get; }
     public string Description { get; }
     public int Experience { get;}
-    public int PhoneNumber { get; }
+    public string PhoneNumber { get; }
     public List<Pet> Pets { get; } = [];
     
     private Volunteer (VolunteerId id) : base(id)
@@ -20,7 +20,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
         
     }
 
-    public Volunteer(FullName name, string email, string description, int experience,int phoneNumber, 
+    public Volunteer(FullName name, string email, string description, int experience,string  phoneNumber, 
         List<Pet> pets, Adress adress, Requisites requisites, VolunteerDetails details, VolunteerId id) : base(id)
     {
         Name = name;
@@ -40,7 +40,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public int PetsAdopted() => Pets.Count(p => p.Status == PetStatus.Adopted);
     
     public static Result<Volunteer> Create(FullName name, string email, string description, int experience,
-        int phoneNumber, List<Pet> pets, Adress adress, Requisites requisites, VolunteerDetails details, VolunteerId id)
+        string phoneNumber, List<Pet> pets, Adress adress, Requisites requisites, VolunteerDetails details, VolunteerId id)
     {
         if (name == null)
         {
@@ -52,7 +52,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
             return Result.Failure<Volunteer>("Email is required");
         }
 
-        if (phoneNumber == null)
+        if (string.IsNullOrEmpty(phoneNumber))
         {
             return Result.Failure<Volunteer>("Phone number is required");
         }
