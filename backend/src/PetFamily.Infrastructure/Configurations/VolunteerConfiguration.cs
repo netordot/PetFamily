@@ -35,5 +35,30 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     .HasMaxLength(Constants.MAX_TITLE_SIZE);
             });
         });
+
+        builder.OwnsOne(v => v.Emails, vbuilder =>
+        {
+            vbuilder.ToJson("volunteer_emails");
+            vbuilder.OwnsMany(vbuilder => vbuilder.Mails, mbuilder =>
+            {
+                mbuilder.Property(m => m.Mail).IsRequired();
+            });
+        });
+
+        builder.OwnsOne(v => v.Numbers, vbuilder =>
+        {
+            vbuilder.ToJson("volunteer_phone_number");
+            vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
+            {
+                nb.Property(n => n.Number).IsRequired();
+            });
+
+        });
+
+        builder.OwnsOne(v => v.Name, nb =>
+        {
+            nb.ToJson("volunteer_name");
+            nb.Property(n => n.Name).IsRequired();
+        });
     }
 }

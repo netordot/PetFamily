@@ -37,6 +37,16 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                         .HasMaxLength(Constants.MAX_TITLE_SIZE);
             });
         });
+        
+        builder.OwnsOne(v => v.PhoneNumbers, vbuilder =>
+        {
+            vbuilder.ToJson("pet_phone_number");
+            vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
+            {
+                nb.Property(n => n.Number).IsRequired();
+            });
+
+        });
 
 
     }

@@ -18,7 +18,7 @@ public class Pet : Shared.Entity<PetId>
     public string Color { get; }
     public string Description { get; }
     public string HealthCondition { get; }
-    public string ContactPhoneNumber { get;} 
+    public PhoneNumbers PhoneNumbers { get; } 
     public Adress Adress { get; }
     public PetStatus Status { get; }
 
@@ -34,7 +34,7 @@ public class Pet : Shared.Entity<PetId>
     public List<PetPhoto> Photos { get; } = [];
 
     private Pet(string name, string species, string breed, string color, string description, string healthCondition,
-        string contactPhoneNumber, Adress adress, PetStatus status, double height, double weight, 
+        PhoneNumbers contactPhoneNumbers, Adress adress, PetStatus status, double height, double weight, 
         bool isCastrated, bool isVaccinated,DateTime dateOfBirth, DateTime createdAt, List<PetPhoto> photos, PetId id) : base(id)
     {
         Name = name;
@@ -43,7 +43,7 @@ public class Pet : Shared.Entity<PetId>
         Color = color;
         Description = description;
         HealthCondition = healthCondition;
-        ContactPhoneNumber = contactPhoneNumber;
+        PhoneNumbers = contactPhoneNumbers;
         Adress = adress;
         Status = status;
         Height = height;
@@ -56,7 +56,7 @@ public class Pet : Shared.Entity<PetId>
     }
 
     public static Result<Pet> Create(string name, string species, string breed, string color, string description,
-        string healthCondition, string contactPhoneNumber, Adress adress, PetStatus status, double height, double weight,
+        string healthCondition, PhoneNumbers contactPhoneNumbers, Adress adress, PetStatus status, double height, double weight,
         bool isCastrated, bool isVaccinated, DateTime dateOfBirth, DateTime createdAt, List<PetPhoto> photos, PetId id)
     {
         if (String.IsNullOrEmpty(name))
@@ -64,7 +64,7 @@ public class Pet : Shared.Entity<PetId>
             return Result.Failure<Pet>("Name is required");
         }
 
-        if (string.IsNullOrEmpty(contactPhoneNumber))
+        if (contactPhoneNumbers == null)
         {
             return Result.Failure<Pet>("Contact phone number is required");
         }
@@ -79,7 +79,7 @@ public class Pet : Shared.Entity<PetId>
             return Result.Failure<Pet>("Status is required");
         }
         
-        return new Pet(name, species, breed, color, description, healthCondition, contactPhoneNumber, 
+        return new Pet(name, species, breed, color, description, healthCondition, contactPhoneNumbers, 
             adress, status, height, weight, isCastrated, isVaccinated, dateOfBirth, createdAt,photos, id);
     }
 
