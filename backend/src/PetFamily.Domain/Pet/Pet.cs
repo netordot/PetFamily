@@ -19,7 +19,7 @@ public class Pet : Shared.Entity<PetId>
     public string Description { get; }
     public string HealthCondition { get; }
     public string ContactPhoneNumber { get;} 
-    public string Adress { get; }
+    public Adress Adress { get; }
     
     public PetStatus Status { get; }
 
