@@ -1,22 +1,27 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Shared;
 
 public record Email
 {
-    private string Pattern { get; } = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n";
+    private const string Pattern  = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n";
     public string Mail { get;private set; }
 
-    public Email(string mail)
+    private Email(string mail)
     {
-        if (Regex.IsMatch(mail, Pattern))
-            Mail = mail;
+        Mail = mail;
+    }
 
-        else
+    public static Result<Email> Create(string mail)
+    {
+        if (!Regex.IsMatch(mail, Pattern))
         {
-            throw new ArgumentException($"Email address '{mail}' is not valid.");
+            return Result.Failure<Email>($"Email address '{mail}' is not valid.");
         }
+        
+        return new Email(mail);
     }
     
 }

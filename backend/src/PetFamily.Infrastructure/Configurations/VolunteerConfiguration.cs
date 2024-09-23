@@ -23,7 +23,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
-            pbuilder.ToJson("volunteer_requisites");
+            pbuilder.ToJson("requisites");
 
             pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
             {
@@ -38,7 +38,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.OwnsOne(v => v.Emails, vbuilder =>
         {
-            vbuilder.ToJson("volunteer_emails");
+            vbuilder.ToJson("emails");
             vbuilder.OwnsMany(vbuilder => vbuilder.Mails, mbuilder =>
             {
                 mbuilder.Property(m => m.Mail).IsRequired();
@@ -47,7 +47,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.OwnsOne(v => v.Numbers, vbuilder =>
         {
-            vbuilder.ToJson("volunteer_phone_number");
+            vbuilder.ToJson("phone_number");
             vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
             {
                 nb.Property(n => n.Number).IsRequired();
@@ -55,10 +55,17 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         });
 
-        builder.OwnsOne(v => v.Name, nb =>
+        builder.ComplexProperty(v => v.Name, vbuilder =>
         {
-            nb.ToJson("volunteer_name");
-            nb.Property(n => n.Name).IsRequired();
+            vbuilder.Property(n => n.Name)
+                .IsRequired()
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+            
+            vbuilder.Property(v => v.MiddleName)
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+            vbuilder.Property(v => v.LastName)
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
         });
     }
 }

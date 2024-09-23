@@ -25,7 +25,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
-            pbuilder.ToJson("pet_requisites");
+            pbuilder.ToJson("requisites");
 
             pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
             {
@@ -40,7 +40,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         
         builder.OwnsOne(v => v.PhoneNumbers, vbuilder =>
         {
-            vbuilder.ToJson("pet_phone_number");
+            vbuilder.ToJson("phone_number");
             vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
             {
                 nb.Property(n => n.Number).IsRequired();
