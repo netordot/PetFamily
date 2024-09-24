@@ -67,5 +67,20 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
 
         });
+
+        builder.ComplexProperty(v => v.Adress, ab =>
+        {
+            ab.Property(a => a.City)
+                .IsRequired()
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
+            ab.Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
+            ab.Property(a => a.BuildingNumber)
+                .IsRequired();
+
+        });
     }
 }

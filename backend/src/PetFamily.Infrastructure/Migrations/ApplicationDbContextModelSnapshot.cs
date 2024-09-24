@@ -45,6 +45,31 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
 
+                    b.ComplexProperty<Dictionary<string, object>>("Adress", "PetFamily.Domain.Pet.Adress#Adress", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("BuildingNumber")
+                                .HasColumnType("integer")
+                                .HasColumnName("adress_building_number");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("adress_city");
+
+                            b1.Property<int?>("CropsNumber")
+                                .HasColumnType("integer")
+                                .HasColumnName("adress_crops_number");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("adress_street");
+                        });
+
                     b.HasKey("Id")
                         .HasName("pk_pets");
 
@@ -93,6 +118,31 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasMaxLength(2500)
                         .HasColumnType("character varying(2500)")
                         .HasColumnName("description");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Adress", "PetFamily.Domain.Volunteer.Volunteer.Adress#Adress", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("BuildingNumber")
+                                .HasColumnType("integer")
+                                .HasColumnName("adress_building_number");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("adress_city");
+
+                            b1.Property<int?>("CropsNumber")
+                                .HasColumnType("integer")
+                                .HasColumnName("adress_crops_number");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("adress_street");
+                        });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PetFamily.Domain.Volunteer.Volunteer.Name#FullName", b1 =>
                         {
