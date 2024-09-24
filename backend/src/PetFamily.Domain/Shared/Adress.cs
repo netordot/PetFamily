@@ -4,6 +4,10 @@ namespace PetFamily.Domain.Shared;
 
 public record Adress
 {
+    private Adress()
+    {
+        
+    }
     public string City { get; private set; }
     public string  Street { get; private set; }
     public int  BuildingNumber { get; private set; }

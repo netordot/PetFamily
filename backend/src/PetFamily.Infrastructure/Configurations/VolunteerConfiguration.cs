@@ -23,7 +23,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
-            pbuilder.ToJson("volunteer_requisites");
+            pbuilder.ToJson("requisites");
 
             pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
             {
@@ -34,6 +34,53 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_TITLE_SIZE);
             });
+        });
+
+        builder.OwnsOne(v => v.Emails, vbuilder =>
+        {
+            vbuilder.ToJson("emails");
+            vbuilder.OwnsMany(vbuilder => vbuilder.Mails, mbuilder =>
+            {
+                mbuilder.Property(m => m.Mail).IsRequired();
+            });
+        });
+
+        builder.OwnsOne(v => v.Numbers, vbuilder =>
+        {
+            vbuilder.ToJson("phone_number");
+            vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
+            {
+                nb.Property(n => n.Number).IsRequired();
+            });
+
+        });
+
+        builder.ComplexProperty(v => v.Name, vbuilder =>
+        {
+            vbuilder.Property(n => n.Name)
+                .IsRequired()
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+            
+            vbuilder.Property(v => v.MiddleName)
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+            vbuilder.Property(v => v.LastName)
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
+        });
+
+        builder.ComplexProperty(v => v.Adress, ab =>
+        {
+            ab.Property(a => a.City)
+                .IsRequired()
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
+            ab.Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
+            ab.Property(a => a.BuildingNumber)
+                .IsRequired();
+
         });
     }
 }

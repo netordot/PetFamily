@@ -25,7 +25,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
-            pbuilder.ToJson("pet_requisites");
+            pbuilder.ToJson("requisites");
 
             pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
             {
@@ -36,6 +36,31 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                         .IsRequired()
                         .HasMaxLength(Constants.MAX_TITLE_SIZE);
             });
+        });
+        
+        builder.OwnsOne(v => v.PhoneNumbers, vbuilder =>
+        {
+            vbuilder.ToJson("phone_number");
+            vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
+            {
+                nb.Property(n => n.Number).IsRequired();
+            });
+
+        });
+        
+        builder.ComplexProperty(v => v.Adress, ab =>
+        {
+            ab.Property(a => a.City)
+                .IsRequired()
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
+            ab.Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
+            ab.Property(a => a.BuildingNumber)
+                .IsRequired();
+
         });
 
 
