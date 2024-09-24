@@ -63,6 +63,15 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         });
 
-
+        builder.ComplexProperty(p => p.SpeciesBreed, pb =>
+        {
+            pb.Property(sb => sb.BreedId)
+                .IsRequired();
+            
+            pb.Property(sb => sb.SpeciesId)
+                .HasConversion(
+                    Id => Id.Value,
+                    value => SpeciesId.Create(value));
+        });
     }
 }

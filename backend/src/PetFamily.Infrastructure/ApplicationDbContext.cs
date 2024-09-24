@@ -10,6 +10,7 @@ namespace PetFamily.Infrastructure;
 public class ApplicationDbContext(IConfiguration _configuration) : DbContext
 {
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
+    public DbSet<Species> Species => Set<Species>();
     
     private const string Database = nameof(Database);
 

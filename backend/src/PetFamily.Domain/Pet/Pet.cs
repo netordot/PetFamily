@@ -13,8 +13,7 @@ public class Pet : Shared.Entity<PetId>
     }
     
     public string Name { get; }
-    public string Species { get; }
-    public string Breed { get; }
+    public SpeciesBreed SpeciesBreed { get;  }
     public string Color { get; }
     public string Description { get; }
     public string HealthCondition { get; }
@@ -33,13 +32,12 @@ public class Pet : Shared.Entity<PetId>
     public Requisites? Requisites { get; }
     public List<PetPhoto> Photos { get; } = [];
 
-    private Pet(string name, string species, string breed, string color, string description, string healthCondition,
+    private Pet(string name, SpeciesBreed speciesBreed, string color, string description, string healthCondition,
         PhoneNumbers contactPhoneNumbers, Adress adress, PetStatus status, double height, double weight, 
         bool isCastrated, bool isVaccinated,DateTime dateOfBirth, DateTime createdAt, List<PetPhoto> photos, PetId id) : base(id)
     {
         Name = name;
-        Species = species;
-        Breed = breed;
+        SpeciesBreed = speciesBreed;
         Color = color;
         Description = description;
         HealthCondition = healthCondition;
@@ -55,7 +53,7 @@ public class Pet : Shared.Entity<PetId>
         Photos = photos;
     }
 
-    public static Result<Pet> Create(string name, string species, string breed, string color, string description,
+    public static Result<Pet> Create(string name, SpeciesBreed speciesBreed, string color, string description,
         string healthCondition, PhoneNumbers contactPhoneNumbers, Adress adress, PetStatus status, double height, double weight,
         bool isCastrated, bool isVaccinated, DateTime dateOfBirth, DateTime createdAt, List<PetPhoto> photos, PetId id)
     {
@@ -79,7 +77,7 @@ public class Pet : Shared.Entity<PetId>
             return Result.Failure<Pet>("Status is required");
         }
         
-        return new Pet(name, species, breed, color, description, healthCondition, contactPhoneNumbers, 
+        return new Pet(name, speciesBreed, color, description, healthCondition, contactPhoneNumbers, 
             adress, status, height, weight, isCastrated, isVaccinated, dateOfBirth, createdAt,photos, id);
     }
 
