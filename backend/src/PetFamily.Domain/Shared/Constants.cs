@@ -2,7 +2,7 @@
 
 public class Constants
 {
-    public const int MAX_DESCRIPTION_SIZE = 2500;
-    public const int MAX_TITLE_SIZE = 100;
+    public const int MAX_LONG_TEXT_SIZE = 2500;
+    public const int MAX_SHORT_TEXT_SIZE = 100;
 
 }

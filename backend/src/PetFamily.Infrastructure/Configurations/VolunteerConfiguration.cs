@@ -19,7 +19,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 value => VolunteerId.Create(value));
         
         builder.Property(v => v.Description)
-            .HasMaxLength(Constants.MAX_DESCRIPTION_SIZE);
+            .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
         
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
@@ -29,10 +29,10 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             {
                 vb.Property(v => v.Description)
                     .IsRequired()
-                    .HasMaxLength(Constants.MAX_DESCRIPTION_SIZE);
+                    .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
                 vb.Property(v => v.Title)
                     .IsRequired()
-                    .HasMaxLength(Constants.MAX_TITLE_SIZE);
+                    .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
             });
         });
 
@@ -59,12 +59,16 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         {
             vbuilder.Property(n => n.Name)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasColumnName("name");
             
             vbuilder.Property(v => v.MiddleName)
-                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasColumnName("middle_name");
+            
             vbuilder.Property(v => v.LastName)
-                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasColumnName("last_name");
 
         });
 
@@ -72,14 +76,19 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         {
             ab.Property(a => a.City)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasColumnName("city");
 
             ab.Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasColumnName("street");
 
             ab.Property(a => a.BuildingNumber)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnName("building_number");
+            ab.Property(a => a.CropsNumber)
+                .HasColumnName("crops_number");
 
         });
     }

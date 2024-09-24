@@ -6,7 +6,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
 {
     public FullName Name { get; private set; }
     public Requisites? Requisites { get; }
-    public VolunteerDetails Details { get; }
+    public VolunteerDetails? Details { get; }
     public Address Address { get;  }
     
     public Emails Emails { get; }
