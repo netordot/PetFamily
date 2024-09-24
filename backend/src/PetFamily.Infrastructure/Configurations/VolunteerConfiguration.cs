@@ -68,7 +68,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         });
 
-        builder.ComplexProperty(v => v.Adress, ab =>
+        builder.ComplexProperty(v => v.Address, ab =>
         {
             ab.Property(a => a.City)
                 .IsRequired()

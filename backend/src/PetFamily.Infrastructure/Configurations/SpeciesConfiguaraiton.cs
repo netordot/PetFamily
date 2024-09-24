@@ -22,5 +22,8 @@ public class SpeciesConfiguaraiton :IEntityTypeConfiguration<Species>
         builder.Property(s => s.Name)
             .IsRequired()
             .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+
+        builder.HasMany(s => s.Breeds)
+            .WithOne();
     }
 }

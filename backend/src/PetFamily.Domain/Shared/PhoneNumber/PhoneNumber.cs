@@ -3,10 +3,9 @@ using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Shared.PhoneNumber;
 
-public class PhoneNumber
+public record PhoneNumber
 {
     private const string Pattern  = "^((\\+7|8)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$\n";
-    
     public string Number { get; private set; }
 
     private PhoneNumber(string number)

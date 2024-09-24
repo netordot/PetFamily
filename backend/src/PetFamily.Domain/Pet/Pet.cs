@@ -18,7 +18,7 @@ public class Pet : Shared.Entity<PetId>
     public string Description { get; }
     public string HealthCondition { get; }
     public PhoneNumbers PhoneNumbers { get; } 
-    public Adress Adress { get; }
+    public Address Address { get; }
     public PetStatus Status { get; }
 
     public double Height { get; }
@@ -32,9 +32,22 @@ public class Pet : Shared.Entity<PetId>
     public Requisites? Requisites { get; }
     public List<PetPhoto> Photos { get; } = [];
 
-    private Pet(string name, SpeciesBreed speciesBreed, string color, string description, string healthCondition,
-        PhoneNumbers contactPhoneNumbers, Adress adress, PetStatus status, double height, double weight, 
-        bool isCastrated, bool isVaccinated,DateTime dateOfBirth, DateTime createdAt, List<PetPhoto> photos, PetId id) : base(id)
+    private Pet(string name, 
+        SpeciesBreed speciesBreed,
+        string color,
+        string description, 
+        string healthCondition,
+        PhoneNumbers contactPhoneNumbers,
+        Address address,
+        PetStatus status, 
+        double height, 
+        double weight, 
+        bool isCastrated,
+        bool isVaccinated,
+        DateTime dateOfBirth, 
+        DateTime createdAt, 
+        List<PetPhoto> photos, 
+        PetId id) : base(id)
     {
         Name = name;
         SpeciesBreed = speciesBreed;
@@ -42,7 +55,7 @@ public class Pet : Shared.Entity<PetId>
         Description = description;
         HealthCondition = healthCondition;
         PhoneNumbers = contactPhoneNumbers;
-        Adress = adress;
+        Address = address;
         Status = status;
         Height = height;
         Weight = weight;
@@ -53,9 +66,22 @@ public class Pet : Shared.Entity<PetId>
         Photos = photos;
     }
 
-    public static Result<Pet> Create(string name, SpeciesBreed speciesBreed, string color, string description,
-        string healthCondition, PhoneNumbers contactPhoneNumbers, Adress adress, PetStatus status, double height, double weight,
-        bool isCastrated, bool isVaccinated, DateTime dateOfBirth, DateTime createdAt, List<PetPhoto> photos, PetId id)
+    public static Result<Pet> Create(string name,
+        SpeciesBreed speciesBreed,
+        string color,
+        string description,
+        string healthCondition,
+        PhoneNumbers contactPhoneNumbers,
+        Address address,
+        PetStatus status,
+        double height,
+        double weight,
+        bool isCastrated,
+        bool isVaccinated,
+        DateTime dateOfBirth,
+        DateTime createdAt,
+        List<PetPhoto> photos,
+        PetId id)
     {
         if (String.IsNullOrEmpty(name))
         {
@@ -67,7 +93,7 @@ public class Pet : Shared.Entity<PetId>
             return Result.Failure<Pet>("Contact phone number is required");
         }
 
-        if (adress == null)
+        if (address == null)
         {
             return Result.Failure<Pet>("Adress is required");
         }
@@ -77,8 +103,22 @@ public class Pet : Shared.Entity<PetId>
             return Result.Failure<Pet>("Status is required");
         }
         
-        return new Pet(name, speciesBreed, color, description, healthCondition, contactPhoneNumbers, 
-            adress, status, height, weight, isCastrated, isVaccinated, dateOfBirth, createdAt,photos, id);
+        return new Pet(name, 
+            speciesBreed,
+            color,
+            description,
+            healthCondition,
+            contactPhoneNumbers, 
+            address, 
+            status, 
+            height,
+            weight,
+            isCastrated,
+            isVaccinated, 
+            dateOfBirth, 
+            createdAt,
+            photos, 
+            id);
     }
 
 }
