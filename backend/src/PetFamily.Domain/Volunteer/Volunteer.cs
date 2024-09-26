@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared;
+﻿using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Volunteer;
 public class Volunteer : Shared.Entity<VolunteerId>
@@ -59,17 +58,17 @@ public class Volunteer : Shared.Entity<VolunteerId>
     {
         if (name == null)
         {
-            return Result.Failure<Volunteer>("Name is required");
+            return ("Name is required");
         }
 
         if (emails == null)
         {
-            return Result.Failure<Volunteer>("Email is required");
+            return ("Email is required");
         }
 
         if (phoneNumber == null)
         {
-            return Result.Failure<Volunteer>("Phone number is required");
+            return ("Phone number is required");
         }
         
         return new Volunteer(name, 

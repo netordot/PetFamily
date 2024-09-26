@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain;
 
@@ -22,7 +22,7 @@ public class Species : Domain.Shared.Entity<SpeciesId>
     {
         if (String.IsNullOrEmpty(speciesName))
         {
-            return Result.Failure<Species>("Species name cannot be empty.");
+            return ("Species name cannot be empty.");
         }
         
         return new Species(speciesName, breeds, id);

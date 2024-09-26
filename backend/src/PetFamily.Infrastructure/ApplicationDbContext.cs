@@ -7,12 +7,12 @@ using PetFamily.Domain.Volunteer;
 namespace PetFamily.Infrastructure;
 
 
-public class ApplicationDbContext(IConfiguration _configuration) : DbContext
+public class ApplicationDbContext(IConfiguration configuration) : DbContext
 {
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
     public DbSet<Species> Species => Set<Species>();
     
-    private const string Database = nameof(Database);
+    private const string DATABASE = nameof(Database);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,7 +21,7 @@ public class ApplicationDbContext(IConfiguration _configuration) : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString(Database));
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString(nameof(DATABASE)));
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
         optionsBuilder.EnableSensitiveDataLogging();

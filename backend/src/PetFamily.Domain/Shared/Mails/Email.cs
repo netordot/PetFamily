@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Shared;
 
@@ -18,7 +17,7 @@ public record Email
     {
         if (!Regex.IsMatch(mail, Pattern))
         {
-            return Result.Failure<Email>($"Email address '{mail}' is not valid.");
+            return ($"Email address '{mail}' is not valid.");
         }
         
         return new Email(mail);
