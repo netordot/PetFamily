@@ -1,4 +1,6 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.Errors;
 
 namespace PetFamily.Domain;
 
@@ -16,11 +18,11 @@ public class Breed : Shared.Entity<BreedId>
         Name = name;
     }
 
-    public static Result<Breed> Create(string breedName,  BreedId id)
+    public static Result<Breed,Error> Create(string breedName,  BreedId id)
     {
         if (String.IsNullOrEmpty(breedName))
         {
-            return Result<Breed>.Failure("BreedName cannot be empty.");
+            return Errors.General.ValueIsRequired(breedName);
         }
         
         return new Breed(breedName, id);

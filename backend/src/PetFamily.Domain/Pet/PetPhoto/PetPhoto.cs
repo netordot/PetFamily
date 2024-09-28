@@ -1,4 +1,6 @@
+using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.Errors;
 
 namespace PetFamily.Domain;
 
@@ -17,15 +19,14 @@ public class PetPhoto : Shared.Entity<PetPhotoId>
         IsMain = isMain; 
     }
 
-    public static Result<PetPhoto> Create(string path, bool isMain, PetPhotoId petPhotoId)
+    public static Result<PetPhoto,Error> Create(string path, bool isMain, PetPhotoId petPhotoId)
     {
         if (string.IsNullOrEmpty(path))
         {
-            return Result<PetPhoto>.Failure("Path cannot be null or empty.");
+            return Errors.General.ValueIsRequired("");
         }
-        var photo = new PetPhoto(path, isMain, petPhotoId);
         
-        return Result<PetPhoto>.Success(photo);  
+        return    new PetPhoto(path, isMain, petPhotoId);
     }
     
 }

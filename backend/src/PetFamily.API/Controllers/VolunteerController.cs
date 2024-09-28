@@ -15,9 +15,8 @@ public class VolunteerController : ControllerBase
         _createVolunteerService = createVolunteerService;
     }
     
-    
     [HttpPost]
-    public async Task<ActionResult<Guid>> Add
+    public async Task<ActionResult<Guid>> Create
         ([FromBody] CreateVolunteerRequest createVolunteerRequest,CancellationToken cancellationToken)
     {
         var result =await _createVolunteerService.Create(createVolunteerRequest, cancellationToken);

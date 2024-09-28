@@ -23,8 +23,8 @@ public class CreateVolunteerService : ICreateVolunteerService
             createVolunteerRequest.LastName);
 
         var addressResult = new Address(createVolunteerRequest.City, createVolunteerRequest.Street,
-            createVolunteerRequest.BuildingNumber
-            , createVolunteerRequest.CorpsNumber);
+            createVolunteerRequest.BuildingNumber,
+            createVolunteerRequest.CorpsNumber);
 
         var phoneResult = PhoneNumber.Create(createVolunteerRequest.PhoneNumber);
         if (phoneResult.IsFailure)
@@ -41,8 +41,9 @@ public class CreateVolunteerService : ICreateVolunteerService
         if (emailResult.IsFailure)
             return "Email введен некорректно";
         
-        var volunteer = Domain.Volunteer.Volunteer.Create(resultName, emailResult.Value,createVolunteerRequest.Description,
-            createVolunteerRequest.Experience, phoneResult.Value, null, addressResult, requisitesResult,
+        var volunteer = Domain.Volunteer.Volunteer.Create(resultName, emailResult.Value,
+            createVolunteerRequest.Description, createVolunteerRequest.Experience, phoneResult.Value, null, 
+            addressResult, requisitesResult,
             socialsResult, volunteerId);
         
         if (volunteer.IsFailure)
@@ -50,9 +51,7 @@ public class CreateVolunteerService : ICreateVolunteerService
                 
         Volunteer result = volunteer.Value;
         
-        await _volunteerRepository.Add(result, CancellationToken.None);
-        
-        return volunteerId.Value;
+        return await _volunteerRepository.Add(result, CancellationToken.None);
         
     }
 }
