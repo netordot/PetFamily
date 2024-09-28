@@ -15,8 +15,4 @@ public class VolunteerDetails
         SocialNetworks = socialNetworks;
     }
 
-    public static VolunteerDetails Create(List<Social> socialNetworks)
-    {
-        return new VolunteerDetails(socialNetworks);
-    }
 }

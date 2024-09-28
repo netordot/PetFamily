@@ -14,8 +14,5 @@ public class Requisites
         Value = value;
     }
 
-    public static Requisites Create(List<Requisite> value)
-    {
-        return new Requisites(value);
-    }
+  
 }
