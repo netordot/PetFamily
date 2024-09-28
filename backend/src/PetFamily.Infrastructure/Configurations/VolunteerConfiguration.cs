@@ -36,24 +36,17 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             });
         });
 
-        builder.OwnsOne(v => v.Emails, vbuilder =>
+
+        builder.ComplexProperty(v => v.Email, eb =>
         {
-            vbuilder.ToJson("emails");
-            vbuilder.OwnsMany(vbuilder => vbuilder.Mails, mbuilder =>
-            {
-                mbuilder.Property(m => m.Mail).IsRequired();
-            });
+            eb.Property(e => e.Mail).IsRequired();
         });
 
-        builder.OwnsOne(v => v.Numbers, vbuilder =>
+        builder.ComplexProperty(v => v.Number, eb =>
         {
-            vbuilder.ToJson("phone_number");
-            vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
-            {
-                nb.Property(n => n.Number).IsRequired();
-            });
-
+            eb.Property(e => e.Number).IsRequired();
         });
+        
 
         builder.ComplexProperty(v => v.Name, vbuilder =>
         {

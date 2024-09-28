@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetFamily.Infrastructure;
@@ -12,9 +13,11 @@ using PetFamily.Infrastructure;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240927152831_email fix")]
+    partial class emailfix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,16 +96,6 @@ namespace PetFamily.Infrastructure.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
                                 .HasColumnName("address_street");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PetFamily.Domain.Pet.PhoneNumber#PhoneNumber", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Number")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("phone_number_number");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("SpeciesBreed", "PetFamily.Domain.Pet.SpeciesBreed#SpeciesBreed", b1 =>
@@ -241,16 +234,6 @@ namespace PetFamily.Infrastructure.Migrations
                                 .HasColumnName("name");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Number", "PetFamily.Domain.Volunteer.Volunteer.Number#PhoneNumber", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Number")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("number_number");
-                        });
-
                     b.HasKey("Id")
                         .HasName("pk_volunteers");
 
@@ -271,6 +254,48 @@ namespace PetFamily.Infrastructure.Migrations
                         .WithMany("Pets")
                         .HasForeignKey("VolunteerId")
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
+
+                    b.OwnsOne("PetFamily.Domain.Shared.PhoneNumbers", "PhoneNumbers", b1 =>
+                        {
+                            b1.Property<Guid>("PetId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("PetId")
+                                .HasName("pk_pets");
+
+                            b1.ToTable("pets");
+
+                            b1.ToJson("phone_number");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PetId")
+                                .HasConstraintName("fk_pets_pets_pet_id");
+
+                            b1.OwnsMany("PetFamily.Domain.Shared.PhoneNumber.PhoneNumber", "Numbers", b2 =>
+                                {
+                                    b2.Property<Guid>("PhoneNumbersPetId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Number")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("PhoneNumbersPetId", "Id")
+                                        .HasName("pk_pets");
+
+                                    b2.ToTable("pets");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("PhoneNumbersPetId")
+                                        .HasConstraintName("fk_pets_pets_phone_numbers_pet_id");
+                                });
+
+                            b1.Navigation("Numbers");
+                        });
 
                     b.OwnsOne("PetFamily.Domain.Shared.Requisites", "Requisites", b1 =>
                         {
@@ -320,6 +345,9 @@ namespace PetFamily.Infrastructure.Migrations
                             b1.Navigation("Value");
                         });
 
+                    b.Navigation("PhoneNumbers")
+                        .IsRequired();
+
                     b.Navigation("Requisites");
                 });
 
@@ -333,6 +361,48 @@ namespace PetFamily.Infrastructure.Migrations
 
             modelBuilder.Entity("PetFamily.Domain.Volunteer.Volunteer", b =>
                 {
+                    b.OwnsOne("PetFamily.Domain.Shared.PhoneNumbers", "Numbers", b1 =>
+                        {
+                            b1.Property<Guid>("VolunteerId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.HasKey("VolunteerId");
+
+                            b1.ToTable("volunteers");
+
+                            b1.ToJson("phone_number");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VolunteerId")
+                                .HasConstraintName("fk_volunteers_volunteers_id");
+
+                            b1.OwnsMany("PetFamily.Domain.Shared.PhoneNumber.PhoneNumber", "Numbers", b2 =>
+                                {
+                                    b2.Property<Guid>("PhoneNumbersVolunteerId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Number")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("PhoneNumbersVolunteerId", "Id")
+                                        .HasName("pk_volunteers");
+
+                                    b2.ToTable("volunteers");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("PhoneNumbersVolunteerId")
+                                        .HasConstraintName("fk_volunteers_volunteers_phone_numbers_volunteer_id");
+                                });
+
+                            b1.Navigation("Numbers");
+                        });
+
                     b.OwnsOne("PetFamily.Domain.Shared.Requisites", "Requisites", b1 =>
                         {
                             b1.Property<Guid>("VolunteerId")
@@ -380,6 +450,9 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.Navigation("Value");
                         });
+
+                    b.Navigation("Numbers")
+                        .IsRequired();
 
                     b.Navigation("Requisites");
                 });

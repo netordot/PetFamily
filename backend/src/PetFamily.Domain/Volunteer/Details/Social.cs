@@ -9,4 +9,6 @@ public record Social
     }
     public string Name { get; private set; }
     public string Link { get; private set; }
+    
+    public static Social Create(string name, string link) => new Social(name, link);
 }

@@ -38,14 +38,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             });
         });
         
-        builder.OwnsOne(v => v.PhoneNumbers, vbuilder =>
+        builder.ComplexProperty(v => v.PhoneNumber, eb =>
         {
-            vbuilder.ToJson("phone_number");
-            vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
-            {
-                nb.Property(n => n.Number).IsRequired();
-            });
-
+            eb.Property(e => e.Number).IsRequired();
         });
         
         builder.ComplexProperty(v => v.Address, ab =>

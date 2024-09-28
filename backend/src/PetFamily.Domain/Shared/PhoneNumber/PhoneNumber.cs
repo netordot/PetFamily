@@ -4,7 +4,7 @@ namespace PetFamily.Domain.Shared.PhoneNumber;
 
 public record PhoneNumber
 {
-    private const string Pattern  = "^((\\+7|8)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$\n";
+    private const string Pattern  = "^((\\+7|8)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
     public string Number { get; private set; }
 
     private PhoneNumber(string number)

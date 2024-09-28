@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetFamily.Application.Volunteers;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteer;
 
 namespace PetFamily.Infrastructure.Repositories;
 
-public class VolunteerRepository
+public class VolunteerRepository : IVolunteerRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -30,7 +31,6 @@ public class VolunteerRepository
         {
             return "Volunteer not found";
         }
-            // добавить result pattern используя самописный result и валидацию
         return volunteer;
     }
     

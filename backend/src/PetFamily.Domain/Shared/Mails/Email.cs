@@ -5,7 +5,7 @@ namespace PetFamily.Domain.Shared;
 
 public record Email
 {
-    private const string Pattern  = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n";
+    private const string Pattern  = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
     public string Mail { get; }
 
     private Email(string mail)
