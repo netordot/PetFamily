@@ -1,5 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared.Errors;
 
 namespace PetFamily.Domain.Shared;
 
@@ -13,11 +15,11 @@ public record Email
         Mail = mail;
     }
 
-    public static Result<Email> Create(string mail)
+    public static Result<Email,Error> Create(string mail)
     {
         if (!Regex.IsMatch(mail, Pattern))
         {
-            return ($"Email address '{mail}' is not valid.");
+            return Errors.Errors.General.ValueIsInvalid(mail);
         }
         
         return new Email(mail);

@@ -1,4 +1,6 @@
-﻿using PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
 
 namespace PetFamily.Domain.Volunteer;
@@ -46,7 +48,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public int PetsRequireHelp() => Pets.Count(p => p.Status == PetStatus.NeedsHelp);
     public int PetsAdopted() => Pets.Count(p => p.Status == PetStatus.Adopted);
     
-    public static Result<Volunteer> Create(FullName name,
+    public static Result<Volunteer,Error> Create(FullName name,
         Email emails, 
         string description, 
         int experience,
@@ -59,17 +61,18 @@ public class Volunteer : Shared.Entity<VolunteerId>
     {
         if (name == null)
         {
-            return ("Name is required");
+            return Error.Validation("value.is.required", "name is required");
         }
 
         if (emails == null)
         {
-            return ("Email is required");
+            return Error.Validation("value.is.required", "email is required");
         }
 
         if (phoneNumber == null)
         {
-            return ("Phone number is required");
+            return Error.Validation("value.is.required", "phonenumber is required");
+
         }
         
         return new Volunteer(name, 

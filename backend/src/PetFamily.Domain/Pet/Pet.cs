@@ -1,5 +1,7 @@
 ﻿using System.Security.AccessControl;
+using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
 
 namespace PetFamily.Domain;
@@ -65,7 +67,7 @@ public class Pet : Shared.Entity<PetId>
         Photos = photos;
     }
 
-    public static Result<Pet> Create(string name,
+    public static Result<Pet, Error> Create(string name,
         SpeciesBreed speciesBreed,
         string color,
         string description,
@@ -84,22 +86,23 @@ public class Pet : Shared.Entity<PetId>
     {
         if (String.IsNullOrEmpty(name))
         {
-            return ("Name is required");
+            return Errors.General.ValueIsRequired(name);
         }
 
         if (contactPhoneNumbers == null)
         {
-            return ("Contact phone number is required");
+            return Error.Validation("value.is.required", "phonenumber is required");
         }
 
         if (address == null)
         {
-            return ("Adress is required");
+            return Error.Validation("value.is.required", "address is required");
+
         }
 
         if (status == null)
         {
-            return ("Status is required");
+            return Error.Validation("value.is.required", "status is required");
         }
         
         return new Pet(name, 

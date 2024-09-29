@@ -1,4 +1,6 @@
 ﻿using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared.Errors;
 
 namespace PetFamily.Domain.Shared.PhoneNumber;
 
@@ -12,11 +14,11 @@ public record PhoneNumber
         Number = number;
     }
 
-    public static Result<PhoneNumber> Create(string number)
+    public static Result<PhoneNumber, Error> Create(string number)
     {
         if (!Regex.IsMatch(number, Pattern))
         {
-            return ($"Invalid phone number: {number}");
+            return Errors.Errors.General.ValueIsInvalid(number);
         }
        
         return new PhoneNumber(number);
