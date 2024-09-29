@@ -1,19 +1,19 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared;
+﻿using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.PhoneNumber;
 
 namespace PetFamily.Domain.Volunteer;
 public class Volunteer : Shared.Entity<VolunteerId>
 {
     public FullName Name { get; private set; }
     public Requisites? Requisites { get; }
-    public VolunteerDetails Details { get; }
+    public VolunteerDetails? Details { get; }
     public Address Address { get;  }
     
-    public Emails Emails { get; }
+    public Email Email { get; }
     public string Description { get; }
     public int Experience { get;}
-    public PhoneNumbers Numbers { get; }
-    public List<Pet> Pets { get; } = [];
+    public PhoneNumber Number { get; }
+    public List<Pet>? Pets { get; } = [];
     
     private Volunteer (VolunteerId id) : base(id)
     {
@@ -21,10 +21,10 @@ public class Volunteer : Shared.Entity<VolunteerId>
     }
 
     public Volunteer(FullName name, 
-        Emails email, 
+        Email email, 
         string description,
         int experience,
-        PhoneNumbers  phoneNumber, 
+        PhoneNumber  phoneNumber, 
         List<Pet> pets,
         Address address,
         Requisites requisites,
@@ -32,10 +32,10 @@ public class Volunteer : Shared.Entity<VolunteerId>
         VolunteerId id) : base(id)
     {
         Name = name;
-        Emails = email;
+        Email = email;
         Description = description;
         Experience = experience;
-        Numbers = phoneNumber;
+        Number = phoneNumber;
         Pets = pets;
         Address = address;
         Requisites = requisites;
@@ -47,11 +47,11 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public int PetsAdopted() => Pets.Count(p => p.Status == PetStatus.Adopted);
     
     public static Result<Volunteer> Create(FullName name,
-        Emails emails, 
+        Email emails, 
         string description, 
         int experience,
-        PhoneNumbers phoneNumber,
-        List<Pet> pets, 
+        PhoneNumber phoneNumber,
+        List<Pet>? pets, 
         Address address, 
         Requisites requisites, 
         VolunteerDetails details, 
@@ -59,17 +59,17 @@ public class Volunteer : Shared.Entity<VolunteerId>
     {
         if (name == null)
         {
-            return Result.Failure<Volunteer>("Name is required");
+            return ("Name is required");
         }
 
         if (emails == null)
         {
-            return Result.Failure<Volunteer>("Email is required");
+            return ("Email is required");
         }
 
         if (phoneNumber == null)
         {
-            return Result.Failure<Volunteer>("Phone number is required");
+            return ("Phone number is required");
         }
         
         return new Volunteer(name, 

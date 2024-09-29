@@ -1,6 +1,5 @@
 ﻿namespace PetFamily.Domain.Volunteer;
 
-
 public record FullName
 {
     public string Name { get; private set; }

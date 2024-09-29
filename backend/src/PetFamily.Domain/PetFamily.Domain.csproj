@@ -4,10 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <UserSecretsId>a4b8aacc-5516-4bb8-956b-87c9e730c564</UserSecretsId>
     </PropertyGroup>
-
-    <ItemGroup>
-      <PackageReference Include="CSharpFunctionalExtensions" Version="3.0.0" />
-    </ItemGroup>
 
 </Project>

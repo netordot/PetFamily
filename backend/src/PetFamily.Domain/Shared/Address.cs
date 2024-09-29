@@ -13,7 +13,7 @@ public record Address
     public int  BuildingNumber { get; private set; }
     public int?  CropsNumber { get; private  set; }
 
-    public Address(string city, string street, int buildingNumber, int cropsNumber)
+    public Address(string city, string street, int buildingNumber, int? cropsNumber)
     {
         City = city;
         Street = street;

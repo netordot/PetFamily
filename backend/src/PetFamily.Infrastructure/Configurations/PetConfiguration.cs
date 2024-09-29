@@ -18,10 +18,10 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 value => PetId.Create(value));
 
         builder.Property(p => p.Description)
-            .HasMaxLength(Constants.MAX_DESCRIPTION_SIZE);
+            .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
         
         builder.Property(p =>p.Name)
-            .HasMaxLength(Constants.MAX_TITLE_SIZE);
+            .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
@@ -31,32 +31,27 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             {
                     vb.Property(v => v.Description)
                         .IsRequired()
-                        .HasMaxLength(Constants.MAX_DESCRIPTION_SIZE);
+                        .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
                     vb.Property(v => v.Title)
                         .IsRequired()
-                        .HasMaxLength(Constants.MAX_TITLE_SIZE);
+                        .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
             });
         });
         
-        builder.OwnsOne(v => v.PhoneNumbers, vbuilder =>
+        builder.ComplexProperty(v => v.PhoneNumber, eb =>
         {
-            vbuilder.ToJson("phone_number");
-            vbuilder.OwnsMany(vbuilder => vbuilder.Numbers, nb =>
-            {
-                nb.Property(n => n.Number).IsRequired();
-            });
-
+            eb.Property(e => e.Number).IsRequired();
         });
         
         builder.ComplexProperty(v => v.Address, ab =>
         {
             ab.Property(a => a.City)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
 
             ab.Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
 
             ab.Property(a => a.BuildingNumber)
                 .IsRequired();
@@ -66,12 +61,15 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.ComplexProperty(p => p.SpeciesBreed, pb =>
         {
             pb.Property(sb => sb.BreedId)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnName("BreedId");
             
             pb.Property(sb => sb.SpeciesId)
+                .IsRequired()
                 .HasConversion(
                     Id => Id.Value,
-                    value => SpeciesId.Create(value));
+                    value => SpeciesId.Create(value))
+                .HasColumnName("SpeciesId");
         });
     }
 }

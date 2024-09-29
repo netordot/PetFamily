@@ -19,7 +19,7 @@ public class BreedConfiguration : IEntityTypeConfiguration<Breed>
         
         builder.Property(b => b.Name)
             .IsRequired()
-            .HasMaxLength(Domain.Shared.Constants.MAX_TITLE_SIZE);
+            .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
         
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Security.AccessControl;
-using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.PhoneNumber;
 
 namespace PetFamily.Domain;
 
@@ -17,7 +17,7 @@ public class Pet : Shared.Entity<PetId>
     public string Color { get; }
     public string Description { get; }
     public string HealthCondition { get; }
-    public PhoneNumbers PhoneNumbers { get; } 
+    public PhoneNumber PhoneNumber { get; } 
     public Address Address { get; }
     public PetStatus Status { get; }
 
@@ -28,7 +28,6 @@ public class Pet : Shared.Entity<PetId>
     
     public DateTime DateOfBirth { get; }
     public DateTime CreatedAt { get; }
-
     public Requisites? Requisites { get; }
     public List<PetPhoto> Photos { get; } = [];
 
@@ -37,7 +36,7 @@ public class Pet : Shared.Entity<PetId>
         string color,
         string description, 
         string healthCondition,
-        PhoneNumbers contactPhoneNumbers,
+        PhoneNumber contactPhoneNumber,
         Address address,
         PetStatus status, 
         double height, 
@@ -54,7 +53,7 @@ public class Pet : Shared.Entity<PetId>
         Color = color;
         Description = description;
         HealthCondition = healthCondition;
-        PhoneNumbers = contactPhoneNumbers;
+        PhoneNumber = contactPhoneNumber;
         Address = address;
         Status = status;
         Height = height;
@@ -71,7 +70,7 @@ public class Pet : Shared.Entity<PetId>
         string color,
         string description,
         string healthCondition,
-        PhoneNumbers contactPhoneNumbers,
+        PhoneNumber contactPhoneNumbers,
         Address address,
         PetStatus status,
         double height,
@@ -85,22 +84,22 @@ public class Pet : Shared.Entity<PetId>
     {
         if (String.IsNullOrEmpty(name))
         {
-            return Result.Failure<Pet>("Name is required");
+            return ("Name is required");
         }
 
         if (contactPhoneNumbers == null)
         {
-            return Result.Failure<Pet>("Contact phone number is required");
+            return ("Contact phone number is required");
         }
 
         if (address == null)
         {
-            return Result.Failure<Pet>("Adress is required");
+            return ("Adress is required");
         }
 
         if (status == null)
         {
-            return Result.Failure<Pet>("Status is required");
+            return ("Status is required");
         }
         
         return new Pet(name, 
