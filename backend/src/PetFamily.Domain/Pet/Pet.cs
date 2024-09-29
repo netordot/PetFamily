@@ -14,24 +14,24 @@ public class Pet : Shared.Entity<PetId>
         
     }
     
-    public string Name { get; }
-    public SpeciesBreed SpeciesBreed { get;  }
-    public string Color { get; }
-    public string Description { get; }
-    public string HealthCondition { get; }
-    public PhoneNumber PhoneNumber { get; } 
-    public Address Address { get; }
-    public PetStatus Status { get; }
+    public string Name { get; private set; }
+    public SpeciesBreed SpeciesBreed { get;  private set; }
+    public string Color { get; private set; }
+    public string Description { get; private set; }
+    public string HealthCondition { get; private set; }
+    public PhoneNumber PhoneNumber { get; private set; } 
+    public Address Address { get; private set; }
+    public PetStatus Status { get; private set; }
 
-    public double Height { get; }
-    public double Weight { get; } 
-    public bool IsCastrated { get; }
-    public bool IsVaccinated { get;}
+    public double Height { get; private set; }
+    public double Weight { get; private set; } 
+    public bool IsCastrated { get; private set; }
+    public bool IsVaccinated { get; private set; }
     
     public DateTime DateOfBirth { get; }
     public DateTime CreatedAt { get; }
     public Requisites? Requisites { get; }
-    public List<PetPhoto> Photos { get; } = [];
+    public List<PetPhoto> Photos { get; private set; } = [];
 
     private Pet(string name, 
         SpeciesBreed speciesBreed,
@@ -91,7 +91,7 @@ public class Pet : Shared.Entity<PetId>
 
         if (contactPhoneNumbers == null)
         {
-            return Error.Validation("value.is.required", "phonenumber is required");
+            return Error.Validation("value.is.required", "phone number is required");
         }
 
         if (address == null)

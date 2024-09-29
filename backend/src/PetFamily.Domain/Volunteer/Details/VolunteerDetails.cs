@@ -3,7 +3,7 @@
 public class VolunteerDetails
 {
     
-    public IReadOnlyList<Social> SocialNetworks ;
+    public IReadOnlyList<Social> SocialNetworks { get; }
 
     private VolunteerDetails()
     {

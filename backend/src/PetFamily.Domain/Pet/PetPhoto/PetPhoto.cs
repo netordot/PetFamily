@@ -6,8 +6,8 @@ namespace PetFamily.Domain;
 
 public class PetPhoto : Shared.Entity<PetPhotoId>
 {
-    public string Path { get; }
-    public bool IsMain { get; }
+    public string Path { get; private set; }
+    public bool IsMain { get; private set; }
 
     private PetPhoto(PetPhotoId id) : base(id)
     {

@@ -2,8 +2,7 @@
 
 public class PetId
 {
-    public Guid Value { get; }
-
+    public Guid Value { get; private set; }
     private PetId(Guid value)
     {
         Value = value;

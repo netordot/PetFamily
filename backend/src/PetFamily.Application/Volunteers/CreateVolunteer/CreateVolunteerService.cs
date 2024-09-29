@@ -33,10 +33,10 @@ public class CreateVolunteerService : ICreateVolunteerService
                 
         
         var requisitesResult =
-            new Requisites(createVolunteerRequest.Requisites.Select(r => Requisite.Create(r.Title, r.Description)).ToList());
+            new Requisites(createVolunteerRequest.Requisites.Select(r => Requisite.Create(r.Title, r.Description).Value).ToList());
         
         var socialsResult = 
-            new VolunteerDetails(createVolunteerRequest.SocialNetworks.Select(s => Social.Create(s.Name, s.Link)).ToList());
+            new VolunteerDetails(createVolunteerRequest.SocialNetworks.Select(s => Social.Create(s.Name, s.Link).Value).ToList());
         
         var emailResult = Email.Create(createVolunteerRequest.Email);
         if (emailResult.IsFailure)

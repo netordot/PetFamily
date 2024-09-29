@@ -7,7 +7,7 @@ namespace PetFamily.Domain;
 public class Species : Domain.Shared.Entity<SpeciesId>
 {
     public string  Name { get; private set; }
-    public List<Breed> Breeds { get; set; }
+    public List<Breed> Breeds { get; private set; } = [];
 
     private Species(SpeciesId id) : base(id)
     {
@@ -25,6 +25,11 @@ public class Species : Domain.Shared.Entity<SpeciesId>
         if (String.IsNullOrEmpty(speciesName))
         {
             return Errors.General.ValueIsRequired(speciesName);
+        }
+
+        if (id == null)
+        {
+            return Errors.General.ValueIsRequired("speciesId");
         }
         
         return new Species(speciesName, breeds, id);

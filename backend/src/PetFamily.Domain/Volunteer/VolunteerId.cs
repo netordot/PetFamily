@@ -6,7 +6,7 @@ public class VolunteerId
 {
     public Guid Value { get; }
 
-    public VolunteerId(Guid value)
+    private VolunteerId(Guid value)
     {
         Value = value;
     }

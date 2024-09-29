@@ -17,6 +17,10 @@ public record Email
 
     public static Result<Email,Error> Create(string mail)
     {
+        if (string.IsNullOrWhiteSpace(mail))
+        {
+            return Errors.Errors.General.ValueIsRequired("Email");
+        }
         if (!Regex.IsMatch(mail, Pattern))
         {
             return Errors.Errors.General.ValueIsInvalid(mail);

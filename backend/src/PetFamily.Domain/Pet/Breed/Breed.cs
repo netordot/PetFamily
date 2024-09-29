@@ -6,7 +6,7 @@ namespace PetFamily.Domain;
 
 public class Breed : Shared.Entity<BreedId>
 {
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
     private Breed(BreedId id) : base(id)
     {
