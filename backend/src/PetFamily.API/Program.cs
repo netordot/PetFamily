@@ -12,15 +12,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<ApplicationDbContext>();
-builder.Services.AddScoped<IVolunteerRepository,VolunteerRepository>();
-builder.Services.AddScoped<ICreateVolunteerService, CreateVolunteerService>();
-
+// builder.Services.AddScoped<ApplicationDbContext>();
+// builder.Services.AddScoped<IVolunteerRepository,VolunteerRepository>();
 builder.Services
-    .AddApplication();
+    .AddApplication()
+    .AddInfrastructure();
 
 var app = builder.Build();
-    
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Volunteers.CreateVolunteer;
 using System.Reflection.Metadata.Ecma335;
+using PetFamily.API.Extensions;
 
 namespace PetFamily.API.Controllers;
 
@@ -22,10 +23,10 @@ public class VolunteerController : ControllerBase
         var result =await _createVolunteerService.Create(createVolunteerRequest, cancellationToken);
         if (result.IsFailure)
         {
-            return BadRequest(result.Error);
+            return result.Error.ToResponse();
         }
 
-        return Ok(result.Value);
+        return Created(result.Value.ToString(), null);
     }
 
 }
