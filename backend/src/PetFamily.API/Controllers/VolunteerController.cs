@@ -21,12 +21,8 @@ public class VolunteerController : ControllerBase
         ([FromBody] CreateVolunteerRequest createVolunteerRequest,CancellationToken cancellationToken)
     {
         var result =await _createVolunteerService.Create(createVolunteerRequest, cancellationToken);
-        if (result.IsFailure)
-        {
-            return result.Error.ToResponse();
-        }
-
-        return Created(result.Value.ToString(), null);
+        
+        return result.ToResponse();
     }
 
 }
