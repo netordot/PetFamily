@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Pet.Breed;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 
@@ -25,11 +26,6 @@ public class Species : Domain.Shared.Entity<SpeciesId>
         if (String.IsNullOrEmpty(speciesName))
         {
             return Errors.General.ValueIsRequired(speciesName);
-        }
-
-        if (id == null)
-        {
-            return Errors.General.ValueIsRequired("speciesId");
         }
         
         return new Species(speciesName, breeds, id);

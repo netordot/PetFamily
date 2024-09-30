@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
 
 namespace PetFamily.Domain.Volunteer;
@@ -15,7 +16,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public string Description { get; }
     public int Experience { get;}
     public PhoneNumber Number { get; }
-    public List<Pet>? Pets { get; } = [];
+    public List<Pet.Pet>? Pets { get; } = [];
     
     private Volunteer (VolunteerId id) : base(id)
     {
@@ -27,7 +28,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
         string description,
         int experience,
         PhoneNumber  phoneNumber, 
-        List<Pet> pets,
+        List<Pet.Pet> pets,
         Address address,
         Requisites requisites,
         VolunteerDetails details,
@@ -53,7 +54,7 @@ public class Volunteer : Shared.Entity<VolunteerId>
         string description, 
         int experience,
         PhoneNumber phoneNumber,
-        List<Pet>? pets, 
+        List<Pet.Pet>? pets, 
         Address address, 
         Requisites requisites, 
         VolunteerDetails details, 

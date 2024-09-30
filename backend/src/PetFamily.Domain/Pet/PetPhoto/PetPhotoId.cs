@@ -1,6 +1,6 @@
 ﻿namespace PetFamily.Domain;
 
-public class PetPhotoId
+public record PetPhotoId
 {
     public Guid Value { get; }
 

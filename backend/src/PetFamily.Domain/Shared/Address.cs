@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace PetFamily.Domain.Shared;
+﻿namespace PetFamily.Domain.Shared;
 
 public record Address
 {
@@ -8,6 +6,7 @@ public record Address
     {
         
     }
+    
     public string City { get; }
     public string  Street { get;}
     public int  BuildingNumber { get;}

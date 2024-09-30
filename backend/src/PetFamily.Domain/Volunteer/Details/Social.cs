@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Domain.Volunteer;
+namespace PetFamily.Domain.Volunteer.Details;
 
 public record Social
 {
@@ -13,7 +13,6 @@ public record Social
     public string Name { get;}
     public string Link { get;}
     
-   // public static Social Create(string name, string link) => new Social(name, link);
    public static Result<Social,Error> Create(string name, string link)
    {
        if (String.IsNullOrWhiteSpace(link))

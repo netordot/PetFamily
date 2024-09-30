@@ -1,9 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Domain.Shared;
+namespace PetFamily.Domain.Shared.Mails;
 
 public record Email
 {

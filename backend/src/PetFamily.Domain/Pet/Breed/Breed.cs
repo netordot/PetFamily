@@ -1,18 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Domain;
+namespace PetFamily.Domain.Pet.Breed;
 
 public class Breed : Shared.Entity<BreedId>
 {
     public string Name { get; private set; }
-
-    private Breed(BreedId id) : base(id)
-    {
-        
-    }
-
+    
     private Breed(string name,  BreedId id) : base(id)
     {
         Name = name;
@@ -27,6 +21,4 @@ public class Breed : Shared.Entity<BreedId>
         
         return new Breed(breedName, id);
     }
-    
-    
 }

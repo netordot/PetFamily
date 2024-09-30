@@ -1,10 +1,9 @@
-﻿using System.Security.AccessControl;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
 
-namespace PetFamily.Domain;
+namespace PetFamily.Domain.Pet;
 
 public class Pet : Shared.Entity<PetId>
 { 
@@ -28,9 +27,9 @@ public class Pet : Shared.Entity<PetId>
     public bool IsCastrated { get; private set; }
     public bool IsVaccinated { get; private set; }
     
-    public DateTime DateOfBirth { get; }
-    public DateTime CreatedAt { get; }
-    public Requisites? Requisites { get; }
+    public DateTime DateOfBirth { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public Requisites? Requisites { get; private set; }
     public List<PetPhoto> Photos { get; private set; } = [];
 
     private Pet(string name, 
@@ -88,22 +87,7 @@ public class Pet : Shared.Entity<PetId>
         {
             return Errors.General.ValueIsRequired(name);
         }
-
-        if (contactPhoneNumbers == null)
-        {
-            return Error.Validation("value.is.required", "phone number is required");
-        }
-
-        if (address == null)
-        {
-            return Error.Validation("value.is.required", "address is required");
-
-        }
-
-        if (status == null)
-        {
-            return Error.Validation("value.is.required", "status is required");
-        }
+        
         
         return new Pet(name, 
             speciesBreed,

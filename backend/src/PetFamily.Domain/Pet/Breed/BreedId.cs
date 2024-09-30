@@ -1,8 +1,8 @@
 ﻿namespace PetFamily.Domain;
 
-public class BreedId
+public record BreedId
 {
-    public Guid Value { get; set; }
+    public Guid Value { get;}
 
     private BreedId(Guid value)
     {
