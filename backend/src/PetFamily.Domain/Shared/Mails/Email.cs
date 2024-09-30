@@ -1,9 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Domain.Shared;
+namespace PetFamily.Domain.Shared.Mails;
 
 public record Email
 {
@@ -17,6 +16,10 @@ public record Email
 
     public static Result<Email,Error> Create(string mail)
     {
+        if (string.IsNullOrWhiteSpace(mail))
+        {
+            return Errors.Errors.General.ValueIsRequired("Email");
+        }
         if (!Regex.IsMatch(mail, Pattern))
         {
             return Errors.Errors.General.ValueIsInvalid(mail);

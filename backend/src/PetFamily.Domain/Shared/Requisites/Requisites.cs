@@ -1,8 +1,11 @@
-﻿namespace PetFamily.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared.Errors;
 
-public class Requisites
+namespace PetFamily.Domain.Shared;
+
+public record Requisites
 {
-    public IReadOnlyList<Requisite> Value { get; private set; }
+    public IReadOnlyList<Requisite> Value { get; }
 
     private Requisites()
     {
@@ -13,6 +16,7 @@ public class Requisites
     {
         Value = value;
     }
+
 
   
 }

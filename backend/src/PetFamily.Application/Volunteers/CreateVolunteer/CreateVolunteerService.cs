@@ -1,8 +1,10 @@
 ﻿using PetFamily.Domain;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
 using PetFamily.Domain.Volunteer;
+using PetFamily.Domain.Volunteer.Details;
 
 namespace PetFamily.Application.Volunteers.CreateVolunteer;
 
@@ -32,11 +34,22 @@ public class CreateVolunteerService : ICreateVolunteerService
             return Error.Validation("value.is.invalid", "некорректный номер телефона");
                 
         
-        var requisitesResult =
-            new Requisites(createVolunteerRequest.Requisites.Select(r => Requisite.Create(r.Title, r.Description)).ToList());
+        var requisites =
+            createVolunteerRequest.Requisites.Select(r => Requisite.Create(r.Title, r.Description)).ToList();
+        if (requisites.Any(x => x.IsFailure))
+        {
+            return Error.Validation("value.is.invalid", "некорректно введены реквизиты");
+        }
+        var requisitesResult = new Requisites(requisites.Select(x => x.Value).ToList());
         
-        var socialsResult = 
-            new VolunteerDetails(createVolunteerRequest.SocialNetworks.Select(s => Social.Create(s.Name, s.Link)).ToList());
+        var socialList = 
+            createVolunteerRequest.SocialNetworks.Select(s => Social.Create(s.Name, s.Link)).ToList();
+        if (socialList.Any(s => s.IsFailure))
+        {
+            return Error.Validation("value.is.invalid", "некорректно введены соцсети");
+        }
+        
+        var socialsResult = new VolunteerDetails(socialList.Select(s => s.Value).ToList());
         
         var emailResult = Email.Create(createVolunteerRequest.Email);
         if (emailResult.IsFailure)

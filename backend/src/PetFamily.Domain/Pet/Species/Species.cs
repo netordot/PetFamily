@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Pet.Breed;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 
@@ -7,7 +8,7 @@ namespace PetFamily.Domain;
 public class Species : Domain.Shared.Entity<SpeciesId>
 {
     public string  Name { get; private set; }
-    public List<Breed> Breeds { get; set; }
+    public List<Breed> Breeds { get; private set; } = [];
 
     private Species(SpeciesId id) : base(id)
     {

@@ -2,9 +2,9 @@
 
 public record FullName
 {
-    public string Name { get; private set; }
-    public string? MiddleName { get; private set; }
-    public string? LastName { get; private set; }
+    public string Name { get;}
+    public string? MiddleName { get;}
+    public string? LastName { get;}
 
     public FullName(string name, string middleName, string lastName)
     {

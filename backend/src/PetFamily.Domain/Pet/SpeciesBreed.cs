@@ -2,8 +2,8 @@
 
 public record SpeciesBreed
 {
-    public SpeciesId SpeciesId { get; private set; }
-    public Guid BreedId { get; private set ; }
+    public SpeciesId SpeciesId { get; }
+    public Guid BreedId { get; }
     
     public SpeciesBreed(SpeciesId speciesId, Guid breedId)
     {

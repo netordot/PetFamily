@@ -1,10 +1,9 @@
-﻿using System.Security.AccessControl;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
 
-namespace PetFamily.Domain;
+namespace PetFamily.Domain.Pet;
 
 public class Pet : Shared.Entity<PetId>
 { 
@@ -14,24 +13,24 @@ public class Pet : Shared.Entity<PetId>
         
     }
     
-    public string Name { get; }
-    public SpeciesBreed SpeciesBreed { get;  }
-    public string Color { get; }
-    public string Description { get; }
-    public string HealthCondition { get; }
-    public PhoneNumber PhoneNumber { get; } 
-    public Address Address { get; }
-    public PetStatus Status { get; }
+    public string Name { get; private set; }
+    public SpeciesBreed SpeciesBreed { get;  private set; }
+    public string Color { get; private set; }
+    public string Description { get; private set; }
+    public string HealthCondition { get; private set; }
+    public PhoneNumber PhoneNumber { get; private set; } 
+    public Address Address { get; private set; }
+    public PetStatus Status { get; private set; }
 
-    public double Height { get; }
-    public double Weight { get; } 
-    public bool IsCastrated { get; }
-    public bool IsVaccinated { get;}
+    public double Height { get; private set; }
+    public double Weight { get; private set; } 
+    public bool IsCastrated { get; private set; }
+    public bool IsVaccinated { get; private set; }
     
-    public DateTime DateOfBirth { get; }
-    public DateTime CreatedAt { get; }
-    public Requisites? Requisites { get; }
-    public List<PetPhoto> Photos { get; } = [];
+    public DateTime DateOfBirth { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public Requisites? Requisites { get; private set; }
+    public List<PetPhoto> Photos { get; private set; } = [];
 
     private Pet(string name, 
         SpeciesBreed speciesBreed,
@@ -88,22 +87,7 @@ public class Pet : Shared.Entity<PetId>
         {
             return Errors.General.ValueIsRequired(name);
         }
-
-        if (contactPhoneNumbers == null)
-        {
-            return Error.Validation("value.is.required", "phonenumber is required");
-        }
-
-        if (address == null)
-        {
-            return Error.Validation("value.is.required", "address is required");
-
-        }
-
-        if (status == null)
-        {
-            return Error.Validation("value.is.required", "status is required");
-        }
+        
         
         return new Pet(name, 
             speciesBreed,

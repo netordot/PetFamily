@@ -1,9 +1,8 @@
 ﻿namespace PetFamily.Domain;
 
-public class PetId
+public record PetId
 {
     public Guid Value { get; }
-
     private PetId(Guid value)
     {
         Value = value;
