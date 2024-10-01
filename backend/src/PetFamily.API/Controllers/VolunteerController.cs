@@ -19,6 +19,7 @@ public class VolunteerController : ControllerBase
         [FromServices] IValidator<CreateVolunteerRequest> validator)
     {
         var validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
+        
         if (!validationResult.IsValid)
         {
             return validationResult.ToValidationErrorResponse();

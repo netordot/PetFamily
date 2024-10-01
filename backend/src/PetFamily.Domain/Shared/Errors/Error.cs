@@ -39,7 +39,7 @@ public record Error
             throw new ArgumentException("Invalid serialized format.");
         }
 
-        return new Error(parts[0], parts[1], result);
+                return new Error(parts[0], parts[1], result);
     }
     
 }
