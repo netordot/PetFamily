@@ -8,8 +8,8 @@ public static class Inject
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
         services.AddScoped<ICreateVolunteerService, CreateVolunteerService>();
+        services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
         
         return services;
     }

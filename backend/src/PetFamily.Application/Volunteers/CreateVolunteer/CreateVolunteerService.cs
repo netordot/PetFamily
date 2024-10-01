@@ -12,26 +12,25 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer;
 public class CreateVolunteerService : ICreateVolunteerService
 {
     private readonly IVolunteerRepository _volunteerRepository;
-    private readonly IValidator<CreateVolunteerRequest> _validator;
+    // private readonly IValidator<CreateVolunteerRequest> _validator;
 
-    public CreateVolunteerService(IVolunteerRepository volunteerRepository,
-        IValidator<CreateVolunteerRequest> validator)
+    public CreateVolunteerService(IVolunteerRepository volunteerRepository)
     {
         _volunteerRepository = volunteerRepository;
-        _validator = validator;
+        // _validator = validator;
     }
 
     public async Task<CSharpFunctionalExtensions.Result<Guid, Error>> Create(
         CreateVolunteerRequest createVolunteerRequest, CancellationToken ct)
     {
-        var validationResult = await _validator.ValidateAsync(createVolunteerRequest);
-        if (!validationResult.IsValid)
-        {
-            var error = Error.Validation(
-                validationResult.Errors[0].ErrorCode,
-                validationResult.Errors[0].ErrorCode);
-            return error;
-        }
+        // var validationResult = await _validator.ValidateAsync(createVolunteerRequest);
+        // if (!validationResult.IsValid)
+        // {
+        //     var error = Error.Validation(
+        //         validationResult.Errors[0].ErrorCode,
+        //         validationResult.Errors[0].ErrorMessage);
+        //     return error;
+        // }
 
         var volunteerId = VolunteerId.NewVolunteerId;
 
@@ -75,8 +74,8 @@ public class CreateVolunteerService : ICreateVolunteerService
             addressResult, requisitesResult,
             socialsResult, volunteerId);
 
-        if (volunteer.IsFailure)
-            return Error.Failure("unable.create", "проблема при создании волонтера");
+        // if (volunteer.IsFailure)
+        //     return Error.Failure("unable.create", "проблема при создании волонтера");
 
         Volunteer result = volunteer.Value;
 

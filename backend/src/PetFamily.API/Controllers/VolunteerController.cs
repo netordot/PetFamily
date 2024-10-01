@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Volunteers.CreateVolunteer;
 using System.Reflection.Metadata.Ecma335;
+using FluentValidation;
 using PetFamily.API.Extensions;
+using PetFamily.API.Response;
+using PetFamily.Domain.Shared.Errors;
 
 namespace PetFamily.API.Controllers;
 
@@ -9,20 +12,23 @@ namespace PetFamily.API.Controllers;
 [Route("[controller]")]
 public class VolunteerController : ControllerBase
 {
-    private readonly ICreateVolunteerService _createVolunteerService;
-
-    public VolunteerController(ICreateVolunteerService createVolunteerService)
-    {
-        _createVolunteerService = createVolunteerService;
-    }
-    
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create
-        ([FromBody] CreateVolunteerRequest createVolunteerRequest,CancellationToken cancellationToken)
+    public async Task<ActionResult> Create
+    ([FromBody] CreateVolunteerRequest createVolunteerRequest, CancellationToken cancellationToken,
+        [FromServices] ICreateVolunteerService createVolunteerService,
+        [FromServices] IValidator<CreateVolunteerRequest> validator)
     {
-        var result =await _createVolunteerService.Create(createVolunteerRequest, cancellationToken);
-        
-        return result.ToResponse();
-    }
+        var validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return validationResult.ToValidationErrorResponse();
+        }
 
+        var result = await createVolunteerService.Create(createVolunteerRequest, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return new ObjectResult(result.Value) { StatusCode = 201 };
+    }
 }
