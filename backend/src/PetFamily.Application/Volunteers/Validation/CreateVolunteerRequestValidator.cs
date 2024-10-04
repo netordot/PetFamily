@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Domain;
+using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
 using PetFamily.Domain.Volunteer.Details;
@@ -14,6 +15,10 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
         RuleFor(c => c.Description).MaximumLength(Domain.Shared.Constants.MAX_LONG_TEXT_SIZE);
         RuleFor(c => c.Email).MustBeValueObject(Email.Create);
         RuleFor(c => c.PhoneNumber).MustBeValueObject(PhoneNumber.Create);
+
+        RuleFor(c => c.BuildingNumber).GreaterThan(0).WithError(Errors.General.ValueIsInvalid("BuildingNumber"));
+        RuleFor(c => c.CorpsNumber).GreaterThanOrEqualTo(0).WithError(Errors.General.ValueIsInvalid("CorpsNumber"));
+        RuleFor(c => c.Experience).GreaterThanOrEqualTo(0).WithError(Errors.General.ValueIsInvalid("Experience"));
 
         RuleFor(c => c.City).NotEmpty();
         RuleFor(c => c.Street).NotEmpty();
