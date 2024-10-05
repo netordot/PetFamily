@@ -1,4 +1,5 @@
 using FluentValidation;
+using PetFamily.API;
 using PetFamily.Application;
 using PetFamily.Application.Volunteers;
 using PetFamily.Application.Volunteers.CreateVolunteer;
@@ -21,6 +22,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    await app.AddMigrations();
+
+
 }
 
 app.UseHttpsRedirection();
