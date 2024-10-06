@@ -18,6 +18,9 @@ public class VolunteerController : ControllerBase
         [FromServices] ICreateVolunteerService createVolunteerService,
         [FromServices] IValidator<CreateVolunteerRequest> validator)
     {
+        // тут обернуть блок try catch, его обрабатывает middleware
+        
+        
         var validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
         if (!validationResult.IsValid)
         {

@@ -1,5 +1,7 @@
 using FluentValidation;
 using PetFamily.API;
+using PetFamily.API.Extensions;
+using PetFamily.API.Middlewares;
 using PetFamily.Application;
 using PetFamily.Application.Volunteers;
 using PetFamily.Application.Volunteers.CreateVolunteer;
@@ -17,6 +19,8 @@ builder.Services
     .AddInfrastructure();
 
 var app = builder.Build();
+
+app.UseExceptionMiddleware();
 
 if (app.Environment.IsDevelopment())
 {
