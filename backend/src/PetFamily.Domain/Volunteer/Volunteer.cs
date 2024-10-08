@@ -9,8 +9,8 @@ namespace PetFamily.Domain.Volunteer;
 public class Volunteer : Shared.Entity<VolunteerId>
 {
     public FullName Name { get; private set; }
-    public Requisites? Requisites { get;}
-    public VolunteerDetails? Details { get; }
+    public Requisites? Requisites { get; private set; }
+    public VolunteerDetails? Details { get; private set; }
     public Address Address { get; private set; }
 
     public Email Email { get; private set; }
@@ -101,7 +101,15 @@ public class Volunteer : Shared.Entity<VolunteerId>
         Experience = experience;
         Number = phoneNumber;
         Address = address;
-        
-        
+    }
+
+    public void UpdateSocials(VolunteerDetails newSocials)
+    {
+        Details = newSocials;
+    }
+
+    public void UdpateRequisites(Requisites requisites)
+    {
+        Requisites = requisites;
     }
 }

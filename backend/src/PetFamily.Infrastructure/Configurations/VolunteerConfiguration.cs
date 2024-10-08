@@ -17,7 +17,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .HasConversion(
                 Id => Id.Value,
                 value => VolunteerId.Create(value));
-        
+
         builder.Property(v => v.Experience)
             .IsRequired()
             .HasColumnName("experience");
@@ -39,6 +39,19 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
             });
         });
+
+
+        builder.OwnsOne(v => v.Details, pbuilder =>
+        {
+            pbuilder.ToJson("socials");
+            pbuilder.OwnsMany(pbuilder => pbuilder.SocialNetworks, ssn =>
+            {
+                ssn.Property(s => s.Name).IsRequired();
+                ssn.Property(s => s.Link).IsRequired();
+            });
+
+        });
+        
 
 
         builder.ComplexProperty(v => v.Email, eb => { eb.Property(e => e.Mail).IsRequired(); });

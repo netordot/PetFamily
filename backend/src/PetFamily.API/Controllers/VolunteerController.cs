@@ -4,6 +4,9 @@ using System.Reflection.Metadata.Ecma335;
 using FluentValidation;
 using PetFamily.API.Extensions;
 using PetFamily.API.Response;
+using PetFamily.Application.Volunteers.SharedDtos;
+using PetFamily.Application.Volunteers.UpdateRequisites;
+using PetFamily.Application.Volunteers.UpdateSocials;
 using PetFamily.Application.Volunteers.UpdateVolunteer;
 using PetFamily.Domain.Shared.Errors;
 
@@ -53,4 +56,44 @@ public class VolunteerController : ControllerBase
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
+
+    [HttpPatch("{id:guid}/socials")]
+    public async Task<ActionResult> UpdateSocials(
+        [FromRoute] Guid id,
+        [FromServices] IUpdateSocialsService service,
+        [FromBody] SocialsListDto Dto,
+        [FromServices] IValidator<UpdateSocialsRequest> validator,
+        CancellationToken cancellationToken)
+    {
+        var request = new UpdateSocialsRequest( id, Dto);
+
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return validationResult.ToValidationErrorResponse();
+
+        var result = await service.UpdateSocials
+            (request, cancellationToken);
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+    }
+    [HttpPatch("{id:guid}/requisites")]
+    public async Task<ActionResult> UpdateRequisites(
+        [FromRoute] Guid id,
+        [FromServices] IUpdateRequisitesService service,
+        [FromBody] RequisiteListDto Dto,
+        [FromServices] IValidator<UpdateRequisitesRequest> validator,
+        CancellationToken cancellationToken)
+    {
+        var request = new UpdateRequisitesRequest( Dto, id);
+
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return validationResult.ToValidationErrorResponse();
+
+        var result = await service.UdpateRequisites(request, cancellationToken);
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+    }
+    
+    
 }

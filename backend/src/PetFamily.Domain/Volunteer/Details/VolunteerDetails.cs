@@ -4,10 +4,16 @@ namespace PetFamily.Domain.Volunteer;
 
 public class VolunteerDetails
 {
+
+    public VolunteerDetails()
+    {
+        
+    }
     public IReadOnlyList<Social> SocialNetworks { get; }
 
-    public VolunteerDetails(List<Social> socialNetworks)
+
+    public VolunteerDetails(IEnumerable<Social> socialNetworks)
     {
-        SocialNetworks = socialNetworks;
+        SocialNetworks = socialNetworks.ToList();
     }
 }

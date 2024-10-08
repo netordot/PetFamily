@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.Volunteers.Dtos;
+﻿using PetFamily.Application.Volunteers.SharedDtos;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteer;
 
