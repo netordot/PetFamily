@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.Volunteers.CreateVolunteer;
+using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Domain;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
@@ -49,7 +49,7 @@ public class CreateVolunteerService : ICreateVolunteerService
             createVolunteerRequest.Description, createVolunteerRequest.Experience, phoneResult.Value, null,
             addressResult, requisitesResult,
             socialsResult, volunteerId);
-
+        
         Volunteer result = volunteer.Value;
 
         return await _volunteerRepository.Add(result, CancellationToken.None);
