@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Logging;
+using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Domain;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
@@ -8,17 +7,15 @@ using PetFamily.Domain.Shared.PhoneNumber;
 using PetFamily.Domain.Volunteer;
 using PetFamily.Domain.Volunteer.Details;
 
-namespace PetFamily.Application.Volunteers.CreateVolunteer;
+namespace PetFamily.Application.Volunteers.Create;
 
 public class CreateVolunteerService : ICreateVolunteerService
 {
     private readonly IVolunteerRepository _volunteerRepository;
-    private readonly ILogger<CreateVolunteerService> _logger;
 
-    public CreateVolunteerService(IVolunteerRepository volunteerRepository, ILogger<CreateVolunteerService> logger)
+    public CreateVolunteerService(IVolunteerRepository volunteerRepository)
     {
         _volunteerRepository = volunteerRepository;
-        _logger = logger;
     }
 
     public async Task<CSharpFunctionalExtensions.Result<Guid, Error>> Create(
@@ -48,15 +45,12 @@ public class CreateVolunteerService : ICreateVolunteerService
 
         var emailResult = Email.Create(createVolunteerRequest.Email);
 
-
         var volunteer = Domain.Volunteer.Volunteer.Create(resultName, emailResult.Value,
             createVolunteerRequest.Description, createVolunteerRequest.Experience, phoneResult.Value, null,
             addressResult, requisitesResult,
             socialsResult, volunteerId);
-
-        Volunteer result = volunteer.Value;
         
-        _logger.LogInformation("Created volunteer with ID: {volunteerId}", volunteerId.Value);
+        Volunteer result = volunteer.Value;
 
         return await _volunteerRepository.Add(result, CancellationToken.None);
     }

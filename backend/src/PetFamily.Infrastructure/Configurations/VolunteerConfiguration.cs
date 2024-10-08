@@ -12,15 +12,19 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
     {
         builder.ToTable("volunteers");
         builder.HasKey(v => v.Id);
-        
+
         builder.Property(v => v.Id)
             .HasConversion(
                 Id => Id.Value,
                 value => VolunteerId.Create(value));
-        
+
+        builder.Property(v => v.Experience)
+            .IsRequired()
+            .HasColumnName("experience");
+
         builder.Property(v => v.Description)
             .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
-        
+
         builder.OwnsOne(p => p.Requisites, pbuilder =>
         {
             pbuilder.ToJson("requisites");
@@ -37,16 +41,23 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         });
 
 
-        builder.ComplexProperty(v => v.Email, eb =>
+        builder.OwnsOne(v => v.Details, pbuilder =>
         {
-            eb.Property(e => e.Mail).IsRequired();
-        });
+            pbuilder.ToJson("socials");
+            pbuilder.OwnsMany(pbuilder => pbuilder.SocialNetworks, ssn =>
+            {
+                ssn.Property(s => s.Name).IsRequired();
+                ssn.Property(s => s.Link).IsRequired();
+            });
 
-        builder.ComplexProperty(v => v.Number, eb =>
-        {
-            eb.Property(e => e.Number).IsRequired();
         });
         
+
+
+        builder.ComplexProperty(v => v.Email, eb => { eb.Property(e => e.Mail).IsRequired(); });
+
+        builder.ComplexProperty(v => v.Number, eb => { eb.Property(e => e.Number).IsRequired(); });
+
 
         builder.ComplexProperty(v => v.Name, vbuilder =>
         {
@@ -54,15 +65,14 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .IsRequired()
                 .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
                 .HasColumnName("name");
-            
+
             vbuilder.Property(v => v.MiddleName)
                 .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
                 .HasColumnName("middle_name");
-            
+
             vbuilder.Property(v => v.LastName)
                 .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
                 .HasColumnName("last_name");
-
         });
 
         builder.ComplexProperty(v => v.Address, ab =>
@@ -82,7 +92,6 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .HasColumnName("building_number");
             ab.Property(a => a.CropsNumber)
                 .HasColumnName("crops_number");
-
         });
     }
 }

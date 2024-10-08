@@ -1,3 +1,3 @@
-﻿namespace PetFamily.Application.Volunteers.Dtos;
+﻿namespace PetFamily.Application.Volunteers.SharedDtos;
 
 public record RequisiteDto(string Title, string Description);
