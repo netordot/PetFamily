@@ -5,6 +5,7 @@ namespace PetFamily.Domain.Volunteer.Details;
 
 public record Social
 {
+    
     public Social(string name, string link)
     {
         Name = name;

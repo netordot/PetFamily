@@ -20,21 +20,28 @@ public class VolunteerRepository : IVolunteerRepository
     {
         await _context.Volunteers.AddAsync(volunteer);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return volunteer.Id;
     }
 
     public async Task<Result<Volunteer, Error>> GetById(Guid volunteerId, CancellationToken cancellationToken = default)
     {
         var volunteer = await _context.Volunteers
-            .Include(p => p.Pets)
+            // .Include(p => p.Pets)
             .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
         if (volunteer == null)
         {
             return Errors.General.NotFound(volunteerId);
         }
+
         return volunteer;
     }
-    
-    
+
+    public async Task<Result<Guid, Error>> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+    {
+        _context.Volunteers.Attach(volunteer);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return volunteer.Id.Value;
+    }
 }

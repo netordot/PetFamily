@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Domain;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
@@ -7,7 +7,7 @@ using PetFamily.Domain.Shared.PhoneNumber;
 using PetFamily.Domain.Volunteer;
 using PetFamily.Domain.Volunteer.Details;
 
-namespace PetFamily.Application.Volunteers.CreateVolunteer;
+namespace PetFamily.Application.Volunteers.Create;
 
 public class CreateVolunteerService : ICreateVolunteerService
 {
