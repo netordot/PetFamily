@@ -30,6 +30,9 @@ public class UpdateSocialsService : IUpdateSocialsService
 
         await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
 
+         _logger.LogInformation("Updated Volunteer socials with Id {id}", request.Id);
+
+
         return request.Id;
     }
 }

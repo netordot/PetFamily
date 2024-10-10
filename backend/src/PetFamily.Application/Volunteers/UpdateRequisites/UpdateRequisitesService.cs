@@ -28,6 +28,8 @@ public class UpdateRequisitesService : IUpdateRequisitesService
 
         volunteerResult.Value.UdpateRequisites(requisitesResult);
 
+        _logger.LogInformation("Updated Volunteer requisites with Id {id}", request.Id);
+
         return await _volunteerRepository.Save(volunteerResult.Value, ct);
     }
 }

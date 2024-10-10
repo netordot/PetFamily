@@ -6,8 +6,9 @@ using PetFamily.Domain.Shared.PhoneNumber;
 
 namespace PetFamily.Domain.Volunteer;
 
-public class Volunteer : Shared.Entity<VolunteerId>
+public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 {
+    private bool _isDeleted;
     public FullName Name { get; private set; }
     public Requisites? Requisites { get; private set; }
     public VolunteerDetails? Details { get; private set; }
@@ -111,5 +112,20 @@ public class Volunteer : Shared.Entity<VolunteerId>
     public void UdpateRequisites(Requisites requisites)
     {
         Requisites = requisites;
+    }
+
+    public void Delete()
+    {
+        if(!_isDeleted)
+            _isDeleted = true;
+    }
+
+    public void Restore()
+    {
+        if(_isDeleted)
+        {
+            _isDeleted= false;
+        }
+
     }
 }

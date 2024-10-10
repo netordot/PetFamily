@@ -51,7 +51,6 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             });
 
         });
-        
 
 
         builder.ComplexProperty(v => v.Email, eb => { eb.Property(e => e.Mail).IsRequired(); });
@@ -93,5 +92,14 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             ab.Property(a => a.CropsNumber)
                 .HasColumnName("crops_number");
         });
+
+        builder.HasMany(v => v.Pets)
+            .WithOne()
+            .HasForeignKey("VolunteerId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property<bool>("_isDeleted")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("deleted");
     }
 }
