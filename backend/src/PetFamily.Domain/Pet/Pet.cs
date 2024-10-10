@@ -2,51 +2,55 @@
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
+using PetFamily.Domain.Volunteer;
 
 namespace PetFamily.Domain.Pet;
 
-public class Pet : Shared.Entity<PetId>
-{ 
+public class Pet : Shared.Entity<PetId>, ISoftDeletable
+{
     // for ef core
     private Pet(PetId id) : base(id)
     {
-        
+
     }
-    
+
+    public VolunteerId VolunteerId { get; private set; }
     public string Name { get; private set; }
-    public SpeciesBreed SpeciesBreed { get;  private set; }
+    public SpeciesBreed SpeciesBreed { get; private set; }
     public string Color { get; private set; }
     public string Description { get; private set; }
     public string HealthCondition { get; private set; }
-    public PhoneNumber PhoneNumber { get; private set; } 
+    public PhoneNumber PhoneNumber { get; private set; }
     public Address Address { get; private set; }
     public PetStatus Status { get; private set; }
 
     public double Height { get; private set; }
-    public double Weight { get; private set; } 
+    public double Weight { get; private set; }
     public bool IsCastrated { get; private set; }
     public bool IsVaccinated { get; private set; }
-    
+
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public Requisites? Requisites { get; private set; }
     public List<PetPhoto> Photos { get; private set; } = [];
 
-    private Pet(string name, 
+    private  bool _isDeleted = false;
+
+    private Pet(string name,
         SpeciesBreed speciesBreed,
         string color,
-        string description, 
+        string description,
         string healthCondition,
         PhoneNumber contactPhoneNumber,
         Address address,
-        PetStatus status, 
-        double height, 
-        double weight, 
+        PetStatus status,
+        double height,
+        double weight,
         bool isCastrated,
         bool isVaccinated,
-        DateTime dateOfBirth, 
-        DateTime createdAt, 
-        List<PetPhoto> photos, 
+        DateTime dateOfBirth,
+        DateTime createdAt,
+        List<PetPhoto> photos,
         PetId id) : base(id)
     {
         Name = name;
@@ -87,24 +91,39 @@ public class Pet : Shared.Entity<PetId>
         {
             return Errors.General.ValueIsRequired(name);
         }
-        
-        
-        return new Pet(name, 
+
+
+        return new Pet(name,
             speciesBreed,
             color,
             description,
             healthCondition,
-            contactPhoneNumbers, 
-            address, 
-            status, 
+            contactPhoneNumbers,
+            address,
+            status,
             height,
             weight,
             isCastrated,
-            isVaccinated, 
-            dateOfBirth, 
+            isVaccinated,
+            dateOfBirth,
             createdAt,
-            photos, 
+            photos,
             id);
+    }
+
+    public void Delete()
+    {
+        if (!_isDeleted)
+            _isDeleted = true;
+    }
+
+    public void Restore()
+    {
+        if (_isDeleted)
+        {
+            _isDeleted = false;
+        }
+
     }
 
 }

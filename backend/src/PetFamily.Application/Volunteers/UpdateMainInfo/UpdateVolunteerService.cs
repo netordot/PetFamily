@@ -36,11 +36,8 @@ public class UpdateVolunteerService : IUpdateVolunteerService
 
         await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
 
+        _logger.LogInformation("Updated Volunteer with Id  {request.id}", request.id);
+
         return request.id;
     }
-}
-
-public interface IUpdateVolunteerService
-{
-    Task<Result<Guid, Error>> Update(UpdateVolunteerRequest request, CancellationToken cancellationToken);
 }

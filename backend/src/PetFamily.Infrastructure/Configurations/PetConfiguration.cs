@@ -12,7 +12,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
     {
         builder.ToTable("pets");
         builder.HasKey(p => p.Id);
-        
+
         builder.Property(p => p.Id)
             .HasConversion(
                 Id => Id.Value,
@@ -20,8 +20,8 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.Property(p => p.Description)
             .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
-        
-        builder.Property(p =>p.Name)
+
+        builder.Property(p => p.Name)
             .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
         builder.OwnsOne(p => p.Requisites, pbuilder =>
@@ -30,20 +30,20 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
             pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
             {
-                    vb.Property(v => v.Description)
-                        .IsRequired()
-                        .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
-                    vb.Property(v => v.Title)
-                        .IsRequired()
-                        .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
+                vb.Property(v => v.Description)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
+                vb.Property(v => v.Title)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
             });
         });
-        
+
         builder.ComplexProperty(v => v.PhoneNumber, eb =>
         {
             eb.Property(e => e.Number).IsRequired();
         });
-        
+
         builder.ComplexProperty(v => v.Address, ab =>
         {
             ab.Property(a => a.City)
@@ -64,13 +64,18 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             pb.Property(sb => sb.BreedId)
                 .IsRequired()
                 .HasColumnName("BreedId");
-            
+
             pb.Property(sb => sb.SpeciesId)
                 .IsRequired()
                 .HasConversion(
                     Id => Id.Value,
                     value => SpeciesId.Create(value))
                 .HasColumnName("SpeciesId");
+
         });
+
+        builder.Property<bool>("_isDeleted")
+           .UsePropertyAccessMode(PropertyAccessMode.Field)
+           .HasColumnName("deleted");
     }
 }

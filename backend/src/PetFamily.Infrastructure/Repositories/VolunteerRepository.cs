@@ -44,4 +44,13 @@ public class VolunteerRepository : IVolunteerRepository
 
         return volunteer.Id.Value;
     }
+
+    public async Task<Result<Guid, Error>> Delete(Volunteer volunteer, CancellationToken cancellationToken)
+    {
+        _context.Volunteers.Remove(volunteer);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return volunteer.Id.Value;
+    }
 }

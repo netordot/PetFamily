@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.CreateVolunteer;
+using PetFamily.Application.Volunteers.Delete;
 using PetFamily.Application.Volunteers.UpdateRequisites;
 using PetFamily.Application.Volunteers.UpdateSocials;
 using PetFamily.Application.Volunteers.UpdateVolunteer;
@@ -16,6 +17,7 @@ public static class Inject
         services.AddScoped<IUpdateVolunteerService, UpdateVolunteerService>();
         services.AddScoped<IUpdateSocialsService, UpdateSocialsService>();
         services.AddScoped<IUpdateRequisitesService, UpdateRequisitesService>();
+        services.AddScoped<IDeleteVolunteerService, DeleteVolunteerService>();
         
         services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
 

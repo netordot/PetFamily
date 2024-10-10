@@ -9,6 +9,7 @@ using PetFamily.Application.Volunteers.UpdateRequisites;
 using PetFamily.Application.Volunteers.UpdateSocials;
 using PetFamily.Application.Volunteers.UpdateVolunteer;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.Application.Volunteers.Delete;
 
 namespace PetFamily.API.Controllers;
 
@@ -79,6 +80,7 @@ public class VolunteerController : ControllerBase
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
+
     [HttpPatch("{id:guid}/requisites")]
     public async Task<ActionResult> UpdateRequisites(
         [FromRoute] Guid id,
@@ -97,6 +99,24 @@ public class VolunteerController : ControllerBase
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
-    
-    
+
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult> Delete(
+       [FromRoute] Guid id,
+       [FromServices] IDeleteVolunteerService service,
+       [FromServices] IValidator<DeleteVolunteerRequest> validator,
+       CancellationToken cancellationToken)
+    {
+        var request = new DeleteVolunteerRequest(id);
+
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            return validationResult.ToValidationErrorResponse();
+
+        var result = await service.Delete(request, cancellationToken);
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+    }
+
+
 }
