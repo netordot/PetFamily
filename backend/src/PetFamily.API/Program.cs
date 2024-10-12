@@ -1,9 +1,11 @@
 using FluentValidation;
+using Minio;
 using PetFamily.API.Extensions;
 using PetFamily.Application;
 using PetFamily.Application.Volunteers;
 using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Infrastructure;
+using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure();
+    .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
