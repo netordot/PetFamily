@@ -4,6 +4,8 @@ using Microsoft.Extensions.Options;
 using Minio;
 using Minio.DataModel.Args;
 using PetFamily.API.Extensions;
+using PetFamily.Application.Photos.GetPhoto;
+using PetFamily.Application.Photos.RemovePhoto;
 using PetFamily.Application.Photos.UploadPhoto;
 using PetFamily.Infrastructure.Options;
 
@@ -22,8 +24,8 @@ namespace PetFamily.API.Controllers
             _client = client;
         }
 
-        // получение файла
-        [HttpGet]
+        // получение бакетов
+        [HttpGet("buckets")]
         public async Task<ActionResult> Get()
         {
             var buckets = await _client.ListBucketsAsync();
@@ -51,7 +53,41 @@ namespace PetFamily.API.Controllers
                 return result.Error.ToResponse();
             }
 
-            return Ok(result);
+            return Ok(result.Value);
+        }
+
+        // получить ссылку на файл
+        //!! требует переделки
+        [HttpGet]
+        public async Task<ActionResult> GetFile(
+            [FromQuery] GetPhotoRequest request,
+            [FromServices] GetPhotoService getPhotoService,
+            CancellationToken cancellation)
+        {
+
+            var result = await getPhotoService.Get(request,cancellation);
+            if (result.IsFailure)
+            {
+                return result.Error.ToResponse();
+            }
+
+            return Ok(result.Value);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> RemoveFile(
+            [FromQuery] string request,
+            [FromServices] RemovePhotoService removePhotoService,
+            CancellationToken cancellation)
+        {
+
+            var result = await removePhotoService.Remove(request, cancellation);
+            if (result.IsFailure)
+            {
+                return result.Error.ToResponse();
+            }
+
+            return Ok(result.Value);
         }
     }
 }

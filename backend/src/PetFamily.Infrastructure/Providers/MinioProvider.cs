@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
+using Minio.Exceptions;
 using PetFamily.Application.Providers;
 using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Domain.Shared.Errors;
@@ -63,6 +64,49 @@ namespace PetFamily.Infrastructure.Providers
                 return Error.Failure("upload.file", "Failed to load file to Minio");
             }
 
+        }
+
+        public async Task<Result<string, Error>> GetFile(GetFileProvider provider, CancellationToken cancellation)
+        {
+            try
+            {
+                PresignedGetObjectArgs args = new PresignedGetObjectArgs()
+                                      .WithBucket("photos")
+                                      .WithObject(provider.FileName)
+                                      .WithExpiry(60 * 60 * 24);
+                string url = await _client.PresignedGetObjectAsync(args);
+                if(url ==null)
+                {
+                    return Errors.General.NotFound();
+                }
+                return url;
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get file from MinIO");
+                return Error.Failure("get.file", "Failed to get file from MinIO");
+            }
+        }
+
+        public async Task<Result<string,Error>> RemoveFile(string fileName, CancellationToken cancellation)
+        {
+            try
+            {
+                RemoveObjectArgs rmArgs = new RemoveObjectArgs()
+                                              .WithBucket("photos")
+                                              .WithObject(fileName);
+                await _client.RemoveObjectAsync(rmArgs);
+                //логировать ниже
+                return fileName;  //Console.WriteLine("successfully removed mybucket/myobject");
+
+            }
+            catch (MinioException e)
+            {
+                //логировать ниже
+                //Console.WriteLine("Error: " + e);
+                return Error.Failure("delete.file", "Failed to delete file from S3 storage");
+            }
         }
 
     }
