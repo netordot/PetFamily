@@ -21,6 +21,7 @@ namespace PetFamily.Infrastructure.Providers
     {
         private readonly IMinioClient _client;
         private readonly ILogger<MinioProvider> _logger;
+        private const string PHOTO = "photos";
 
         public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger)
         {
@@ -35,20 +36,20 @@ namespace PetFamily.Infrastructure.Providers
                 var path = Guid.NewGuid();
 
                 var bucketExistsArgs = new BucketExistsArgs()
-                    .WithBucket("photos");
+                    .WithBucket(PHOTO);
 
                 var bucketExists = await _client.BucketExistsAsync(bucketExistsArgs);
 
                 if (bucketExists == false)
                 {
                     var makeBucketArgs = new MakeBucketArgs()
-                        .WithBucket("photos");
+                        .WithBucket(PHOTO);
 
                     await _client.MakeBucketAsync(makeBucketArgs);
                 }
 
                 var putObjectArgs = new PutObjectArgs()
-                    .WithBucket("photos")
+                    .WithBucket(PHOTO)
                     .WithStreamData(content.Stream)
                     .WithObjectSize(content.Stream.Length)
                     .WithObject(path.ToString());
@@ -70,15 +71,20 @@ namespace PetFamily.Infrastructure.Providers
         {
             try
             {
+                var statObjectArgs = new StatObjectArgs()
+                    .WithBucket(PHOTO)
+                    .WithObject(provider.FileName);
+
+                var objStat = await _client.StatObjectAsync(statObjectArgs);
+               
+
                 PresignedGetObjectArgs args = new PresignedGetObjectArgs()
-                                      .WithBucket("photos")
+                                      .WithBucket(PHOTO)
                                       .WithObject(provider.FileName)
                                       .WithExpiry(60 * 60 * 24);
+
                 string url = await _client.PresignedGetObjectAsync(args);
-                if(url ==null)
-                {
-                    return Errors.General.NotFound();
-                }
+
                 return url;
             }
 
@@ -89,25 +95,27 @@ namespace PetFamily.Infrastructure.Providers
             }
         }
 
-        public async Task<Result<string,Error>> RemoveFile(string fileName, CancellationToken cancellation)
+        public async Task<Result<string, Error>> RemoveFile(string fileName, CancellationToken cancellation)
         {
             try
             {
                 RemoveObjectArgs rmArgs = new RemoveObjectArgs()
-                                              .WithBucket("photos")
+                                              .WithBucket(PHOTO)
                                               .WithObject(fileName);
                 await _client.RemoveObjectAsync(rmArgs);
-                //логировать ниже
-                return fileName;  //Console.WriteLine("successfully removed mybucket/myobject");
+
+                _logger.LogInformation("{fileName} file successfully deleted ", fileName);
+                return fileName;
 
             }
             catch (MinioException e)
             {
-                //логировать ниже
-                //Console.WriteLine("Error: " + e);
+                _logger.LogInformation("Failed to delete file {fileName} from S3 storage", fileName);
                 return Error.Failure("delete.file", "Failed to delete file from S3 storage");
             }
         }
+
+        //TODO: сделать метод для проверки есть ли бакет, и если нет, делать его
 
     }
 }
