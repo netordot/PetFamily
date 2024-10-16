@@ -13,20 +13,20 @@ public class PetPhoto : Shared.Entity<PetPhotoId>
     {
     }
 
-    private  PetPhoto(string path, bool isMain, PetPhotoId petPhotoId) : base(petPhotoId)
+    private PetPhoto(string path, bool isMain, PetPhotoId petPhotoId) : base(petPhotoId)
     {
         Path = path;
-        IsMain = isMain; 
+        IsMain = isMain;
     }
 
-    public static Result<PetPhoto,Error> Create(string path, bool isMain, PetPhotoId petPhotoId)
+    public static Result<PetPhoto, Error> Create(string path, bool isMain, PetPhotoId petPhotoId)
     {
         if (string.IsNullOrEmpty(path))
         {
             return Errors.General.ValueIsRequired("");
         }
-        
-        return    new PetPhoto(path, isMain, petPhotoId);
+
+        return new PetPhoto(path, isMain, petPhotoId);
     }
-    
+
 }

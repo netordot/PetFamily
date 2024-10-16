@@ -39,6 +39,19 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             });
         });
 
+        //builder.OwnsOne(p => p.Photos, pbuilder =>
+        //{
+        //    pbuilder.OwnsMany(pbuilder => pbuilder.Photos);
+
+        //});
+
+        //builder.OwnsOne(p => p.Photos, phb =>
+        //{
+        //    phb.Property(ph => ph.Photos)
+        //    .IsRequired();
+        //});
+            
+
         builder.ComplexProperty(v => v.PhoneNumber, eb =>
         {
             eb.Property(e => e.Number).IsRequired();

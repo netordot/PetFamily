@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Pet;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.Mails;
@@ -126,6 +127,11 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         {
             _isDeleted= false;
         }
+    }
 
+    public UnitResult<Error> AddPet(Pet.Pet pet)
+    {
+        Pets.Add(pet);
+        return Result.Success<Error>();
     }
 }

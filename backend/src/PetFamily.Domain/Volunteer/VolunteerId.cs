@@ -19,5 +19,4 @@ public class VolunteerId
         ArgumentNullException.ThrowIfNull(volunteerId);
         return volunteerId.Value;
     }
-
 }
