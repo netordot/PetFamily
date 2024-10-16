@@ -8,6 +8,7 @@ namespace PetFamily.Domain;
 public class Species : Domain.Shared.Entity<SpeciesId>
 {
     public string  Name { get; private set; }
+    //TODO: инкапсулировать взаимодействие с листом
     public List<Breed>? Breeds { get; private set; } = [];
 
     private Species(SpeciesId id) : base(id)
@@ -29,4 +30,11 @@ public class Species : Domain.Shared.Entity<SpeciesId>
         
         return new Species(speciesName, breeds, id);
     }
+
+    public UnitResult<Error> AddBreed(Breed breed)
+    {
+        Breeds.Add(breed);
+        return Result.Success<Error>();
+    }
+
 }

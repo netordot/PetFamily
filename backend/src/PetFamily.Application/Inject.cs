@@ -4,6 +4,7 @@ using PetFamily.Application.Photos.GetPhoto;
 using PetFamily.Application.Photos.RemovePhoto;
 using PetFamily.Application.Photos.UploadPhoto;
 using PetFamily.Application.Species;
+using PetFamily.Application.Species.AddBreeds;
 using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.CreateVolunteer;
@@ -28,6 +29,7 @@ public static class Inject
         services.AddScoped<GetPhotoService>();
         services.AddScoped<AddPetService>();
         services.AddScoped<CreateSpeciesService>();
+        services.AddScoped<AddBreedService>();
 
 
         services.AddValidatorsFromAssembly(typeof(Inject).Assembly);

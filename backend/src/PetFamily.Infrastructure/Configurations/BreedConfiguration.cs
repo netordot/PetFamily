@@ -21,6 +21,14 @@ public class BreedConfiguration : IEntityTypeConfiguration<Breed>
         builder.Property(b => b.Name)
             .IsRequired()
             .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
-        
+
+        builder.Property(b => b.SpeciesId)
+            .IsRequired()
+            .HasColumnName("species_id")
+            .HasConversion(
+
+            Id => Id.Value,
+            Value => SpeciesId.Create(Value));
+
     }
 }

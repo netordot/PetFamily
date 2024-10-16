@@ -50,7 +50,7 @@ namespace PetFamily.Infrastructure.Repositories
         }
 
         // в дальнейшем рассмотреть еще проверку через ToLower, чтобы точно никак не повторялось
-        public async Task<Result<Species,Error>> GetByName(string Name, CancellationToken cancellation)
+        public async Task<Result<Species, Error>> GetByName(string Name, CancellationToken cancellation)
         {
             var speciesResult = await _context.Species
                 // .Include(s => s.Breeds)
