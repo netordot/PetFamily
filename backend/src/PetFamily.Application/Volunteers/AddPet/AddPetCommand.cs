@@ -13,7 +13,8 @@ namespace PetFamily.Application.Volunteers.AddPet
         Guid VolunteerId,
         // другие файлы и дто по аналогии с волонтером
         string Name,
-        //SpeciesBreedDto SpeciesBreed,
+        string Species,
+        string Breed,
         string Color,
         string Description,
         string HealthCondition,
@@ -22,7 +23,6 @@ namespace PetFamily.Application.Volunteers.AddPet
         double Height,
         bool IsCastrated,
         bool IsVaccinated,
-        IEnumerable<FileDto> Files,
         DateTime BirthDate
 
     );

@@ -123,19 +123,17 @@ public class VolunteerController : ControllerBase
     [HttpPost("{id:guid}/pet")]
     public async Task<ActionResult> AddPet
         (
-        [FromRoute] Guid Id,
-        [FromForm] AddPetRequest request,
+        [FromRoute] Guid id,
+        [FromBody] AddPetRequest request,
         [FromServices] AddPetService addPetService,
         CancellationToken cancellationToken
         )
     {
-        var filesDto = request.Files.Select(f => new FileDto(f.FileName));
-
         var command = new AddPetCommand(
-            request.Id,
+            id,
             request.Name,
-            //request.SpeciesBreed,
-            //null вместо speciesBreed
+            request.Species,
+            request.Breed,
             request.Color,
             request.Description,
             request.HealthCondition,
@@ -144,17 +142,14 @@ public class VolunteerController : ControllerBase
             request.Height,
             request.IsCastrated,
             request.IsVaccinated,
-            filesDto,
             request.BirthDate
             );
 
         var result = await addPetService.AddPet(command, cancellationToken);
-        if(result.IsFailure)
-        {
+        if (result.IsFailure)
             return result.Error.ToResponse();
-        }
 
-        return Ok(result);
+        return new ObjectResult(result.Value) { StatusCode = 201 };
 
     }
 

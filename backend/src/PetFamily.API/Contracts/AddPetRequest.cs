@@ -6,9 +6,9 @@ namespace PetFamily.API.Contracts
     public record AddPetRequest
     // временно speciesBreed не будет указан
     (
-        Guid Id,
         string Name,
-        // SpeciesBreedDto SpeciesBreed,
+        string Species,
+        string Breed,
         string Color,
         string Description,
         string HealthCondition,
@@ -18,7 +18,6 @@ namespace PetFamily.API.Contracts
         double Height,
         bool IsCastrated,
         bool IsVaccinated,
-        DateTime BirthDate,
-        IFormFileCollection Files
+        DateTime BirthDate
         );
 }

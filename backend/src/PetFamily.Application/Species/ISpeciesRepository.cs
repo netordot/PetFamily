@@ -9,5 +9,7 @@ namespace PetFamily.Application.Species
         Task<Result<Guid, Error>> Create(Domain.Species species, CancellationToken cancellationToken);
         Task<Result<Domain.Species, Error>> GetById(Guid SpeciesId, CancellationToken cancellation);
         Task<Result<Guid, Error>> Save(Domain.Species species, CancellationToken cancellationToken = default);
+        Task<Result<SpeciesBreed, Error>> GetSpeciesBreedByNames(string speciesName, string breedname,
+            CancellationToken cancellation);
     }
 }

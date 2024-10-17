@@ -40,7 +40,7 @@ namespace PetFamily.Infrastructure.Repositories
         public async Task<Result<Species, Error>> GetById(Guid SpeciesId, CancellationToken cancellation)
         {
             var speciesResult = await _context.Species
-                // .Include(s => s.Breeds)
+                 .Include(s => s.Breeds)
                 .FirstOrDefaultAsync(s => s.Id == SpeciesId, cancellation);
 
             if (speciesResult == null)
@@ -50,10 +50,10 @@ namespace PetFamily.Infrastructure.Repositories
         }
 
         // в дальнейшем рассмотреть еще проверку через ToLower, чтобы точно никак не повторялось
-        public async Task<Result<Species, Error>> GetByName(string Name, CancellationToken cancellation)
+        private async Task<Result<Species, Error>> GetByName(string Name, CancellationToken cancellation)
         {
             var speciesResult = await _context.Species
-                // .Include(s => s.Breeds)
+                 .Include(s => s.Breeds)
                 .FirstOrDefaultAsync(s => s.Name == Name, cancellation);
 
             if (speciesResult == null)
@@ -68,6 +68,24 @@ namespace PetFamily.Infrastructure.Repositories
             await _context.SaveChangesAsync(cancellationToken);
 
             return species.Id.Value;
+        }
+
+        public async Task<Result<SpeciesBreed, Error>> GetSpeciesBreedByNames(string speciesName, string breedname,
+            CancellationToken cancellation)
+        {
+            var species = await GetByName(speciesName, cancellation);
+            if (species.IsFailure)
+                return Errors.General.NotFound();
+
+            var breedList = species.Value.Breeds;
+            if (breedList == null)
+                return Errors.General.NotFound();
+
+            var result = breedList.FirstOrDefault(b => b.Name == breedname);
+            if (result == null)
+                return Errors.General.NotFound();
+
+            return new SpeciesBreed(species.Value.Id, result.Id.Value);
         }
 
     }

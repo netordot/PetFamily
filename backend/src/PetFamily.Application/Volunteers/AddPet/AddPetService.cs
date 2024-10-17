@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Providers;
+using PetFamily.Application.Species;
+using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet;
 using PetFamily.Domain.Pet.PetPhoto;
@@ -17,11 +19,13 @@ namespace PetFamily.Application.Volunteers.AddPet
     {
         private readonly IFileProvider _fileProvider;
         private readonly IVolunteerRepository _volunteerRepository;
+        private readonly ISpeciesRepository _speciesRepository;
 
-        public AddPetService(IFileProvider fileProvider, IVolunteerRepository volunteerRepository)
+        public AddPetService(IFileProvider fileProvider, IVolunteerRepository volunteerRepository, ISpeciesRepository species)
         {
             _fileProvider = fileProvider;
             _volunteerRepository = volunteerRepository;
+            _speciesRepository = species;
         }
 
         public async Task<Result<Guid, Error>> AddPet(AddPetCommand command, CancellationToken cancellationToken)
@@ -32,42 +36,34 @@ namespace PetFamily.Application.Volunteers.AddPet
                 return volunteerResult.Error;
             }
 
-            // достаем через агрегат характерные для пета поля
+            var speciesBreed = await _speciesRepository
+                .GetSpeciesBreedByNames(command.Species, command.Breed, cancellationToken);
+            if(speciesBreed.IsFailure)
+                return speciesBreed.Error;
 
             var phoneNumberResult = volunteerResult.Value.Number;
             var addressResult = volunteerResult.Value.Address;
 
+            var requisitesResult = (volunteerResult.Value.Requisites);
 
             var petId = PetId.NewPetId;
-            //прописываем другие параметры
-
-            // загрузка файлов в Minio, создание VO файлов, сохраненияе в бд
-
-            // заглушка
-            var fileList = command.Files.Select(f => PetPhoto.Create(
-                f.fileName,
-                false,
-                PetPhotoId.NewPetPhotoId(Guid.NewGuid())).Value).ToList();
-
-            //var petPhotos = new PetPhotos(fileList);
-
+ 
             var pet = Pet.Create(command.Name,
-                //заглушка
-                //command.SpeciesBreed.SpeciesBreed,
-                null,
+                speciesBreed.Value,
                 command.Color,
                 command.Description,
                 command.HealthCondition,
                 phoneNumberResult,
                 addressResult,
+                requisitesResult,
                 command.status,
                 command.Height,
                 command.Weight,
                 command.IsCastrated,
                 command.IsVaccinated,
                 command.BirthDate,
-                DateTime.Now,
-                fileList,
+                DateTime.UtcNow,
+                null,
                 petId
                 );
 
@@ -79,7 +75,6 @@ namespace PetFamily.Application.Volunteers.AddPet
             await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
 
             return petId.Value;
-            // вернуть айдишку пета
         }
     }
 }

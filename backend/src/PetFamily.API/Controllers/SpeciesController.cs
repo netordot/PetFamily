@@ -40,7 +40,7 @@ namespace PetFamily.API.Controllers
              CancellationToken cancellationToken
             )
         {
-            var command = new AddBreedCommand(request.breedName, request.speciesId);
+            var command = new AddBreedCommand(request.breedName, id);
 
            var result = await addBreedService.AddBreed(command,cancellationToken);
             if(result.IsFailure)

@@ -33,7 +33,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public Requisites? Requisites { get; private set; }
-    public IReadOnlyList<Domain.PetPhoto> Photos { get; private set; }
+    public IReadOnlyList<Domain.PetPhoto>? Photos { get; private set; }
 
     private bool _isDeleted = false;
 
@@ -44,6 +44,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         string healthCondition,
         PhoneNumber contactPhoneNumber,
         Address address,
+        Requisites? requisites,
         PetStatus status,
         double height,
         double weight,
@@ -51,7 +52,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        List<Domain.PetPhoto> photos,
+        List<Domain.PetPhoto>? photos,
         PetId id) : base(id)
     {
         Name = name;
@@ -61,6 +62,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         HealthCondition = healthCondition;
         PhoneNumber = contactPhoneNumber;
         Address = address;
+        Requisites = requisites;
         Status = status;
         Height = height;
         Weight = weight;
@@ -78,6 +80,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         string healthCondition,
         PhoneNumber contactPhoneNumbers,
         Address address,
+        Requisites? requisites,
         PetStatus status,
         double height,
         double weight,
@@ -85,7 +88,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        List<Domain.PetPhoto> petPhotos,
+        List<Domain.PetPhoto>? petPhotos,
         PetId id)
     {
         if (String.IsNullOrEmpty(name))
@@ -101,6 +104,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
             healthCondition,
             contactPhoneNumbers,
             address,
+            requisites,
             status,
             height,
             weight,
@@ -125,10 +129,5 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
             _isDeleted = false;
         }
     }
-
-    //public UnitResult<Error> AddBreed(Breed.Breed breed)
-    //{
-    //    Breeds
-    //}
 
 }
