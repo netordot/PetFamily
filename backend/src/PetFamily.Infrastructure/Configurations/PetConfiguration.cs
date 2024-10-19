@@ -54,6 +54,28 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasColumnName("created_date")
             .IsRequired();
 
+        builder.Property(p => p.CreatedAt)
+            .HasConversion(
+        src => src.Kind == DateTimeKind.Utc
+        ? src
+        : DateTime.SpecifyKind(src, DateTimeKind.Utc),
+
+        dst => dst.Kind == DateTimeKind.Utc
+        ? dst
+        : DateTime.SpecifyKind(dst, DateTimeKind.Utc));
+
+        builder.Property(p => p.DateOfBirth)
+            .HasConversion(
+        src => src.Kind == DateTimeKind.Utc
+        ? src
+        : DateTime.SpecifyKind(src, DateTimeKind.Utc),
+
+        dst => dst.Kind == DateTimeKind.Utc
+        ? dst
+        : DateTime.SpecifyKind(dst, DateTimeKind.Utc));
+
+
+
         builder.Property(p => p.Status)
             .HasColumnName("status")
             .IsRequired();

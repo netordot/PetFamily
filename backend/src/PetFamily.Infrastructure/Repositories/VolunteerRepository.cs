@@ -48,11 +48,12 @@ public class VolunteerRepository : IVolunteerRepository
         //}
         //catch (Exception ex)
         //{
-        //    return Error.Failure("get.volunteer","An error occurred while retrieving volunteer");
+        //    return Error.Failure("get.volunteer", "An error occurred while retrieving volunteer");
         //}
 
         var volunteer = await _context.Volunteers
             .Include(v => v.Pets)
+            .ThenInclude(p => p.Photos)
             .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
 
         int a = 10;
@@ -65,35 +66,35 @@ public class VolunteerRepository : IVolunteerRepository
         return volunteer;
     }
 
-    //public async Task<Result<Guid, Error>> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
-    //{
-    //    _context.Volunteers.Attach(volunteer);
-    //    await _context.SaveChangesAsync(cancellationToken);
-
-    //    return volunteer.Id.Value;
-    //}
-
     public async Task<Result<Guid, Error>> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            _context.Volunteers.Attach(volunteer);
+        _context.Volunteers.Attach(volunteer);
+        await _context.SaveChangesAsync(cancellationToken);
 
-            foreach (var pet in volunteer.Pets)
-            {
-                // Set the correct state for pets
-                _context.Entry(pet).State = pet.Id.Value == Guid.Empty ? EntityState.Added : EntityState.Modified;
-            }
-
-            await _context.SaveChangesAsync(cancellationToken);
-            return volunteer.Id.Value;
-        }
-        catch (Exception ex)
-        {
-            //_logger.LogError(ex, "An error occurred while saving volunteer with ID: {VolunteerId}", volunteer.Id);
-            return Error.Failure("update.volunteer","An error occurred while saving volunteer");
-        }
+        return volunteer.Id.Value;
     }
+
+    //public async Task<Result<Guid, Error>> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+    //{
+    //    try
+    //    {
+    //        _context.Volunteers.Attach(volunteer);
+
+    //        foreach (var pet in volunteer.Pets)
+    //        {
+    //            // Set the correct state for pets
+    //            _context.Entry(pet).State = pet.Id.Value == Guid.Empty ? EntityState.Added : EntityState.Modified;
+    //        }
+
+    //        await _context.SaveChangesAsync(cancellationToken);
+    //        return volunteer.Id.Value;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        //_logger.LogError(ex, "An error occurred while saving volunteer with ID: {VolunteerId}", volunteer.Id);
+    //        return Error.Failure("update.volunteer","An error occurred while saving volunteer");
+    //    }
+    //}
 
     //public async Task<Result<Guid, Error>> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
     //{
