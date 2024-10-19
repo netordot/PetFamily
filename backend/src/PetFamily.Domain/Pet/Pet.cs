@@ -53,6 +53,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         DateTime dateOfBirth,
         DateTime createdAt,
         List<Domain.PetPhoto>? photos,
+        //VolunteerId volunteerId,
         PetId id) : base(id)
     {
         Name = name;
@@ -71,6 +72,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         DateOfBirth = dateOfBirth;
         CreatedAt = createdAt;
         Photos = photos;
+        //VolunteerId = volunteerId;
     }
 
     public static Result<Pet, Error> Create(string name,
@@ -89,13 +91,13 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         DateTime dateOfBirth,
         DateTime createdAt,
         List<Domain.PetPhoto>? petPhotos,
+        //VolunteerId volunteerId,
         PetId id)
     {
         if (String.IsNullOrEmpty(name))
         {
             return Errors.General.ValueIsRequired(name);
         }
-
 
         return new Pet(name,
             speciesBreed,
@@ -113,6 +115,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
             dateOfBirth,
             createdAt,
             petPhotos,
+            //volunteerId,
             id);
     }
 

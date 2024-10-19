@@ -52,7 +52,6 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         });
 
-
         builder.ComplexProperty(v => v.Email, eb => { eb.Property(e => e.Mail).IsRequired(); });
 
         builder.ComplexProperty(v => v.Number, eb => { eb.Property(e => e.Number).IsRequired(); });
@@ -95,7 +94,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.HasMany(v => v.Pets)
             .WithOne()
-            .HasForeignKey("VolunteerId")
+            .HasForeignKey(p => p.VolunteerId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property<bool>("_isDeleted")

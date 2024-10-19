@@ -64,6 +64,7 @@ namespace PetFamily.Application.Volunteers.AddPet
                 command.BirthDate,
                 DateTime.UtcNow,
                 null,
+                //volunteerResult.Value.Id,
                 petId
                 );
 
@@ -71,6 +72,7 @@ namespace PetFamily.Application.Volunteers.AddPet
                 return pet.Error;
 
             volunteerResult.Value.AddPet(pet.Value);
+            int a = 10;
 
             await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
 

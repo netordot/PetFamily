@@ -21,49 +21,65 @@ namespace PetFamily.Infrastructure.Providers
     {
         private readonly IMinioClient _client;
         private readonly ILogger<MinioProvider> _logger;
-        private const string PHOTO = "photos";
+        private readonly string PHOTO = "photos";
+        public const int MAX_DEGREE_PARALLEL = 10;
 
         public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger)
         {
             _client = minioClient;
             _logger = logger;
         }
-        public async Task<Result<string, Error>> UploadFile(FileContent content, CancellationToken cancellation)
+        public async Task<UnitResult<Error>> UploadFile(FileData fileData, CancellationToken cancellation)
         {
+            var semaphoreSlim = new SemaphoreSlim(MAX_DEGREE_PARALLEL);
 
             try
             {
-                var path = Guid.NewGuid();
+                await BucketExists(fileData.BucketName, cancellation);
+                //var bucketExistsArgs = new BucketExistsArgs()
+                //    .WithBucket(fileData.BucketName);
 
-                var bucketExistsArgs = new BucketExistsArgs()
-                    .WithBucket(PHOTO);
+                //var bucketExists = await _client.BucketExistsAsync(bucketExistsArgs);
 
-                var bucketExists = await _client.BucketExistsAsync(bucketExistsArgs);
+                //if (bucketExists == false)
+                //{
+                //    var makeBucketArgs = new MakeBucketArgs()
+                //        .WithBucket(fileData.BucketName);
 
-                if (bucketExists == false)
+                //    await _client.MakeBucketAsync(makeBucketArgs);
+                //}
+
+                List<Task> tasks = [];
+
+                foreach (var file in fileData.Files)
                 {
-                    var makeBucketArgs = new MakeBucketArgs()
-                        .WithBucket(PHOTO);
+                    await semaphoreSlim.WaitAsync(cancellation);
 
-                    await _client.MakeBucketAsync(makeBucketArgs);
+                    var putObjectArgs = new PutObjectArgs()
+                        .WithBucket(fileData.BucketName)
+                        .WithStreamData(file.Stream)
+                        .WithObjectSize(file.Stream.Length)
+                        .WithObject(file.ObjectName);
+
+                    var task = _client.PutObjectAsync(putObjectArgs, cancellation);
+
+                    semaphoreSlim.Release();
+                    tasks.Add(task);
                 }
 
-                var putObjectArgs = new PutObjectArgs()
-                    .WithBucket(PHOTO)
-                    .WithStreamData(content.Stream)
-                    .WithObjectSize(content.Stream.Length)
-                    .WithObject(path.ToString());
-
-                var result = await _client.PutObjectAsync(putObjectArgs);
-
-                return result.ObjectName;
-
+                await Task.WhenAll(tasks);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to load file to Minio");
                 return Error.Failure("upload.file", "Failed to load file to Minio");
             }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
+
+            return Result.Success<Error>();
 
         }
 
@@ -76,7 +92,7 @@ namespace PetFamily.Infrastructure.Providers
                     .WithObject(provider.FileName);
 
                 var objStat = await _client.StatObjectAsync(statObjectArgs);
-               
+
 
                 PresignedGetObjectArgs args = new PresignedGetObjectArgs()
                                       .WithBucket(PHOTO)
@@ -113,9 +129,32 @@ namespace PetFamily.Infrastructure.Providers
                 _logger.LogInformation("Failed to delete file {fileName} from S3 storage", fileName);
                 return Error.Failure("delete.file", "Failed to delete file from S3 storage");
             }
+
         }
+        private async Task<UnitResult<Error>> BucketExists(string bucketName, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var bucketExistsArgs = new BucketExistsArgs()
+                    .WithBucket(bucketName);
 
-        //TODO: сделать метод для проверки есть ли бакет, и если нет, делать его
+                if (await _client.BucketExistsAsync(bucketExistsArgs, cancellationToken) == false)
+                {
+                    var makeBucketArgs = new MakeBucketArgs()
+                          .WithBucket(bucketName);
 
+                    await _client.MakeBucketAsync(makeBucketArgs);
+                }
+
+            }
+
+            catch (MinioException e)
+            {
+                _logger.LogError(e, bucketName);
+                return Error.Failure("create.or.find", "unable to create or find bucket");
+            }
+
+            return UnitResult.Success<Error>();
+        }
     }
 }

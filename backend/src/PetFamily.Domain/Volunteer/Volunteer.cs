@@ -19,7 +19,7 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
     public string Description { get; private set; }
     public int Experience { get; private set; }
     public PhoneNumber Number { get; private set; }
-    public List<Pet.Pet>? Pets { get; private set; } = [];
+    public List<Pet.Pet>? Pets { get; private set; }
 
     private Volunteer(VolunteerId id) : base(id)
     {

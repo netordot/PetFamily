@@ -9,7 +9,7 @@ public class Species : Domain.Shared.Entity<SpeciesId>
 {
     public string  Name { get; private set; }
     //TODO: инкапсулировать взаимодействие с листом
-    public List<Breed>? Breeds { get; private set; } = [];
+    public List<Breed>? Breeds { get; private set; } 
 
     private Species(SpeciesId id) : base(id)
     {

@@ -12,6 +12,7 @@ using PetFamily.Domain.Shared.Errors;
 using PetFamily.Application.Volunteers.Delete;
 using PetFamily.API.Contracts;
 using PetFamily.Application.Volunteers.AddPet;
+using PetFamily.Application.Volunteers.AddPet.AddPhoto;
 
 namespace PetFamily.API.Controllers;
 
@@ -124,7 +125,7 @@ public class VolunteerController : ControllerBase
     public async Task<ActionResult> AddPet
         (
         [FromRoute] Guid id,
-        [FromBody] AddPetRequest request,
+        [FromForm] AddPetRequest request,
         [FromServices] AddPetService addPetService,
         CancellationToken cancellationToken
         )
@@ -150,8 +151,42 @@ public class VolunteerController : ControllerBase
             return result.Error.ToResponse();
 
         return new ObjectResult(result.Value) { StatusCode = 201 };
-
     }
 
+    [HttpPatch("{Id:guid}/photos")]
+    public async Task<ActionResult> AddPhotosToPet(
+        [FromRoute] Guid Id,
+        [FromServices] AddPetFilesService service,
+        [FromForm] AddFilesRequest request,
+        CancellationToken cancellation
+        )
+    {
+        //var filesDto = request.files.Select(f => new FileDto(f.FileName));
+
+        //var addFilesCommand = new AddFileCommand(filesDto);
+
+        List<FileDto> filesDto = [];
+
+        try
+        {
+            foreach (var file in request.files)
+            {
+                var stream = file.OpenReadStream();
+                filesDto.Add(new FileDto(stream,file.FileName, file.ContentType));
+            }
+
+            // тут добавитб взаимодействие с сервисами
+        }
+
+        finally
+        {
+            foreach (var fileDto in filesDto)
+            {
+                await fileDto.stream.DisposeAsync();
+            }
+        }
+
+        return new ObjectResult(Id);
+    }
 
 }

@@ -28,6 +28,4 @@ namespace PetFamily.Application.Volunteers.AddPet
     );
 
     public record SpeciesBreedDto(SpeciesBreed SpeciesBreed);
-
-    public record FileDto(string fileName);
 }
