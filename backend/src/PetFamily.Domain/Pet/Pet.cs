@@ -133,4 +133,10 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         }
     }
 
+    public UnitResult<Error> AddPhotos(List<Domain.PetPhoto> photos)
+    {
+        Photos = photos;
+        return Result.Success<Error>();
+    }
+
 }

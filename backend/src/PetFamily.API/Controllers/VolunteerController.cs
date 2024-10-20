@@ -163,7 +163,7 @@ public class VolunteerController : ControllerBase
     {
         //var filesDto = request.files.Select(f => new FileDto(f.FileName));
 
-        //var addFilesCommand = new AddFileCommand(filesDto);
+
 
         List<FileDto> filesDto = [];
 
@@ -175,7 +175,8 @@ public class VolunteerController : ControllerBase
                 filesDto.Add(new FileDto(stream,file.FileName, file.ContentType));
             }
 
-            // тут добавитб взаимодействие с сервисами
+            var addFilesCommand = new AddFileCommand(filesDto);
+            await service.AddPetFiles(Id, addFilesCommand, cancellation);
         }
 
         finally

@@ -27,9 +27,19 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
             _fileProvider = fileProvider;
         }
 
-        public async Task<Result<Guid, Error>> AddPetFiles(AddFileCommand command, CancellationToken cancellation)
+        public async Task<Result<Guid, Error>> AddPetFiles(Guid petId, AddFileCommand command, CancellationToken cancellation)
         {
             //логика нахождения пета по айдишнику
+
+            var volunteerOwns = await _volunteerRepository.GetVolunteerByPetId(PetId.Create(petId));
+            if (volunteerOwns.IsFailure)
+                return volunteerOwns.Error;
+
+            // тут может возникнуть ошибка
+            var petToUpdate = volunteerOwns.Value
+                .Pets.FirstOrDefault(p => p.Id.Value == petId);
+
+
 
             List<PetPhoto> photos = [];
             List<FileContent> fileContents = [];
@@ -63,9 +73,12 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             var petPhotos = filePaths.Select(p => PetPhoto.Create(p, false, PetPhotoId.NewPetPhotoId()));
 
-            // добавили фото к пету
-            // сохранили изменения
+            photos = filePaths.Select(p => PetPhoto.Create(p, false, PetPhotoId.NewPetPhotoId()).Value).ToList();
 
+            // добавили фото к пету
+            petToUpdate.AddPhotos(photos);
+            // сохранили изменения
+            _volunteerRepository.Save(volunteerOwns.Value, cancellation);
             // будем возвращать ид пета
             return Guid.NewGuid();
 
