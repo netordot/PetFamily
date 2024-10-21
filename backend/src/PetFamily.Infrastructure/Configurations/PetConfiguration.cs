@@ -75,24 +75,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         ? dst
         : DateTime.SpecifyKind(dst, DateTimeKind.Utc));
 
-
-
         builder.Property(p => p.Status)
             .HasColumnName("status")
             .IsRequired();
-
-        //builder.OwnsOne(p => p.Photos, pbuilder =>
-        //{
-        //    pbuilder.OwnsMany(pbuilder => pbuilder.Photos);
-
-        //});
-
-        //builder.OwnsOne(p => p.Photos, phb =>
-        //{
-        //    phb.Property(ph => ph.Photos)
-        //    .IsRequired();
-        //});
-
 
         builder.ComplexProperty(v => v.PhoneNumber, eb =>
         {
@@ -128,6 +113,13 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasColumnName("species_id");
 
         });
+
+        //builder.OwnsOne(p => p.Photos, phb =>
+        //{
+        //    phb.ToJson("photos");
+
+        //    phb.OwnsMany(v => v.Values);
+        //});
 
         builder.Property<bool>("_isDeleted")
            .UsePropertyAccessMode(PropertyAccessMode.Field)

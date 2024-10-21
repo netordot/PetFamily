@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PetFamily.Domain.Pet;
+using System.IO.Pipes;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 {
@@ -76,8 +78,11 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             photos = filePaths.Select(p => PetPhoto.Create(p, false, PetPhotoId.NewPetPhotoId()).Value).ToList();
 
+            // нормально переделать
+            var pictures = new ValueObjectList<PetPhoto>(photos);
+
             // добавили фото к пету
-            petToUpdate.AddPhotos(photos);
+            petToUpdate.AddPhotos(pictures);
             // сохранили изменения
             _volunteerRepository.Save(volunteerOwns.Value, cancellation);
             // будем возвращать ид пета

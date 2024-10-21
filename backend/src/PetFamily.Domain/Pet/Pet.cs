@@ -10,7 +10,6 @@ namespace PetFamily.Domain.Pet;
 
 public class Pet : Shared.Entity<PetId>, ISoftDeletable
 {
-    // for ef core
     private Pet(PetId id) : base(id)
     {
 
@@ -18,7 +17,6 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
 
     public VolunteerId VolunteerId { get; private set; }
     public string Name { get; private set; }
-    //временно nullable
     public SpeciesBreed SpeciesBreed { get; private set; }
     public string Color { get; private set; }
     public string Description { get; private set; }
@@ -34,7 +32,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public Requisites? Requisites { get; private set; }
-    public IReadOnlyList<PetPhoto.PetPhoto>? Photos { get; private set; }
+    public ValueObjectList<PetPhoto.PetPhoto>? Photos { get; private set; }
 
     private bool _isDeleted = false;
 
@@ -53,8 +51,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        List<PetPhoto.PetPhoto>? photos,
-        //VolunteerId volunteerId,
+        ValueObjectList<PetPhoto.PetPhoto>? photos,
         PetId id) : base(id)
     {
         Name = name;
@@ -73,7 +70,6 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         DateOfBirth = dateOfBirth;
         CreatedAt = createdAt;
         Photos = photos;
-        //VolunteerId = volunteerId;
     }
 
     public static Result<Pet, Error> Create(string name,
@@ -91,8 +87,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        List<PetPhoto.PetPhoto>? petPhotos,
-        //VolunteerId volunteerId,
+        ValueObjectList<PetPhoto.PetPhoto>? petPhotos,
         PetId id)
     {
         if (String.IsNullOrEmpty(name))
@@ -116,7 +111,6 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
             dateOfBirth,
             createdAt,
             petPhotos,
-            //volunteerId,
             id);
     }
 
@@ -134,7 +128,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         }
     }
 
-    public UnitResult<Error> AddPhotos(List<PetPhoto.PetPhoto> photos)
+    public UnitResult<Error> AddPhotos(ValueObjectList<PetPhoto.PetPhoto> photos)
     {
         Photos = photos;
         return Result.Success<Error>();
