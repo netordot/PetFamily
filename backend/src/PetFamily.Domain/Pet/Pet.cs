@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
@@ -16,6 +17,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
 
     public VolunteerId VolunteerId { get; private set; }
     public string Name { get; private set; }
+    //временно nullable
     public SpeciesBreed SpeciesBreed { get; private set; }
     public string Color { get; private set; }
     public string Description { get; private set; }
@@ -28,13 +30,12 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public double Weight { get; private set; }
     public bool IsCastrated { get; private set; }
     public bool IsVaccinated { get; private set; }
-
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public Requisites? Requisites { get; private set; }
-    public List<PetPhoto> Photos { get; private set; } = [];
+    public IReadOnlyList<Domain.PetPhoto>? Photos { get; private set; }
 
-    private  bool _isDeleted = false;
+    private bool _isDeleted = false;
 
     private Pet(string name,
         SpeciesBreed speciesBreed,
@@ -43,6 +44,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         string healthCondition,
         PhoneNumber contactPhoneNumber,
         Address address,
+        Requisites? requisites,
         PetStatus status,
         double height,
         double weight,
@@ -50,7 +52,8 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        List<PetPhoto> photos,
+        List<Domain.PetPhoto>? photos,
+        //VolunteerId volunteerId,
         PetId id) : base(id)
     {
         Name = name;
@@ -60,6 +63,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         HealthCondition = healthCondition;
         PhoneNumber = contactPhoneNumber;
         Address = address;
+        Requisites = requisites;
         Status = status;
         Height = height;
         Weight = weight;
@@ -68,6 +72,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         DateOfBirth = dateOfBirth;
         CreatedAt = createdAt;
         Photos = photos;
+        //VolunteerId = volunteerId;
     }
 
     public static Result<Pet, Error> Create(string name,
@@ -77,6 +82,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         string healthCondition,
         PhoneNumber contactPhoneNumbers,
         Address address,
+        Requisites? requisites,
         PetStatus status,
         double height,
         double weight,
@@ -84,14 +90,14 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        List<PetPhoto> photos,
+        List<Domain.PetPhoto>? petPhotos,
+        //VolunteerId volunteerId,
         PetId id)
     {
         if (String.IsNullOrEmpty(name))
         {
             return Errors.General.ValueIsRequired(name);
         }
-
 
         return new Pet(name,
             speciesBreed,
@@ -100,6 +106,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
             healthCondition,
             contactPhoneNumbers,
             address,
+            requisites,
             status,
             height,
             weight,
@@ -107,7 +114,8 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
             isVaccinated,
             dateOfBirth,
             createdAt,
-            photos,
+            petPhotos,
+            //volunteerId,
             id);
     }
 
@@ -123,7 +131,12 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         {
             _isDeleted = false;
         }
+    }
 
+    public UnitResult<Error> AddPhotos(List<Domain.PetPhoto> photos)
+    {
+        Photos = photos;
+        return Result.Success<Error>();
     }
 
 }

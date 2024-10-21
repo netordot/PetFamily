@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.Providers
 {
-    public interface IFileProvider
+    public interface IFileProvider 
     {
-        Task<Result<string, Error>> UploadFile(FileContent content, CancellationToken cancellation);
+        Task<UnitResult<Error>> UploadFile(FileData fileData, CancellationToken cancellation);
+        //Task<Result<string, Error>> UploadFile(FileData content, CancellationToken cancellation);
         Task<Result<string, Error>> GetFile(GetFileProvider provider, CancellationToken cancellation);
 
         Task<Result<string, Error>> RemoveFile(string provider, CancellationToken cancellation);

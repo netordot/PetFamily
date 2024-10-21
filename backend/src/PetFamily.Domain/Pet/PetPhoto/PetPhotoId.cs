@@ -9,7 +9,7 @@ public record PetPhotoId
         Value = value;
     }
     
-    public static PetPhotoId NewPetPhotoId (Guid value) => new(Guid.NewGuid());
+    public static PetPhotoId NewPetPhotoId () => new(Guid.NewGuid());
     public static PetPhotoId Empty => new(Guid.Empty);
     public static PetPhotoId Create(Guid id) => new(id);
 

@@ -9,7 +9,7 @@ public record BreedId
         Value = value;
     }
     
-    public static BreedId NewBreedId (Guid value) => new(Guid.NewGuid());
+    public static BreedId NewBreedId => new(Guid.NewGuid());
     public static BreedId Empty => new(Guid.Empty);
     public static BreedId Create(Guid id) => new(id);
 }

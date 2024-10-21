@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Volunteer;
 
 namespace PetFamily.Infrastructure.Configurations;
 
@@ -17,6 +18,12 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasConversion(
                 Id => Id.Value,
                 value => PetId.Create(value));
+
+        builder.Property(p => p.VolunteerId)
+           .HasConversion(
+               id => id.Value,
+               result => VolunteerId.Create(result)
+           ).HasColumnName("volunteer_id");
 
         builder.Property(p => p.Description)
             .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
@@ -38,6 +45,53 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                     .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
             });
         });
+
+        builder.Property(p => p.DateOfBirth)
+           .HasColumnName("birth_date")
+           .IsRequired();
+
+        builder.Property(p => p.CreatedAt)
+            .HasColumnName("created_date")
+            .IsRequired();
+
+        builder.Property(p => p.CreatedAt)
+            .HasConversion(
+        src => src.Kind == DateTimeKind.Utc
+        ? src
+        : DateTime.SpecifyKind(src, DateTimeKind.Utc),
+
+        dst => dst.Kind == DateTimeKind.Utc
+        ? dst
+        : DateTime.SpecifyKind(dst, DateTimeKind.Utc));
+
+        builder.Property(p => p.DateOfBirth)
+            .HasConversion(
+        src => src.Kind == DateTimeKind.Utc
+        ? src
+        : DateTime.SpecifyKind(src, DateTimeKind.Utc),
+
+        dst => dst.Kind == DateTimeKind.Utc
+        ? dst
+        : DateTime.SpecifyKind(dst, DateTimeKind.Utc));
+
+
+
+        builder.Property(p => p.Status)
+            .HasColumnName("status")
+            .IsRequired();
+
+        //builder.OwnsOne(p => p.Photos, pbuilder =>
+        //{
+        //    pbuilder.OwnsMany(pbuilder => pbuilder.Photos);
+
+        //});
+
+        //builder.OwnsOne(p => p.Photos, phb =>
+        //{
+        //    phb.Property(ph => ph.Photos)
+        //    .IsRequired();
+        //});
+
 
         builder.ComplexProperty(v => v.PhoneNumber, eb =>
         {
@@ -63,14 +117,14 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         {
             pb.Property(sb => sb.BreedId)
                 .IsRequired()
-                .HasColumnName("BreedId");
+                .HasColumnName("breed_id");
 
             pb.Property(sb => sb.SpeciesId)
                 .IsRequired()
                 .HasConversion(
                     Id => Id.Value,
                     value => SpeciesId.Create(value))
-                .HasColumnName("SpeciesId");
+                .HasColumnName("species_id");
 
         });
 

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetFamily.Application.Providers;
+using PetFamily.Application.Species;
 using PetFamily.Application.Volunteers;
 using PetFamily.Infrastructure.Interceptors;
 using PetFamily.Infrastructure.Options;
@@ -19,6 +20,7 @@ public static class Inject
         services.AddScoped<IVolunteerRepository, VolunteerRepository>();
         services.AddSingleton<SoftDeleteInterceptor>();
         services.AddScoped<IFileProvider, MinioProvider>();
+        services.AddScoped<ISpeciesRepository, SpeciesRepository>();
         services.AddMinio(configuration);
 
         return services;

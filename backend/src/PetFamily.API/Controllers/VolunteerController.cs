@@ -10,6 +10,9 @@ using PetFamily.Application.Volunteers.UpdateSocials;
 using PetFamily.Application.Volunteers.UpdateVolunteer;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Application.Volunteers.Delete;
+using PetFamily.API.Contracts;
+using PetFamily.Application.Volunteers.AddPet;
+using PetFamily.Application.Volunteers.AddPet.AddPhoto;
 
 namespace PetFamily.API.Controllers;
 
@@ -25,8 +28,8 @@ public class VolunteerController : ControllerBase
         [FromServices] IValidator<CreateVolunteerRequest> validator)
     {
         // тут обернуть блок try catch, его обрабатывает middleware
-        
-        
+
+
         var validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
 
         if (!validationResult.IsValid)
@@ -69,7 +72,7 @@ public class VolunteerController : ControllerBase
         [FromServices] IValidator<UpdateSocialsRequest> validator,
         CancellationToken cancellationToken)
     {
-        var request = new UpdateSocialsRequest( id, Dto);
+        var request = new UpdateSocialsRequest(id, Dto);
 
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
@@ -89,7 +92,7 @@ public class VolunteerController : ControllerBase
         [FromServices] IValidator<UpdateRequisitesRequest> validator,
         CancellationToken cancellationToken)
     {
-        var request = new UpdateRequisitesRequest( Dto, id);
+        var request = new UpdateRequisitesRequest(Dto, id);
 
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
@@ -118,5 +121,73 @@ public class VolunteerController : ControllerBase
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
+    [HttpPost("{id:guid}/pet")]
+    public async Task<ActionResult> AddPet
+        (
+        [FromRoute] Guid id,
+        [FromForm] AddPetRequest request,
+        [FromServices] AddPetService addPetService,
+        CancellationToken cancellationToken
+        )
+    {
+        var command = new AddPetCommand(
+            id,
+            request.Name,
+            request.Species,
+            request.Breed,
+            request.Color,
+            request.Description,
+            request.HealthCondition,
+            request.status,
+            request.Weight,
+            request.Height,
+            request.IsCastrated,
+            request.IsVaccinated,
+            request.BirthDate
+            );
+
+        var result = await addPetService.AddPet(command, cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return new ObjectResult(result.Value) { StatusCode = 201 };
+    }
+
+    [HttpPatch("{Id:guid}/photos")]
+    public async Task<ActionResult> AddPhotosToPet(
+        [FromRoute] Guid Id,
+        [FromServices] AddPetFilesService service,
+        [FromForm] AddFilesRequest request,
+        CancellationToken cancellation
+        )
+    {
+        //var filesDto = request.files.Select(f => new FileDto(f.FileName));
+
+
+
+        List<FileDto> filesDto = [];
+
+        try
+        {
+            foreach (var file in request.files)
+            {
+                var stream = file.OpenReadStream();
+                filesDto.Add(new FileDto(stream,file.FileName, file.ContentType));
+            }
+
+            var addFilesCommand = new AddFileCommand(filesDto);
+            await service.AddPetFiles(Id, addFilesCommand, cancellation);
+        }
+
+        finally
+        {
+            foreach (var fileDto in filesDto)
+            {
+                await fileDto.stream.DisposeAsync();
+            }
+        }
+
+        return new ObjectResult(Id);
+    }
 
 }
