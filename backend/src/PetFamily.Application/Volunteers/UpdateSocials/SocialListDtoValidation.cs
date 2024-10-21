@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
+using PetFamily.Application.Volunteers.Create.Validation;
 using PetFamily.Application.Volunteers.SharedDtos;
-using PetFamily.Application.Volunteers.Validation;
 using PetFamily.Domain.Volunteer.Details;
 
 namespace PetFamily.Application.Volunteers.UpdateSocials;

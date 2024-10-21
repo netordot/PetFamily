@@ -1,6 +1,4 @@
-﻿using PetFamily.Domain.Volunteer;
-
-namespace PetFamily.Domain;
+﻿namespace PetFamily.Domain.Pet.Species;
 
 public record SpeciesId
 {

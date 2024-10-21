@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
-using PetFamily.Application.Volunteers.Validation;
+using PetFamily.Application.Volunteers.Create.Validation;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
 
-namespace PetFamily.Application.Volunteers.UpdateVolunteer;
+namespace PetFamily.Application.Volunteers.UpdateMainInfo;
 
 public class UpdateVolunteerRequestValidator : AbstractValidator<UpdateVolunteerRequest>
 {

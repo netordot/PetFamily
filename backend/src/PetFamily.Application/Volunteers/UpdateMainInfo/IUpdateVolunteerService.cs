@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Application.Volunteers.UpdateVolunteer;
+namespace PetFamily.Application.Volunteers.UpdateMainInfo;
 
 public interface IUpdateVolunteerService
 {

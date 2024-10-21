@@ -1,9 +1,7 @@
 using CSharpFunctionalExtensions;
-using PetFamily.Domain.Pet.PetPhoto;
-using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Domain;
+namespace PetFamily.Domain.Pet.PetPhoto;
 
 public class PetPhoto : Shared.Entity<PetPhotoId>
 {
@@ -22,7 +20,7 @@ public class PetPhoto : Shared.Entity<PetPhotoId>
 
     public static Result<PetPhoto, Error> Create(FilePath path, bool isMain, PetPhotoId petPhotoId)
     {
-        // возможно какая-то валидация
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         return new PetPhoto(path, isMain, petPhotoId);
     }
 

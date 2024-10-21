@@ -6,7 +6,7 @@ using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
 using PetFamily.Domain.Volunteer;
 
-namespace PetFamily.Application.Volunteers.UpdateVolunteer;
+namespace PetFamily.Application.Volunteers.UpdateMainInfo;
 
 public class UpdateVolunteerService : IUpdateVolunteerService
 {

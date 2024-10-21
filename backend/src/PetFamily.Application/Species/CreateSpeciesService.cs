@@ -20,7 +20,7 @@ namespace PetFamily.Application.Species
 
         public async Task<Result<Guid, Error>> Create(CreateSpeciesCommand request, CancellationToken cancellation)
         {
-            var speciesToAdd = Domain.Species.Create(request.SpeciesName, null, request.id);
+            var speciesToAdd = Domain.Pet.Species.Species.Create(request.SpeciesName, null, request.id);
 
             if (speciesToAdd.IsFailure)
                 return speciesToAdd.Error;

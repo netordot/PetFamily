@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Domain;
+using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Volunteer;
 using PetFamily.Infrastructure.Interceptors;
 

@@ -3,6 +3,7 @@ using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
+using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
 
 namespace PetFamily.Domain.Pet;
@@ -33,7 +34,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public Requisites? Requisites { get; private set; }
-    public IReadOnlyList<Domain.PetPhoto>? Photos { get; private set; }
+    public IReadOnlyList<PetPhoto.PetPhoto>? Photos { get; private set; }
 
     private bool _isDeleted = false;
 
@@ -52,7 +53,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        List<Domain.PetPhoto>? photos,
+        List<PetPhoto.PetPhoto>? photos,
         //VolunteerId volunteerId,
         PetId id) : base(id)
     {
@@ -90,7 +91,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        List<Domain.PetPhoto>? petPhotos,
+        List<PetPhoto.PetPhoto>? petPhotos,
         //VolunteerId volunteerId,
         PetId id)
     {
@@ -133,7 +134,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         }
     }
 
-    public UnitResult<Error> AddPhotos(List<Domain.PetPhoto> photos)
+    public UnitResult<Error> AddPhotos(List<PetPhoto.PetPhoto> photos)
     {
         Photos = photos;
         return Result.Success<Error>();

@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PetFamily.Domain.Pet;
+using PetFamily.Domain.Pet.Species;
 
 namespace PetFamily.Infrastructure.Repositories
 {

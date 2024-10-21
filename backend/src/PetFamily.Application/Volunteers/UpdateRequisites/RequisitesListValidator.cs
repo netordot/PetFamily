@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
-using PetFamily.Application.Volunteers.Validation;
+using PetFamily.Application.Volunteers.Create.Validation;
 using PetFamily.Domain;
+using PetFamily.Domain.Shared.Requisites;
 
 namespace PetFamily.Application.Volunteers.UpdateRequisites;
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetFamily.Application.Volunteers.CreateVolunteer;
 using System.Reflection.Metadata.Ecma335;
 using FluentValidation;
 using PetFamily.API.Extensions;
@@ -7,12 +6,13 @@ using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.SharedDtos;
 using PetFamily.Application.Volunteers.UpdateRequisites;
 using PetFamily.Application.Volunteers.UpdateSocials;
-using PetFamily.Application.Volunteers.UpdateVolunteer;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Application.Volunteers.Delete;
 using PetFamily.API.Contracts;
 using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.AddPet.AddPhoto;
+using PetFamily.Application.Volunteers.Create;
+using PetFamily.Application.Volunteers.UpdateMainInfo;
 
 namespace PetFamily.API.Controllers;
 

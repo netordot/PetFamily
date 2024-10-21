@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet.Breed;
+using PetFamily.Domain.Pet.Species;
 
 namespace PetFamily.Infrastructure.Configurations;
 

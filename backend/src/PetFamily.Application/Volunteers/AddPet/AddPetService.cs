@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Providers;
 using PetFamily.Application.Species;
-using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet;
 using PetFamily.Domain.Pet.PetPhoto;

@@ -6,6 +6,7 @@ using PetFamily.Application.Species;
 using PetFamily.Application.Species.AddBreeds;
 using PetFamily.Application.Species.CreateSpecies;
 using PetFamily.Domain;
+using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared.Errors;
 
 namespace PetFamily.API.Controllers

@@ -1,8 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Domain;
+namespace PetFamily.Domain.Shared.Requisites;
 
 public class Requisite
 {
@@ -19,12 +18,12 @@ public class Requisite
     {
         if (String.IsNullOrEmpty(title))
         {
-            return Errors.General.ValueIsRequired("requisite title");
+            return Errors.Errors.General.ValueIsRequired("requisite title");
         }
         
         if (String.IsNullOrEmpty(description))
         {
-            return Errors.General.ValueIsRequired("requisite description");
+            return Errors.Errors.General.ValueIsRequired("requisite description");
         }
         
        return new Requisite(title, description);

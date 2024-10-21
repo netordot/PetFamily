@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using PetFamily.Domain;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.Domain.Shared.Requisites;
 
 namespace PetFamily.Application.Volunteers.UpdateRequisites;
 
