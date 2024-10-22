@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Database;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Volunteer;
 using PetFamily.Infrastructure.Interceptors;
+using System.Data;
 
 namespace PetFamily.Infrastructure;
 
@@ -14,7 +16,7 @@ public class ApplicationDbContext(IConfiguration configuration,
 {
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
     public DbSet<Species> Species => Set<Species>();
-    
+
     private const string DATABASE = nameof(Database);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,7 +32,8 @@ public class ApplicationDbContext(IConfiguration configuration,
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.AddInterceptors(softDeleteInterceptor);
     }
-    
+
     private ILoggerFactory CreateLoggerFactory()
-    => LoggerFactory.Create(builder => {builder.AddConsole(); });
-} 
+    => LoggerFactory.Create(builder => { builder.AddConsole(); });
+
+}

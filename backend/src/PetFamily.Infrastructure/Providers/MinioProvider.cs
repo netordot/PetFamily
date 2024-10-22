@@ -27,7 +27,7 @@ namespace PetFamily.Infrastructure.Providers
         private readonly string PHOTO = "photos";
         public const int MAX_DEGREE_PARALLEL = 10;
 
-        public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger, IUnitOfWork unitOfWork)
+        public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger)
         {
             _client = minioClient;
             _logger = logger;

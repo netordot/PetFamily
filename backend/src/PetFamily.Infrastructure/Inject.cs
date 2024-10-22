@@ -23,6 +23,7 @@ public static class Inject
         services.AddScoped<IFileProvider, MinioProvider>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        //services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddMinio(configuration);
 
         return services;

@@ -1,3 +1,4 @@
+using PetFamily.Application.Database;
 using PetFamily.Domain;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
@@ -12,15 +13,18 @@ namespace PetFamily.Application.Volunteers.Create;
 public class CreateVolunteerService : ICreateVolunteerService
 {
     private readonly IVolunteerRepository _volunteerRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateVolunteerService(IVolunteerRepository volunteerRepository)
+    public CreateVolunteerService(IVolunteerRepository volunteerRepository, IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<CSharpFunctionalExtensions.Result<Guid, Error>> Create(
         CreateVolunteerRequest createVolunteerRequest, CancellationToken ct)
     {
+
         var volunteerId = VolunteerId.NewVolunteerId;
 
         var resultName = new FullName(createVolunteerRequest.FirstName,
@@ -50,8 +54,13 @@ public class CreateVolunteerService : ICreateVolunteerService
             addressResult, requisitesResult,
             socialsResult, volunteerId);
 
-        Volunteer result = volunteer.Value;
+        Volunteer volunteerResult = volunteer.Value;
 
-        return await _volunteerRepository.Add(result, CancellationToken.None);
+        var result = await _volunteerRepository.Add(volunteerResult, CancellationToken.None);
+
+        await _unitOfWork.SaveChanges(ct);
+
+
+        return result;
     }
 }

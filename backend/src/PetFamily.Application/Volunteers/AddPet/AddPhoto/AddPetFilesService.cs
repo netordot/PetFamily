@@ -19,23 +19,22 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 {
     public class AddPetFilesService
     {
-        // дальше допилить метод с созданием бакета в минио провайдере
         private readonly string _bucket = "photos";
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly Providers.IFileProvider _fileProvider;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _context;
 
         public AddPetFilesService(
-            IVolunteerRepository repository, Providers.IFileProvider fileProvider, IUnitOfWork unitOfWork)
+            IVolunteerRepository repository, Providers.IFileProvider fileProvider, IUnitOfWork context)
         {
             _volunteerRepository = repository;
             _fileProvider = fileProvider;
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<Result<Guid, Error>> AddPetFiles(Guid petId, AddFileCommand command, CancellationToken cancellation)
         {
-            var transaction = await _unitOfWork.BeginTransaction(cancellation);
+            var transaction = await _context.BeginTransaction(cancellation);
             //логика нахождения пета по айдишнику
 
             var volunteerOwns = await _volunteerRepository.GetVolunteerByPetId(PetId.Create(petId));
@@ -45,7 +44,6 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
             // тут может возникнуть ошибка
             var petToUpdate = volunteerOwns.Value
                 .Pets.FirstOrDefault(p => p.Id.Value == petId);
-
 
 
             List<PetPhoto> photos = [];
@@ -67,7 +65,7 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
             var fileData = fileContents.ToList();
 
             var uploadResult = await _fileProvider.UploadFile(fileData, cancellation);
-            if(uploadResult.IsFailure)
+            if (uploadResult.IsFailure)
                 return uploadResult.Error;
 
             var filePaths = command.files.Select(f => FilePath.Create(Guid.NewGuid(), f.fileName).Value);
@@ -76,17 +74,14 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             photos = filePaths.Select(p => PetPhoto.Create(p, false, PetPhotoId.NewPetPhotoId()).Value).ToList();
 
-            // нормально переделать
             var pictures = new ValueObjectList<PetPhoto>(photos);
 
-            // добавили фото к пету
             petToUpdate.AddPhotos(pictures);
-            // сохранили изменения
-            await _unitOfWork.SaveChanges(cancellation);
+
+            await _context.SaveChanges(cancellation);
 
             transaction.Commit();
-            // будем возвращать ид пета
-            return Guid.NewGuid();
+            return petId;
 
         }
     }

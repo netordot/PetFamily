@@ -13,12 +13,12 @@ namespace PetFamily.Application.Species
     public class CreateSpeciesService
     {
         private readonly ISpeciesRepository _speciesRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _UnitOfWork;
 
         public CreateSpeciesService(ISpeciesRepository repository, IUnitOfWork unitOfWork)
         {
             _speciesRepository = repository;
-            _unitOfWork = unitOfWork;
+            _UnitOfWork = unitOfWork;
         }
 
         public async Task<Result<Guid, Error>> Create(CreateSpeciesCommand request, CancellationToken cancellation)
@@ -31,7 +31,7 @@ namespace PetFamily.Application.Species
             var speciesResult = await _speciesRepository.Create(speciesToAdd.Value, cancellation);
             if (speciesResult.IsFailure)
                 return speciesResult.Error;
-            await _unitOfWork.SaveChanges(cancellation);
+            await _UnitOfWork.SaveChanges(cancellation);
 
             return speciesResult.Value;
         }

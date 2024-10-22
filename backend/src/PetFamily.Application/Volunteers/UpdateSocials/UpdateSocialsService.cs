@@ -17,11 +17,11 @@ public class UpdateSocialsService : IUpdateSocialsService
     public UpdateSocialsService(
         IVolunteerRepository volunteerRepository,
         ILogger<UpdateSocialsService> logger,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork context)
     {
         _volunteerRepository = volunteerRepository;
         _logger = logger;
-        _unitOfWork = unitOfWork;
+        _unitOfWork = context;
     }
 
     public async Task<Result<Guid, Error>> UpdateSocials(UpdateSocialsRequest request,
