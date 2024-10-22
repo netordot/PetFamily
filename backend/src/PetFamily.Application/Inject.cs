@@ -8,11 +8,10 @@ using PetFamily.Application.Species.AddBreeds;
 using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.AddPet.AddPhoto;
 using PetFamily.Application.Volunteers.Create;
-using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Application.Volunteers.Delete;
+using PetFamily.Application.Volunteers.UpdateMainInfo;
 using PetFamily.Application.Volunteers.UpdateRequisites;
 using PetFamily.Application.Volunteers.UpdateSocials;
-using PetFamily.Application.Volunteers.UpdateVolunteer;
 
 namespace PetFamily.Application;
 

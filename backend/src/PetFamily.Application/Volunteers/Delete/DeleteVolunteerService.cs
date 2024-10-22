@@ -29,7 +29,7 @@ namespace PetFamily.Application.Volunteers.Delete
                 return volunteerResult.Error;
             }
 
-            var result = await _volunteerRepository.Delete(volunteerResult.Value, cancellationToken);
+            var result =  _volunteerRepository.Delete(volunteerResult.Value, cancellationToken);
 
             _logger.LogInformation("Updated deleted Volunteer with Id {result}", result);
 

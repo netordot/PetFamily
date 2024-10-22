@@ -1,6 +1,4 @@
-﻿using PetFamily.Domain.Volunteer.Details;
-
-namespace PetFamily.Domain.Volunteer;
+﻿namespace PetFamily.Domain.Volunteer.Details;
 
 public class VolunteerDetails
 {

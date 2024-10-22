@@ -1,27 +1,25 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Pet.Breed;
-using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Domain;
+namespace PetFamily.Domain.Pet.Species;
 
 public class Species : Domain.Shared.Entity<SpeciesId>
 {
     public string  Name { get; private set; }
     //TODO: инкапсулировать взаимодействие с листом
-    public List<Breed>? Breeds { get; private set; } 
+    public List<Breed.Breed>? Breeds { get; private set; } 
 
     private Species(SpeciesId id) : base(id)
     {
 
     }
-    private Species(string name, List<Breed>? breeds, SpeciesId id) : base(id)
+    private Species(string name, List<Breed.Breed>? breeds, SpeciesId id) : base(id)
     {
         Name = name;
         Breeds = breeds;
     }
 
-    public static Result<Species,Error> Create(string speciesName, List<Breed>? breeds, SpeciesId id)
+    public static Result<Species,Error> Create(string speciesName, List<Breed.Breed>? breeds, SpeciesId id)
     {
         if (String.IsNullOrEmpty(speciesName))
         {
@@ -31,7 +29,7 @@ public class Species : Domain.Shared.Entity<SpeciesId>
         return new Species(speciesName, breeds, id);
     }
 
-    public UnitResult<Error> AddBreed(Breed breed)
+    public UnitResult<Error> AddBreed(Breed.Breed breed)
     {
         Breeds.Add(breed);
         return Result.Success<Error>();

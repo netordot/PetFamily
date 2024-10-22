@@ -22,7 +22,7 @@ public class PetPhotoConfiguration : IEntityTypeConfiguration<PetPhoto>
             .HasConversion(
             pth => pth.Path,
             value => FilePath.Create(value).Value);
-        
+
         builder.Property(pp=> pp.Path)
             .IsRequired();
         

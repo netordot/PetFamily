@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PetFamily.Domain.Pet;
+using PetFamily.Domain.Pet.Species;
 
 namespace PetFamily.Infrastructure.Repositories
 {
@@ -32,7 +34,6 @@ namespace PetFamily.Infrastructure.Repositories
                 return Error.Conflict("already.exists", "species");
             }
             await _context.Species.AddAsync(species);
-            await _context.SaveChangesAsync();
 
             return species.Id.Value;
         }
@@ -65,7 +66,6 @@ namespace PetFamily.Infrastructure.Repositories
         public async Task<Result<Guid, Error>> Save(Species species, CancellationToken cancellationToken = default)
         {
             _context.Species.Attach(species);
-            await _context.SaveChangesAsync(cancellationToken);
 
             return species.Id.Value;
         }

@@ -1,9 +1,9 @@
-using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Domain;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
+using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
 using PetFamily.Domain.Volunteer.Details;
 

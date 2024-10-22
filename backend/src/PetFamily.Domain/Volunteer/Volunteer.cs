@@ -4,6 +4,8 @@ using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
+using PetFamily.Domain.Shared.Requisites;
+using PetFamily.Domain.Volunteer.Details;
 
 namespace PetFamily.Domain.Volunteer;
 

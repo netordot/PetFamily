@@ -1,8 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Database;
 using PetFamily.Domain;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.Domain.Shared.Requisites;
 
 namespace PetFamily.Application.Volunteers.UpdateRequisites;
 
@@ -10,11 +12,16 @@ public class UpdateRequisitesService : IUpdateRequisitesService
 {
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly ILogger<UpdateRequisitesService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateRequisitesService(IVolunteerRepository volunteerRepository, ILogger<UpdateRequisitesService> logger)
+    public UpdateRequisitesService(
+        IVolunteerRepository volunteerRepository, 
+        ILogger<UpdateRequisitesService> logger, 
+        IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<Guid, Error>> UdpateRequisites(UpdateRequisitesRequest request, CancellationToken ct)
@@ -30,6 +37,8 @@ public class UpdateRequisitesService : IUpdateRequisitesService
 
         _logger.LogInformation("Updated Volunteer requisites with Id {id}", request.Id);
 
-        return await _volunteerRepository.Save(volunteerResult.Value, ct);
+        await _unitOfWork.SaveChanges(ct);
+
+        return volunteerResult.Value.Id.Value;
     }
 }

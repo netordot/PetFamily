@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet;
+using PetFamily.Domain.Pet.PetPhoto;
+using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteer;
 
@@ -74,24 +76,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         ? dst
         : DateTime.SpecifyKind(dst, DateTimeKind.Utc));
 
-
-
         builder.Property(p => p.Status)
             .HasColumnName("status")
             .IsRequired();
-
-        //builder.OwnsOne(p => p.Photos, pbuilder =>
-        //{
-        //    pbuilder.OwnsMany(pbuilder => pbuilder.Photos);
-
-        //});
-
-        //builder.OwnsOne(p => p.Photos, phb =>
-        //{
-        //    phb.Property(ph => ph.Photos)
-        //    .IsRequired();
-        //});
-
 
         builder.ComplexProperty(v => v.PhoneNumber, eb =>
         {
@@ -127,6 +114,22 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasColumnName("species_id");
 
         });
+
+        //builder.OwnsOne(p => p.Photos, phb =>
+        //{
+        //    phb.OwnsMany(v => v.Values, vb =>
+        //    {
+        //        vb.Property(x => x.Path).
+        //        HasConversion(
+        //        pth => pth.Path,
+        //        value => FilePath.Create(value).Value);
+
+        //        vb.Property(p => p.Id)
+        //        .HasConversion(
+        //        Id => Id.Value,
+        //        value => PetPhotoId.Create(value));
+        //    });
+        //});
 
         builder.Property<bool>("_isDeleted")
            .UsePropertyAccessMode(PropertyAccessMode.Field)

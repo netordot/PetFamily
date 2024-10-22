@@ -1,6 +1,6 @@
 ﻿using PetFamily.Domain.Shared.Errors;
 
-namespace PetFamily.Application.Volunteers.CreateVolunteer;
+namespace PetFamily.Application.Volunteers.Create;
 
 public interface ICreateVolunteerService
 {

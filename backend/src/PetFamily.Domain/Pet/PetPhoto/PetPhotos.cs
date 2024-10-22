@@ -13,9 +13,9 @@ namespace PetFamily.Domain.Pet.PetPhoto
             
         }
 
-        public IReadOnlyList<Domain.PetPhoto> Photos { get; }
+        public IReadOnlyList<PetPhoto> Photos { get; }
 
-        public PetPhotos(IEnumerable<Domain.PetPhoto> petPhotos)
+        public PetPhotos(IEnumerable<PetPhoto> petPhotos)
         {
             Photos = petPhotos.ToList();
         }

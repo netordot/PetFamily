@@ -3,7 +3,6 @@ using Minio;
 using PetFamily.API.Extensions;
 using PetFamily.Application;
 using PetFamily.Application.Volunteers;
-using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Repositories;

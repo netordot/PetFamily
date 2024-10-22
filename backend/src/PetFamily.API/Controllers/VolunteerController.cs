@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetFamily.Application.Volunteers.CreateVolunteer;
 using System.Reflection.Metadata.Ecma335;
 using FluentValidation;
 using PetFamily.API.Extensions;
@@ -7,12 +6,14 @@ using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.SharedDtos;
 using PetFamily.Application.Volunteers.UpdateRequisites;
 using PetFamily.Application.Volunteers.UpdateSocials;
-using PetFamily.Application.Volunteers.UpdateVolunteer;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Application.Volunteers.Delete;
 using PetFamily.API.Contracts;
 using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.AddPet.AddPhoto;
+using PetFamily.Application.Volunteers.Create;
+using PetFamily.Application.Volunteers.UpdateMainInfo;
+using PetFamily.API.Processors;
 
 namespace PetFamily.API.Controllers;
 
@@ -161,33 +162,16 @@ public class VolunteerController : ControllerBase
         CancellationToken cancellation
         )
     {
-        //var filesDto = request.files.Select(f => new FileDto(f.FileName));
+        await using var fileProcessor = new FormFileProcessor();
 
+        var fileDtos = fileProcessor.Process(request.files);
 
+        var addFilesCommand = new AddFileCommand(fileDtos);
+        var result = await service.AddPetFiles(Id, addFilesCommand, cancellation);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
 
-        List<FileDto> filesDto = [];
-
-        try
-        {
-            foreach (var file in request.files)
-            {
-                var stream = file.OpenReadStream();
-                filesDto.Add(new FileDto(stream,file.FileName, file.ContentType));
-            }
-
-            var addFilesCommand = new AddFileCommand(filesDto);
-            await service.AddPetFiles(Id, addFilesCommand, cancellation);
-        }
-
-        finally
-        {
-            foreach (var fileDto in filesDto)
-            {
-                await fileDto.stream.DisposeAsync();
-            }
-        }
-
-        return new ObjectResult(Id);
+        return new ObjectResult(result.Value) { StatusCode = 200};
     }
 
 }

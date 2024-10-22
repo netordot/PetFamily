@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared.Errors;
 
 namespace PetFamily.Domain.Pet.Breed;

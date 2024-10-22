@@ -1,7 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared.Errors;
-
-namespace PetFamily.Domain.Shared;
+﻿namespace PetFamily.Domain.Shared.Requisites;
 
 public record Requisites
 {
