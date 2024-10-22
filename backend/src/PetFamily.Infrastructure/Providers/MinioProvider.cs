@@ -5,14 +5,17 @@ using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
+using PetFamily.Application.Database;
 using PetFamily.Application.Providers;
 using PetFamily.Application.Providers.FileProvider;
+using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Shared.Errors;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PetFamily.Infrastructure.Providers
@@ -24,50 +27,61 @@ namespace PetFamily.Infrastructure.Providers
         private readonly string PHOTO = "photos";
         public const int MAX_DEGREE_PARALLEL = 10;
 
-        public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger)
+        public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger, IUnitOfWork unitOfWork)
         {
             _client = minioClient;
             _logger = logger;
         }
-        public async Task<UnitResult<Error>> UploadFile(FileData fileData, CancellationToken cancellation)
+        public async Task<Result<IReadOnlyList<FilePath>, Error>> UploadFile(IEnumerable<FileData> filesData, CancellationToken cancellation)
         {
             var semaphoreSlim = new SemaphoreSlim(MAX_DEGREE_PARALLEL);
+            var files = filesData.ToList();
 
             try
             {
-                await BucketExists(fileData.BucketName, cancellation);
-                //var bucketExistsArgs = new BucketExistsArgs()
-                //    .WithBucket(fileData.BucketName);
+                await IfBucketsNotExistCreateBucket(files, cancellation);
 
-                //var bucketExists = await _client.BucketExistsAsync(bucketExistsArgs);
+                var tasks = files.Select(async file =>
+               await PutObject(file, semaphoreSlim, cancellation));
 
-                //if (bucketExists == false)
-                //{
-                //    var makeBucketArgs = new MakeBucketArgs()
-                //        .WithBucket(fileData.BucketName);
+                var pathResult = await Task.WhenAll(tasks);
 
-                //    await _client.MakeBucketAsync(makeBucketArgs);
-                //}
-
-                List<Task> tasks = [];
-
-                foreach (var file in fileData.Files)
+                if (pathResult.Any(p => p.IsFailure))
                 {
-                    await semaphoreSlim.WaitAsync(cancellation);
-
-                    var putObjectArgs = new PutObjectArgs()
-                        .WithBucket(fileData.BucketName)
-                        .WithStreamData(file.Stream)
-                        .WithObjectSize(file.Stream.Length)
-                        .WithObject(file.ObjectName);
-
-                    var task = _client.PutObjectAsync(putObjectArgs, cancellation);
-
-                    semaphoreSlim.Release();
-                    tasks.Add(task);
+                    return pathResult.First().Error;
                 }
 
-                await Task.WhenAll(tasks);
+                var results = pathResult.Select(p => p.Value).ToList();
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                // залогировать для конкретного файла
+                _logger.LogError(ex, "Failed to load file to Minio");
+                return Error.Failure("upload.file", "Failed to load file to Minio");
+            }
+        }
+
+        public async Task<Result<FilePath, Error>> PutObject(
+            FileData fileData,
+            SemaphoreSlim semaphoreSlim,
+            CancellationToken cancellation)
+        {
+            await semaphoreSlim.WaitAsync(cancellation);
+
+            var putObjectArgs = new PutObjectArgs()
+                .WithBucket(fileData.BucketName)
+                .WithStreamData(fileData.Content)
+                .WithObjectSize(fileData.Content.Length)
+                .WithObject(fileData.FilePath.Path);
+            try
+            {
+                var task = _client.PutObjectAsync(putObjectArgs, cancellation);
+
+                semaphoreSlim.Release();
+
+                return fileData.FilePath;
             }
             catch (Exception ex)
             {
@@ -78,8 +92,6 @@ namespace PetFamily.Infrastructure.Providers
             {
                 semaphoreSlim.Release();
             }
-
-            return Result.Success<Error>();
 
         }
 
@@ -131,30 +143,26 @@ namespace PetFamily.Infrastructure.Providers
             }
 
         }
-        private async Task<UnitResult<Error>> BucketExists(string bucketName, CancellationToken cancellationToken)
-        {
-            try
-            {
-                var bucketExistsArgs = new BucketExistsArgs()
-                    .WithBucket(bucketName);
 
-                if (await _client.BucketExistsAsync(bucketExistsArgs, cancellationToken) == false)
+        private async Task IfBucketsNotExistCreateBucket(
+        IEnumerable<FileData> filesData,
+        CancellationToken cancellationToken)
+        {
+            HashSet<string> bucketNames = [.. filesData.Select(file => file.BucketName)];
+
+            foreach (var bucketName in bucketNames)
+            {
+                var bucketExistArgs = new BucketExistsArgs()
+                    .WithBucket(bucketName);
+                var bucketExist = await _client
+                    .BucketExistsAsync(bucketExistArgs, cancellationToken);
+                if (bucketExist == false)
                 {
                     var makeBucketArgs = new MakeBucketArgs()
-                          .WithBucket(bucketName);
-
-                    await _client.MakeBucketAsync(makeBucketArgs);
+                        .WithBucket(bucketName);
+                    await _client.MakeBucketAsync(makeBucketArgs, cancellationToken);
                 }
-
             }
-
-            catch (MinioException e)
-            {
-                _logger.LogError(e, bucketName);
-                return Error.Failure("create.or.find", "unable to create or find bucket");
-            }
-
-            return UnitResult.Success<Error>();
         }
     }
 }

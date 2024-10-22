@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Database;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.Mails;
@@ -12,11 +13,16 @@ public class UpdateVolunteerService : IUpdateVolunteerService
 {
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly ILogger<UpdateVolunteerService> _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateVolunteerService(IVolunteerRepository volunteerRepository, ILogger<UpdateVolunteerService> logger)
+    public UpdateVolunteerService(
+        IVolunteerRepository volunteerRepository, 
+        ILogger<UpdateVolunteerService> logger,
+        IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<Guid, Error>> Update(UpdateVolunteerRequest request, CancellationToken cancellationToken)
@@ -34,7 +40,7 @@ public class UpdateVolunteerService : IUpdateVolunteerService
         volunteerResult.Value.UpdateMainInfo(name, email.Value, request.dto.Description, request.dto.Experience,
             phoneNumber.Value, address);
 
-        await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation("Updated Volunteer with Id  {request.id}", request.id);
 

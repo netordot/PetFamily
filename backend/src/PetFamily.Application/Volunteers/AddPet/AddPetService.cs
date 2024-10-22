@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
+using PetFamily.Application.Database;
 using PetFamily.Application.Providers;
 using PetFamily.Application.Species;
 using PetFamily.Domain;
@@ -19,12 +20,18 @@ namespace PetFamily.Application.Volunteers.AddPet
         private readonly IFileProvider _fileProvider;
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly ISpeciesRepository _speciesRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AddPetService(IFileProvider fileProvider, IVolunteerRepository volunteerRepository, ISpeciesRepository species)
+        public AddPetService(
+            IFileProvider fileProvider,
+            IVolunteerRepository volunteerRepository,
+            ISpeciesRepository species,
+            IUnitOfWork unitOfWork)
         {
             _fileProvider = fileProvider;
             _volunteerRepository = volunteerRepository;
             _speciesRepository = species;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<Guid, Error>> AddPet(AddPetCommand command, CancellationToken cancellationToken)
@@ -37,7 +44,7 @@ namespace PetFamily.Application.Volunteers.AddPet
 
             var speciesBreed = await _speciesRepository
                 .GetSpeciesBreedByNames(command.Species, command.Breed, cancellationToken);
-            if(speciesBreed.IsFailure)
+            if (speciesBreed.IsFailure)
                 return speciesBreed.Error;
 
             var phoneNumberResult = volunteerResult.Value.Number;
@@ -46,7 +53,7 @@ namespace PetFamily.Application.Volunteers.AddPet
             var requisitesResult = (volunteerResult.Value.Requisites);
 
             var petId = PetId.NewPetId;
- 
+
             var pet = Pet.Create(command.Name,
                 speciesBreed.Value,
                 command.Color,
@@ -63,7 +70,6 @@ namespace PetFamily.Application.Volunteers.AddPet
                 command.BirthDate,
                 DateTime.UtcNow,
                 null,
-                //volunteerResult.Value.Id,
                 petId
                 );
 
@@ -73,7 +79,7 @@ namespace PetFamily.Application.Volunteers.AddPet
             volunteerResult.Value.AddPet(pet.Value);
             int a = 10;
 
-            await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
+            await _unitOfWork.SaveChanges(cancellationToken);
 
             return petId.Value;
         }

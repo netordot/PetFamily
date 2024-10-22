@@ -30,5 +30,8 @@ namespace PetFamily.Domain.Shared
 
         public static implicit operator List<T>(ValueObjectList<T> list)
             => list.Values.ToList();
+
+        public static implicit operator ValueObjectList<T>(List<T> list) =>
+             new(list);
     }
 }

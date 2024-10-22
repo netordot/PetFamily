@@ -32,7 +32,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public Requisites? Requisites { get; private set; }
-    public ValueObjectList<PetPhoto.PetPhoto>? Photos { get; private set; }
+    public List<PetPhoto.PetPhoto>? Photos { get; private set; }
 
     private bool _isDeleted = false;
 
@@ -51,7 +51,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        ValueObjectList<PetPhoto.PetPhoto>? photos,
+        List<PetPhoto.PetPhoto>? photos,
         PetId id) : base(id)
     {
         Name = name;
@@ -87,7 +87,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         bool isVaccinated,
         DateTime dateOfBirth,
         DateTime createdAt,
-        ValueObjectList<PetPhoto.PetPhoto>? petPhotos,
+        List<PetPhoto.PetPhoto>? petPhotos,
         PetId id)
     {
         if (String.IsNullOrEmpty(name))
@@ -128,7 +128,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         }
     }
 
-    public UnitResult<Error> AddPhotos(ValueObjectList<PetPhoto.PetPhoto> photos)
+    public UnitResult<Error> AddPhotos(List<PetPhoto.PetPhoto> photos)
     {
         Photos = photos;
         return Result.Success<Error>();

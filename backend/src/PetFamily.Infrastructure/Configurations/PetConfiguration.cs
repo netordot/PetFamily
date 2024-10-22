@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet;
+using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteer;
@@ -116,9 +117,18 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         //builder.OwnsOne(p => p.Photos, phb =>
         //{
-        //    phb.ToJson("photos");
+        //    phb.OwnsMany(v => v.Values, vb =>
+        //    {
+        //        vb.Property(x => x.Path).
+        //        HasConversion(
+        //        pth => pth.Path,
+        //        value => FilePath.Create(value).Value);
 
-        //    phb.OwnsMany(v => v.Values);
+        //        vb.Property(p => p.Id)
+        //        .HasConversion(
+        //        Id => Id.Value,
+        //        value => PetPhotoId.Create(value));
+        //    });
         //});
 
         builder.Property<bool>("_isDeleted")

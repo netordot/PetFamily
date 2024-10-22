@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using PetFamily.Domain.Pet;
 using System.IO.Pipes;
 using PetFamily.Domain.Shared;
+using PetFamily.Application.Database;
 
 namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 {
@@ -22,16 +23,19 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
         private readonly string _bucket = "photos";
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly Providers.IFileProvider _fileProvider;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AddPetFilesService(
-            IVolunteerRepository repository, Providers.IFileProvider fileProvider)
+            IVolunteerRepository repository, Providers.IFileProvider fileProvider, IUnitOfWork unitOfWork)
         {
             _volunteerRepository = repository;
             _fileProvider = fileProvider;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<Guid, Error>> AddPetFiles(Guid petId, AddFileCommand command, CancellationToken cancellation)
         {
+            var transaction = await _unitOfWork.BeginTransaction(cancellation);
             //логика нахождения пета по айдишнику
 
             var volunteerOwns = await _volunteerRepository.GetVolunteerByPetId(PetId.Create(petId));
@@ -45,7 +49,7 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
 
             List<PetPhoto> photos = [];
-            List<FileContent> fileContents = [];
+            List<FileData> fileContents = [];
 
             foreach (var file in command.files)
             {
@@ -55,18 +59,12 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
                 if (filePath.IsFailure)
                     return filePath.Error;
 
-                var fileContent = new FileContent(file.stream, filePath.Value.Path);
+                var fileContent = new FileData(file.stream, filePath.Value, _bucket);
                 fileContents.Add(fileContent);
-
-                //var petPhoto = PetPhoto.Create(filePath.Value, false, PetPhotoId.NewPetPhotoId());
-                //if (petPhoto.IsFailure)
-                //    return petPhoto.Error;
-
-                //photos.Add(petPhoto.Value);
 
             }
 
-            var fileData = new FileData(fileContents, _bucket);
+            var fileData = fileContents.ToList();
 
             var uploadResult = await _fileProvider.UploadFile(fileData, cancellation);
             if(uploadResult.IsFailure)
@@ -84,7 +82,9 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
             // добавили фото к пету
             petToUpdate.AddPhotos(pictures);
             // сохранили изменения
-            _volunteerRepository.Save(volunteerOwns.Value, cancellation);
+            await _unitOfWork.SaveChanges(cancellation);
+
+            transaction.Commit();
             // будем возвращать ид пета
             return Guid.NewGuid();
 
