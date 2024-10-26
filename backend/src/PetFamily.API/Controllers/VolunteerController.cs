@@ -23,22 +23,27 @@ public class VolunteerController : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult> Create(
-        [FromBody] CreateVolunteerRequest createVolunteerRequest,
+        [FromBody] CreateVolunteerRequest request,
         CancellationToken cancellationToken,
-        [FromServices] ICreateVolunteerService createVolunteerService,
-        [FromServices] IValidator<CreateVolunteerRequest> validator)
+        [FromServices] ICreateVolunteerService createVolunteerService)
     {
-        // тут обернуть блок try catch, его обрабатывает middleware
+        var command = new CreateVolunteerCommand(
+            request.FirstName,
+            request.MiddleName,
+            request.LastName,
+            request.Email,
+            request.PhoneNumber,
+            request.Experience,
+            request.Description,
+            request.City,
+            request.Street,
+            request.BuildingNumber,
+            request.CorpsNumber,
+            request.Requisites,
+            request.SocialNetworks
+            );
 
-
-        var validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            return validationResult.ToValidationErrorResponse();
-        }
-
-        var result = await createVolunteerService.Create(createVolunteerRequest, cancellationToken);
+        var result = await createVolunteerService.Create(command, cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
@@ -49,18 +54,16 @@ public class VolunteerController : ControllerBase
     [HttpPatch("{id:guid}/main-info")]
     public async Task<ActionResult> UpdateMainInfo(
         [FromRoute] Guid id,
-        [FromServices] IUpdateVolunteerService service,
-        [FromBody] UpdateVolunteerDto Dto,
-        [FromServices] IValidator<UpdateVolunteerRequest> validator,
+        [FromServices] UpdateVolunteerService service,
+        [FromBody] UpdateVolunteerRequest request,
+        [FromServices] IValidator<UpdateVolunteerCommand> validator,
         CancellationToken cancellationToken)
     {
-        var request = new UpdateVolunteerRequest(Dto, id);
+        var command = new UpdateVolunteerCommand(request, id);
 
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-            return validationResult.ToValidationErrorResponse();
-
-        var result = await service.Update(request, cancellationToken);
+        var result = await service.Update(command, cancellationToken);
+        if(result.IsFailure)
+            return result.Error.ToResponse();
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
@@ -68,19 +71,19 @@ public class VolunteerController : ControllerBase
     [HttpPatch("{id:guid}/socials")]
     public async Task<ActionResult> UpdateSocials(
         [FromRoute] Guid id,
-        [FromServices] IUpdateSocialsService service,
-        [FromBody] SocialsListDto Dto,
-        [FromServices] IValidator<UpdateSocialsRequest> validator,
+        [FromServices] UpdateSocialsService service,
+        [FromBody] UpdateSocialsRequest request,
+        [FromServices] IValidator<UpdateSocialsCommand> validator,
         CancellationToken cancellationToken)
     {
-        var request = new UpdateSocialsRequest(id, Dto);
+        var command = new UpdateSocialsCommand(id, request.socials);
 
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-            return validationResult.ToValidationErrorResponse();
+        //var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        //if (!validationResult.IsValid)
+        //    return validationResult.ToValidationErrorResponse();
 
         var result = await service.UpdateSocials
-            (request, cancellationToken);
+            (command, cancellationToken);
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
@@ -88,18 +91,13 @@ public class VolunteerController : ControllerBase
     [HttpPatch("{id:guid}/requisites")]
     public async Task<ActionResult> UpdateRequisites(
         [FromRoute] Guid id,
-        [FromServices] IUpdateRequisitesService service,
-        [FromBody] RequisiteListDto Dto,
-        [FromServices] IValidator<UpdateRequisitesRequest> validator,
+        [FromServices] UpdateRequisitesService service,
+        [FromBody] UpdateRequisitesRequest request,
         CancellationToken cancellationToken)
     {
-        var request = new UpdateRequisitesRequest(Dto, id);
+        var command = new UpdateRequisitesCommand(request.requisites, id);
 
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-            return validationResult.ToValidationErrorResponse();
-
-        var result = await service.UdpateRequisites(request, cancellationToken);
+        var result = await service.UdpateRequisites(command, cancellationToken);
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
@@ -107,15 +105,10 @@ public class VolunteerController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(
        [FromRoute] Guid id,
-       [FromServices] IDeleteVolunteerService service,
-       [FromServices] IValidator<DeleteVolunteerRequest> validator,
+       [FromServices] DeleteVolunteerService service,
        CancellationToken cancellationToken)
     {
-        var request = new DeleteVolunteerRequest(id);
-
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-            return validationResult.ToValidationErrorResponse();
+        var request = new DeleteVolunteerCommand(id);
 
         var result = await service.Delete(request, cancellationToken);
 
@@ -173,5 +166,4 @@ public class VolunteerController : ControllerBase
 
         return new ObjectResult(result.Value) { StatusCode = 200};
     }
-
 }

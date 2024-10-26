@@ -19,11 +19,11 @@ public static class Inject
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<ICreateVolunteerService, CreateVolunteerService>();
-        services.AddScoped<IUpdateVolunteerService, UpdateVolunteerService>();
-        services.AddScoped<IUpdateSocialsService, UpdateSocialsService>();
-        services.AddScoped<IUpdateRequisitesService, UpdateRequisitesService>();
-        services.AddScoped<IDeleteVolunteerService, DeleteVolunteerService>();
+        services.AddScoped<CreateVolunteerService>();
+        services.AddScoped<UpdateVolunteerService>();
+        services.AddScoped<UpdateSocialsService>();
+        services.AddScoped<UpdateRequisitesService>();
+        services.AddScoped<DeleteVolunteerService>();
         services.AddScoped<RemovePhotoService>();
         services.AddScoped<UploadPhotoService>();
         services.AddScoped<GetPhotoService>();

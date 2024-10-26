@@ -4,6 +4,6 @@ namespace PetFamily.Application.Volunteers.Create;
 
 public interface ICreateVolunteerService
 {
-    Task<CSharpFunctionalExtensions.Result<Guid, Error>> Create(CreateVolunteerRequest createVolunteerRequest,
+    Task<CSharpFunctionalExtensions.Result<Guid, ErrorList>> Create(CreateVolunteerCommand createVolunteerRequest,
         CancellationToken ct);
 }

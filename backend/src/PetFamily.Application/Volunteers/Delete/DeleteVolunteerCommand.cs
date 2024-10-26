@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.Volunteers.Delete
 {
-    public record DeleteVolunteerRequest(Guid Id);
+    public record DeleteVolunteerCommand(Guid Id);
 }

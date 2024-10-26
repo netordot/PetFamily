@@ -7,9 +7,9 @@ using PetFamily.Domain.Volunteer.Details;
 
 namespace PetFamily.Application.Volunteers.Create.Validation;
 
-public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteerRequest>
+public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteerCommand>
 {
-    public CreateVolunteerRequestValidator()
+    public CreateVolunteerCommandValidator()
     {
         RuleFor(c => c.Description).MaximumLength(Domain.Shared.Constants.MAX_LONG_TEXT_SIZE);
         RuleFor(c => c.Email).MustBeValueObject(Email.Create);

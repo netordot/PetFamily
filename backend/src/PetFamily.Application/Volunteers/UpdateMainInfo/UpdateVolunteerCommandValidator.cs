@@ -6,15 +6,15 @@ using PetFamily.Domain.Shared.PhoneNumber;
 
 namespace PetFamily.Application.Volunteers.UpdateMainInfo;
 
-public class UpdateVolunteerRequestValidator : AbstractValidator<UpdateVolunteerRequest>
+public class UpdateVolunteerCommandValidator : AbstractValidator<UpdateVolunteerCommand>
 {
-    public UpdateVolunteerRequestValidator()
+    public UpdateVolunteerCommandValidator()
     {
         RuleFor(u => u.id).NotEmpty();
     }
 }
 
-public class UpdateVolunteerDtoValidator : AbstractValidator<UpdateVolunteerDto>
+public class UpdateVolunteerDtoValidator : AbstractValidator<UpdateVolunteerRequest>
 {
     public UpdateVolunteerDtoValidator()
     {

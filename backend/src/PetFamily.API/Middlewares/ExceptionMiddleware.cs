@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using PetFamily.API.Response;
+using PetFamily.Domain.Shared.Errors;
 
 namespace PetFamily.API.Middlewares;
 
@@ -27,8 +28,8 @@ public class ExceptionMiddleware
         {
             _logger.LogError(ex, ex.Message);
             
-            var responseError = new ResponseError("Server.Iternal", ex.Message, null);
-            var envelope = Envelope.Error([responseError]);
+            var error = Error.Failure("Server.Iternal", ex.Message, null);
+            var envelope = Envelope.Error(error);
             
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError; 

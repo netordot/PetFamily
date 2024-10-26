@@ -1,8 +1,9 @@
 ﻿using PetFamily.Application.Volunteers.SharedDtos;
 
-namespace PetFamily.Application.Volunteers.Create;
-
-public record CreateVolunteerRequest(
+namespace PetFamily.API.Contracts
+{
+    public record CreateVolunteerRequest
+    (
     string FirstName,
     string MiddleName,
     string LastName,
@@ -15,5 +16,6 @@ public record CreateVolunteerRequest(
     int BuildingNumber,
     int CorpsNumber,
     List<RequisiteDto> Requisites,
-    List<SocialNetworkDto> SocialNetworks
-);
+    List<SocialNetworkDto> SocialNetworks);
+
+}

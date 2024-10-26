@@ -2,9 +2,9 @@
 
 namespace PetFamily.Application.Volunteers.UpdateRequisites;
 
-public class UpdateRequisiteRequestValidator : AbstractValidator<UpdateRequisitesRequest>
+public class UpdateRequisiteCommandValidator : AbstractValidator<UpdateRequisitesCommand>
 {
-    public UpdateRequisiteRequestValidator()
+    public UpdateRequisiteCommandValidator()
     {
         RuleFor(u => u.Id).NotEmpty();
     }

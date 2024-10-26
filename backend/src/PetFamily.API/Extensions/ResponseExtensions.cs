@@ -4,14 +4,53 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Response;
 using PetFamily.Domain.Shared.Errors;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PetFamily.API.Extensions;
 
 public static class ResponseExtensions
 {
-    public static ActionResult ToResponse(this Error error)
+    public static ActionResult ToResponse(this Domain.Shared.Errors.Error error)
     {
-        var statusCode = error.Type switch
+        var statusCode = GetStatusCodes(error.Type);
+        
+
+        var responseError = new ResponseError(error.Code, error.Message, null);
+        var envelope = Envelope.Error(error.ToErrorList());
+
+        return new ObjectResult(envelope)
+        {
+            StatusCode = statusCode
+        };
+    }
+
+    public static ActionResult ToResponse(this ErrorList errorList)
+    {
+        if (!errorList.Any())
+        {
+            return new ObjectResult(null)
+            {
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+        }
+
+        var distinctErrorTypes = errorList.Select(x => x.Type).Distinct().ToList();
+
+        var statusCode = distinctErrorTypes.Count > 1
+            ? StatusCodes.Status500InternalServerError
+            : GetStatusCodes(distinctErrorTypes.First());
+
+        var envelope = Envelope.Error(errorList);
+
+        return new ObjectResult(envelope)
+        {
+            StatusCode = statusCode
+        };
+    }
+
+    private static int GetStatusCodes(ErrorType errorType)
+    =>
+        errorType switch
         {
             ErrorType.Validation => StatusCodes.Status400BadRequest,
             ErrorType.NotFound => StatusCodes.Status404NotFound,
@@ -20,45 +59,40 @@ public static class ResponseExtensions
             _ => StatusCodes.Status500InternalServerError
         };
 
-        var responseError = new ResponseError(error.Code, error.Message, null);
-        var envelope = Envelope.Error([responseError]);
 
-        return new ObjectResult(envelope)
-        {
-            StatusCode = statusCode
-        };
-    }
 
-    public static ActionResult ToValidationErrorResponse(this ValidationResult result)
-    {
-        if (result.IsValid)
-        {
-            throw new InvalidOperationException("Result cannot be succeed");
-        }
 
-        var validationErrors = result.Errors;
 
-        List<ResponseError> responseErrors = [];
+    //public static ActionResult ToValidationErrorResponse(this ValidationResult result)
+    //{
+    //    if (result.IsValid)
+    //    {
+    //        throw new InvalidOperationException("Result cannot be succeed");
+    //    }
 
-        foreach (var validationError in validationErrors)
-        {
-            var errorMessage = validationError.ErrorMessage;
+    //    var validationErrors = result.Errors;
 
-            var error = Error.Deserialize(errorMessage);
+    //    List<ResponseError> responseErrors = [];
 
-            var responseError = new ResponseError
-            (error.Code,
-                error.Message,
-                validationError.PropertyName);
+    //    foreach (var validationError in validationErrors)
+    //    {
+    //        var errorMessage = validationError.ErrorMessage;
 
-            responseErrors.Add(responseError);
-        }
+    //        var error = Error.Deserialize(errorMessage);
 
-        var envelope = Envelope.Error(responseErrors);
+    //        var responseError = new ResponseError
+    //        (error.Code,
+    //            error.Message,
+    //            validationError.PropertyName);
 
-        return new ObjectResult(envelope)
-        {
-            StatusCode = StatusCodes.Status400BadRequest
-        };
-    }
+    //        responseErrors.Add(responseError);
+    //    }
+
+    //    var envelope = Envelope.Error(responseErrors);
+
+    //    return new ObjectResult(envelope)
+    //    {
+    //        StatusCode = StatusCodes.Status400BadRequest
+    //    };
+    //}
 }

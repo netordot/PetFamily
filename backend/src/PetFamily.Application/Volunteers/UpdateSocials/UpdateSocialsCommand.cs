@@ -2,4 +2,4 @@
 
 namespace PetFamily.Application.Volunteers.UpdateSocials;
 
-public record UpdateSocialsRequest(Guid Id, SocialsListDto Dto);
+public record UpdateSocialsCommand(Guid Id, SocialsListDto Dto);

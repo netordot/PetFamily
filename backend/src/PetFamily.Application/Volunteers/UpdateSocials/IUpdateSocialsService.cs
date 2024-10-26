@@ -5,6 +5,6 @@ namespace PetFamily.Application.Volunteers.UpdateSocials;
 
 public interface IUpdateSocialsService
 {
-    Task<Result<Guid, Error>> UpdateSocials(UpdateSocialsRequest request,
+    Task<Result<Guid, Error>> UpdateSocials(UpdateSocialsCommand request,
         CancellationToken cancellationToken);
 }

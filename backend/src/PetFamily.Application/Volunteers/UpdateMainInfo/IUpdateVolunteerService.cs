@@ -5,5 +5,5 @@ namespace PetFamily.Application.Volunteers.UpdateMainInfo;
 
 public interface IUpdateVolunteerService
 {
-    Task<Result<Guid, Error>> Update(UpdateVolunteerRequest request, CancellationToken cancellationToken);
+    Task<Result<Guid, Error>> Update(UpdateVolunteerCommand request, CancellationToken cancellationToken);
 }

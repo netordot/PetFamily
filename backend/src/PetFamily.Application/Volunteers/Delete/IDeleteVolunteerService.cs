@@ -5,6 +5,6 @@ namespace PetFamily.Application.Volunteers.Delete
 {
     public interface IDeleteVolunteerService
     {
-        Task<Result<Guid, Error>> Delete(DeleteVolunteerRequest request, CancellationToken cancellationToken);
+        Task<Result<Guid, Error>> Delete(DeleteVolunteerCommand request, CancellationToken cancellationToken);
     }
 }
