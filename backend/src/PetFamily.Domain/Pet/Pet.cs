@@ -128,7 +128,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         }
     }
 
-    public UnitResult<Error> AddPhotos(List<PetPhoto.PetPhoto> photos)
+    public UnitResult<Error> UploadPhotos(List<PetPhoto.PetPhoto> photos)
     {
         Photos = photos;
         return Result.Success<Error>();

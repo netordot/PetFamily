@@ -13,7 +13,5 @@ public interface IVolunteerRepository
     Task<Result<Volunteer, Error>> GetById(Guid volunteerId, CancellationToken cancellationToken = default);
     Guid Save(Volunteer volunteer, CancellationToken cancellationToken = default);
     Guid Delete(Volunteer volunteer, CancellationToken cancellationToken);
-    Task<Result<Volunteer, Error>> GetVolunteerByPetId(PetId petId);
-
 
 }
