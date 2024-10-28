@@ -25,7 +25,7 @@ public class VolunteerController : ControllerBase
     public async Task<ActionResult> Create(
         [FromBody] CreateVolunteerRequest request,
         CancellationToken cancellationToken,
-        [FromServices] ICreateVolunteerService createVolunteerService)
+        [FromServices] CreateVolunteerService createVolunteerService)
     {
         var command = new CreateVolunteerCommand(
             request.FirstName,

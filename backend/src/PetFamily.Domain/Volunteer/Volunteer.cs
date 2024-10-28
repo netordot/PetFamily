@@ -119,21 +119,35 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 
     public void Delete()
     {
-        if(!_isDeleted)
+        if (!_isDeleted)
             _isDeleted = true;
     }
 
     public void Restore()
     {
-        if(_isDeleted)
+        if (_isDeleted)
         {
-            _isDeleted= false;
+            _isDeleted = false;
         }
     }
 
     public UnitResult<Error> AddPet(Pet.Pet pet)
     {
+        var serialNumber = SerialNumber.Create(Pets.Count + 1);
+        pet.SetSerialNumber(serialNumber.Value);
+
         Pets.Add(pet);
         return Result.Success<Error>();
+    }
+
+    public Result<Pet.Pet, Error> GetPetById(Guid petId)
+    {
+        var pet = Pets.FirstOrDefault(p => p.Id == PetId.Create(petId));
+        if (pet == null)
+        {
+            return Errors.General.NotFound(petId);
+        }
+
+        return pet;
     }
 }

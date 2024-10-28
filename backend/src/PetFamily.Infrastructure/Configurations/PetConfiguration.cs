@@ -115,24 +115,14 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         });
 
-        //builder.OwnsOne(p => p.Photos, phb =>
-        //{
-        //    phb.OwnsMany(v => v.Values, vb =>
-        //    {
-        //        vb.Property(x => x.Path).
-        //        HasConversion(
-        //        pth => pth.Path,
-        //        value => FilePath.Create(value).Value);
-
-        //        vb.Property(p => p.Id)
-        //        .HasConversion(
-        //        Id => Id.Value,
-        //        value => PetPhotoId.Create(value));
-        //    });
-        //});
-
         builder.Property<bool>("_isDeleted")
            .UsePropertyAccessMode(PropertyAccessMode.Field)
            .HasColumnName("deleted");
+
+        builder.ComplexProperty(p => p.SerialNumber, sb =>
+        {
+            sb.Property(s => s.Value)
+            .IsRequired();
+        });
     }
 }
