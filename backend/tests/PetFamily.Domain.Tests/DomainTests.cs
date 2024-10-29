@@ -144,6 +144,70 @@ namespace PetFamily.Domain.Tests
         }
 
         [Fact]
+        public void Move_First_To_Last()
+        {
+            // arrange
+            var volunteer = CreateVolunteer();
+            CreatePets(volunteer);
+            var firstPet = volunteer.Pets[0];
+            var secondPet = volunteer.Pets[1];
+            var thirdPet = volunteer.Pets[2];
+            var forthPet = volunteer.Pets[3];
+            var fifthPet = volunteer.Pets[4];
+            var sixthPet = volunteer.Pets[5];
+            var seventhPet = volunteer.Pets[6];
+
+            var newPositionForFirst = Position.Create(7);
+
+            // act
+
+            volunteer.MovePet(firstPet, newPositionForFirst.Value);
+
+            // assert
+
+            secondPet.Position.Value.Should().Be(1);
+            firstPet.Position.Value.Should().Be(7);
+            sixthPet.Position.Value.Should().Be(5);
+            fifthPet.Position.Value.Should().Be(4);
+            forthPet.Position.Value.Should().Be(3);
+            thirdPet.Position.Value.Should().Be(2);
+            seventhPet.Position.Value.Should().Be(6);
+
+        }
+
+        [Fact]
+        public void Move_Last_To_First()
+        {
+            // arrange
+            var volunteer = CreateVolunteer();
+            CreatePets(volunteer);
+            var firstPet = volunteer.Pets[0];
+            var secondPet = volunteer.Pets[1];
+            var thirdPet = volunteer.Pets[2];
+            var forthPet = volunteer.Pets[3];
+            var fifthPet = volunteer.Pets[4];
+            var sixthPet = volunteer.Pets[5];
+            var seventhPet = volunteer.Pets[6];
+
+            var newPositionForSeventh = Position.Create(1);
+
+            // act
+
+            volunteer.MovePet(seventhPet, newPositionForSeventh.Value);
+
+            // assert
+
+            secondPet.Position.Value.Should().Be(3);
+            firstPet.Position.Value.Should().Be(2);
+            sixthPet.Position.Value.Should().Be(7);
+            fifthPet.Position.Value.Should().Be(6);
+            forthPet.Position.Value.Should().Be(5);
+            thirdPet.Position.Value.Should().Be(4);
+            seventhPet.Position.Value.Should().Be(1);
+
+        }
+
+        [Fact]
         public void Move_NonFirstAndlast_Position_BackWard()
         {
             // arrange
