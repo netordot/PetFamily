@@ -14,27 +14,7 @@ namespace PetFamily.Domain.Tests
 {
     public class DomainTests
     {
-
-        [Fact]
-        public void Move_Pet_Same_Position_Returns_Same()
-        {
-            // arrange
-
-            var volunteer = CreateVolunteer();
-            CreatePets(volunteer);
-            var thirdPet = volunteer.Pets[2];
-            var position = Position.Create(3);
-
-            // act
-
-            volunteer.MovePet(thirdPet, position.Value);
-
-
-            // assert
-
-            thirdPet.Position.Should().Be(position.Value);
-        }
-
+        // сверху будут лежать вспомогательные методы
         private Volunteer.Volunteer CreateVolunteer()
         {
             var fullName = new FullName("MASOASO", "ASAS", "ASASSASA");
@@ -45,7 +25,7 @@ namespace PetFamily.Domain.Tests
             var listReq = new List<Requisite>();
             listReq.Add(requisite.Value);
             var social = Social.Create("sdfnsdkjfksdj", "dsfksdjfkdsjfk");
-            var socialList = new List<Social>(); 
+            var socialList = new List<Social>();
             socialList.Add(social.Value);
             var petList = new List<Pet.Pet>();
 
@@ -84,7 +64,7 @@ namespace PetFamily.Domain.Tests
             var speciesBreed = CreateSpeciesBreed();
             PetStatus petStatus = PetStatus.NeedsHelp;
 
-            for (int i = 1; i <= 4; i++)
+            for (int i = 1; i <= 7; i++)
             {
                 var pet = Pet.Pet.Create
                 (i.ToString(),
@@ -111,5 +91,90 @@ namespace PetFamily.Domain.Tests
             }
 
         }
+
+        [Fact]
+        public void Move_Pet_Same_Position_Returns_Same()
+        {
+            // arrange
+
+            var volunteer = CreateVolunteer();
+            CreatePets(volunteer);
+            var thirdPet = volunteer.Pets[2];
+            var position = Position.Create(3);
+
+            // act
+
+            volunteer.MovePet(thirdPet, position.Value);
+
+            // assert
+
+            thirdPet.Position.Should().Be(position.Value);
+        }
+
+        [Fact]
+        public void Move_NonFirstAndlast_Position_Forward()
+        {
+            // arrange
+            var volunteer = CreateVolunteer();
+            CreatePets(volunteer);
+            var firstPet = volunteer.Pets[0];
+            var secondPet = volunteer.Pets[1];
+            var thirdPet = volunteer.Pets[2];
+            var forthPet = volunteer.Pets[3];
+            var fifthPet = volunteer.Pets[4];
+            var sixthPet = volunteer.Pets[5];
+            var seventhPet = volunteer.Pets[6];
+
+            var newPositionForSecond = Position.Create(6);
+
+            // act
+
+            volunteer.MovePet(secondPet, newPositionForSecond.Value);
+
+            // assert
+
+            secondPet.Position.Value.Should().Be(6);
+            firstPet.Position.Value.Should().Be(1);
+            sixthPet.Position.Value.Should().Be(5);
+            fifthPet.Position.Value.Should().Be(4);
+            forthPet.Position.Value.Should().Be(3);
+            thirdPet.Position.Value.Should().Be(2);
+            seventhPet.Position.Value.Should().Be(7);
+
+        }
+
+        [Fact]
+        public void Move_NonFirstAndlast_Position_BackWard()
+        {
+            // arrange
+            var volunteer = CreateVolunteer();
+            CreatePets(volunteer);
+            var firstPet = volunteer.Pets[0];
+            var secondPet = volunteer.Pets[1];
+            var thirdPet = volunteer.Pets[2];
+            var forthPet = volunteer.Pets[3];
+            var fifthPet = volunteer.Pets[4];
+            var sixthPet = volunteer.Pets[5];
+            var seventhPet = volunteer.Pets[6];
+
+            var newPositionForFifrh = Position.Create(3);
+
+            // act
+
+            volunteer.MovePet(fifthPet, newPositionForFifrh.Value);
+
+            // assert
+
+            secondPet.Position.Value.Should().Be(2);
+            firstPet.Position.Value.Should().Be(1);
+            sixthPet.Position.Value.Should().Be(6);
+            fifthPet.Position.Value.Should().Be(3);
+            forthPet.Position.Value.Should().Be(5);
+            thirdPet.Position.Value.Should().Be(4);
+            seventhPet.Position.Value.Should().Be(7);
+
+        }
+
+
     }
 }

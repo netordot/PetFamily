@@ -22,7 +22,7 @@ namespace PetFamily.Domain.Pet
            => Create(Value +1);
 
         public Result<Position, Error> Backward()
-           => Create(Value + 1);
+           => Create(Value - 1);
 
 
         public static Result<Position, Error> Create(int value)
