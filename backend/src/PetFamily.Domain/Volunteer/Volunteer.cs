@@ -6,6 +6,7 @@ using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
 using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer.Details;
+using System.Runtime.InteropServices.ObjectiveC;
 
 namespace PetFamily.Domain.Volunteer;
 
@@ -133,8 +134,8 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 
     public UnitResult<Error> AddPet(Pet.Pet pet)
     {
-        var serialNumber = SerialNumber.Create(Pets.Count + 1);
-        pet.SetSerialNumber(serialNumber.Value);
+        var serialNumber = Position.Create(Pets.Count + 1);
+        pet.SetPosition(serialNumber.Value);
 
         Pets.Add(pet);
         return Result.Success<Error>();
@@ -150,4 +151,85 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 
         return pet;
     }
+
+    public UnitResult<Error> MovePet(Pet.Pet pet, Position position)
+    { 
+        var currentPosition = pet.Position;
+
+        if(currentPosition == position || Pets.Count ==1)
+        {
+            return Result.Success<Error>();
+        }
+
+        var adjustedPosition = SetPositionIfOutOfRange(position);
+        if(adjustedPosition.IsFailure)
+        {
+            return adjustedPosition.Error;
+        }
+        var newPosition = adjustedPosition.Value;
+
+        var moveResult = AdjutPositionsBetween(currentPosition, newPosition);
+        if (moveResult.IsFailure)
+        {
+            return moveResult.Error;    
+        }
+
+        pet.MovePosition(position);
+
+        return Result.Success<Error>();
+
+    }
+
+    private UnitResult<Error> AdjutPositionsBetween(Position currentPosition, Position newPosition)
+    {
+        if (newPosition.Value < currentPosition.Value)
+        {
+            var petsToMove = Pets.Where(p => p.Position.Value >= newPosition.Value
+            && p.Position.Value < currentPosition.Value);
+
+            foreach (var petToMove in petsToMove)
+            {
+                var result = petToMove.MoveForward();
+                if (result.IsFailure)
+                {
+                    return result.Error;
+                }
+            }
+        }
+
+        else if (newPosition.Value > currentPosition.Value)
+        {
+            var petsToMove = Pets.Where(p => p.Position.Value > currentPosition.Value
+            && p.Position.Value <= newPosition.Value);
+
+            foreach (var petToMove in petsToMove)
+            {
+                var result = petToMove.MoveBack();
+                if (result.IsFailure)
+                {
+                    return result.Error;
+                }
+            }
+        }
+
+        return Result.Success<Error>();
+
+    }
+
+    private Result<Position,Error> SetPositionIfOutOfRange(Position newPosition)
+    {
+        if (newPosition.Value <= Pets.Count())
+        {
+            return newPosition;
+        }
+
+        var lastPosition = Position.Create(Pets.Count() - 1);
+        if (lastPosition.IsFailure)
+        {
+            return lastPosition.Error;
+        }
+
+        return lastPosition.Error;
+    }
+
 }

@@ -119,9 +119,11 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
            .UsePropertyAccessMode(PropertyAccessMode.Field)
            .HasColumnName("deleted");
 
-        builder.ComplexProperty(p => p.SerialNumber, sb =>
+        builder.ComplexProperty(p => p.Position, sb =>
         {
+            
             sb.Property(s => s.Value)
+            .HasColumnName("position")
             .IsRequired();
         });
     }

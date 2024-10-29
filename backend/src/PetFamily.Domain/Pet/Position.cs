@@ -2,29 +2,37 @@
 using PetFamily.Domain.Shared.Errors;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PetFamily.Domain.Pet
 {
-    public record SerialNumber
+    public record Position
     {
         public int Value { get; }
 
-        private SerialNumber(int value)
+        private Position(int value)
         {
             Value = value;
         }
 
-        public static Result<SerialNumber, Error> Create(int value)
+        public Result<Position,Error> Forward()
+           => Create(Value +1);
+
+        public Result<Position, Error> Backward()
+           => Create(Value + 1);
+
+
+        public static Result<Position, Error> Create(int value)
         {
             if(value <= 0)
             {
                 return Errors.General.ValueIsInvalid("number");
             }
 
-            return new SerialNumber(value);
+            return new Position(value);
         }
     }
 }
