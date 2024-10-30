@@ -34,7 +34,7 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
         public async Task<Result<Guid, Error>> AddPetFiles(Guid petId,Guid volunteerId, AddFileCommand command, CancellationToken cancellation)
         {
-            var transaction = await _context.BeginTransaction(cancellation);
+            //var transaction = await _context.BeginTransaction(cancellation);
 
             var volunteer = await _volunteerRepository.GetById(volunteerId, cancellation);
 
@@ -79,7 +79,7 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             await _context.SaveChanges(cancellation);
 
-            transaction.Commit();
+            //transaction.Commit();
             return petId;
 
         }
