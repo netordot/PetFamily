@@ -25,7 +25,7 @@ public class VolunteerController : ControllerBase
     public async Task<ActionResult> Create(
         [FromBody] CreateVolunteerRequest request,
         CancellationToken cancellationToken,
-        [FromServices] ICreateVolunteerService createVolunteerService)
+        [FromServices] CreateVolunteerService createVolunteerService)
     {
         var command = new CreateVolunteerCommand(
             request.FirstName,
@@ -147,9 +147,10 @@ public class VolunteerController : ControllerBase
         return new ObjectResult(result.Value) { StatusCode = 201 };
     }
 
-    [HttpPatch("{Id:guid}/photos")]
+    [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos")]
     public async Task<ActionResult> AddPhotosToPet(
-        [FromRoute] Guid Id,
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
         [FromServices] AddPetFilesService service,
         [FromForm] AddFilesRequest request,
         CancellationToken cancellation
@@ -160,7 +161,7 @@ public class VolunteerController : ControllerBase
         var fileDtos = fileProcessor.Process(request.files);
 
         var addFilesCommand = new AddFileCommand(fileDtos);
-        var result = await service.AddPetFiles(Id, addFilesCommand, cancellation);
+        var result = await service.AddPetFiles(petId, volunteerId, addFilesCommand, cancellation);
         if (result.IsFailure)
             return result.Error.ToResponse();
 

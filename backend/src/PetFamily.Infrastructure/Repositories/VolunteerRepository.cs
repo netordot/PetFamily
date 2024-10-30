@@ -54,18 +54,4 @@ public class VolunteerRepository : IVolunteerRepository
         return volunteer.Id.Value;
     }
 
-    public async Task<Result<Volunteer, Error>> GetVolunteerByPetId(PetId petId)
-    {
-        var volunteer = await _context
-            .Volunteers
-            .Include(p => p.Pets)
-            .ThenInclude(ph => ph.Photos)
-            .FirstOrDefaultAsync(v => v.Pets.Any(p => p.Id == petId));
-        
-        if(volunteer ==null)
-            return Errors.General.NotFound();
-
-        return volunteer;
-    }
-
 }

@@ -5,6 +5,7 @@ using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
 using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
+using System.Reflection.PortableExecutable;
 
 namespace PetFamily.Domain.Pet;
 
@@ -33,6 +34,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public DateTime CreatedAt { get; private set; }
     public Requisites? Requisites { get; private set; }
     public List<PetPhoto.PetPhoto>? Photos { get; private set; }
+    public Position Position { get; private set; }
 
     private bool _isDeleted = false;
 
@@ -128,10 +130,48 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         }
     }
 
-    public UnitResult<Error> AddPhotos(List<PetPhoto.PetPhoto> photos)
+    public UnitResult<Error> SetPosition(Position number)
+    {
+        Position = number;
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> UploadPhotos(List<PetPhoto.PetPhoto> photos)
     {
         Photos = photos;
         return Result.Success<Error>();
     }
+
+    public UnitResult<Error> MoveForward()
+    {
+        var newPosition = Position.Forward();
+        if(newPosition.IsFailure)
+        {
+            return newPosition.Error;
+        }
+
+        Position = newPosition.Value;
+
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> MoveBack()
+    {
+        var newPosition = Position.Backward();
+        if (newPosition.IsFailure)
+        {
+            return newPosition.Error;
+        }
+
+        Position = newPosition.Value;
+
+        return Result.Success<Error>();
+    }
+
+    public void MovePosition(Position position)
+    {
+        Position = position;
+    }
+
 
 }

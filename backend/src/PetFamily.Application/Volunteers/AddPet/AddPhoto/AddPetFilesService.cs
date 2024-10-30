@@ -32,19 +32,18 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
             _context = context;
         }
 
-        public async Task<Result<Guid, Error>> AddPetFiles(Guid petId, AddFileCommand command, CancellationToken cancellation)
+        public async Task<Result<Guid, Error>> AddPetFiles(Guid petId,Guid volunteerId, AddFileCommand command, CancellationToken cancellation)
         {
-            var transaction = await _context.BeginTransaction(cancellation);
-            //логика нахождения пета по айдишнику
+            //var transaction = await _context.BeginTransaction(cancellation);
 
-            var volunteerOwns = await _volunteerRepository.GetVolunteerByPetId(PetId.Create(petId));
-            if (volunteerOwns.IsFailure)
-                return volunteerOwns.Error;
+            var volunteer = await _volunteerRepository.GetById(volunteerId, cancellation);
 
-            // тут может возникнуть ошибка
-            var petToUpdate = volunteerOwns.Value
-                .Pets.FirstOrDefault(p => p.Id.Value == petId);
-
+            var petToUpdate = volunteer.Value.GetPetById(petId);
+            if(petToUpdate.IsFailure)
+            {
+                return petToUpdate.Error;
+            }
+            
 
             List<PetPhoto> photos = [];
             List<FileData> fileContents = [];
@@ -76,11 +75,11 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             var pictures = new ValueObjectList<PetPhoto>(photos);
 
-            petToUpdate.AddPhotos(pictures);
+            petToUpdate.Value.UploadPhotos(pictures);
 
             await _context.SaveChanges(cancellation);
 
-            transaction.Commit();
+            //transaction.Commit();
             return petId;
 
         }
