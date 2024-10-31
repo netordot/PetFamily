@@ -22,7 +22,7 @@ public static class Inject
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>();
+        services.AddDbContext<WriteDbContext>();
         services.AddScoped<IVolunteerRepository, VolunteerRepository>();
         services.AddSingleton<SoftDeleteInterceptor>();
         services.AddScoped<IFileProvider, MinioProvider>();

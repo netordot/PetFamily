@@ -11,9 +11,9 @@ namespace PetFamily.Infrastructure.Repositories;
 
 public class VolunteerRepository : IVolunteerRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly WriteDbContext _context;
 
-    public VolunteerRepository(ApplicationDbContext context)
+    public VolunteerRepository(WriteDbContext context)
     {
         _context = context;
     }

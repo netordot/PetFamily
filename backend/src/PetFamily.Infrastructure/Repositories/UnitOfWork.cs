@@ -13,9 +13,9 @@ namespace PetFamily.Infrastructure.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ApplicationDbContext _context;
+        private readonly WriteDbContext _context;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(WriteDbContext context)
         {
             _context = context;
         }
