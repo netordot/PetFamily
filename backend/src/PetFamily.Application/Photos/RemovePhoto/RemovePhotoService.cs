@@ -17,17 +17,19 @@ namespace PetFamily.Application.Photos.RemovePhoto
         {
             _fileProvider = provider;
         }
+        
+        // закомментил т.к. пока не используется
 
-        public async Task<Result<string, Error>> Remove(string fileName, CancellationToken cancellationToken)
-        {
+        //public async Task<Result<string, Error>> Remove(string fileName, CancellationToken cancellationToken)
+        //{
 
-            var result = await _fileProvider.RemoveFile(fileName, cancellationToken);
-            if (result.IsFailure)
-            {
-                return result.Error;
-            }
+        //    var result = await _fileProvider.RemoveFile(fileName, cancellationToken);
+        //    if (result.IsFailure)
+        //    {
+        //        return result.Error;
+        //    }
 
-            return result.Value;
-        }
+        //    return result.Value;
+        //}
     }
 }

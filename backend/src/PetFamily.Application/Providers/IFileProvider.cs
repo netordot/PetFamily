@@ -15,6 +15,6 @@ namespace PetFamily.Application.Providers
         Task<Result<IReadOnlyList<FilePath>, Error>> UploadFile(IEnumerable<FileData> filesData, CancellationToken cancellation);
         Task<Result<string, Error>> GetFile(GetFileProvider provider, CancellationToken cancellation);
 
-        Task<Result<string, Error>> RemoveFile(string provider, CancellationToken cancellation);
+        Task<UnitResult<Error>> RemoveFile(FileProvider.FileInfo fileInfo , CancellationToken cancellation);
     }
 }

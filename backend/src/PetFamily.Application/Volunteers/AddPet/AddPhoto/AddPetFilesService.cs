@@ -14,6 +14,7 @@ using PetFamily.Domain.Pet;
 using System.IO.Pipes;
 using PetFamily.Domain.Shared;
 using PetFamily.Application.Database;
+using PetFamily.Application.Messaging;
 
 namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 {
@@ -22,17 +23,22 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
         private readonly string _bucket = "photos";
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly Providers.IFileProvider _fileProvider;
-        private readonly IUnitOfWork _context;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IMessageQueue<IEnumerable<Providers.FileProvider.FileInfo>> _messageQueue;
 
         public AddPetFilesService(
-            IVolunteerRepository repository, Providers.IFileProvider fileProvider, IUnitOfWork context)
+            IVolunteerRepository repository,
+            Providers.IFileProvider fileProvider,
+            IUnitOfWork context,
+            IMessageQueue<IEnumerable<Providers.FileProvider.FileInfo>> messageQueue)
         {
             _volunteerRepository = repository;
             _fileProvider = fileProvider;
-            _context = context;
+            unitOfWork = context;
+            _messageQueue = messageQueue;
         }
 
-        public async Task<Result<Guid, Error>> AddPetFiles(Guid petId,Guid volunteerId, AddFileCommand command, CancellationToken cancellation)
+        public async Task<Result<Guid, ErrorList>> AddPetFiles(Guid petId,Guid volunteerId, AddFileCommand command, CancellationToken cancellation)
         {
             //var transaction = await _context.BeginTransaction(cancellation);
 
@@ -41,7 +47,7 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
             var petToUpdate = volunteer.Value.GetPetById(petId);
             if(petToUpdate.IsFailure)
             {
-                return petToUpdate.Error;
+                return petToUpdate.Error.ToErrorList();
             }
             
 
@@ -54,9 +60,11 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
                 var filePath = FilePath.Create(Guid.NewGuid(), extension);
                 if (filePath.IsFailure)
-                    return filePath.Error;
+                    return filePath.Error.ToErrorList();
 
-                var fileContent = new FileData(file.stream, filePath.Value, _bucket);
+                var fileInfo = new Providers.FileProvider.FileInfo(filePath.Value, _bucket);
+
+                var fileContent = new FileData(file.stream, fileInfo);
                 fileContents.Add(fileContent);
 
             }
@@ -65,7 +73,11 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             var uploadResult = await _fileProvider.UploadFile(fileData, cancellation);
             if (uploadResult.IsFailure)
-                return uploadResult.Error;
+            {
+                await _messageQueue.WriteAsync(fileData.Select(f => f.FileInfo), cancellation);
+
+                return uploadResult.Error.ToErrorList();
+            }
 
             var filePaths = command.files.Select(f => FilePath.Create(Guid.NewGuid(), f.fileName).Value);
 
@@ -77,7 +89,7 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             petToUpdate.Value.UploadPhotos(pictures);
 
-            await _context.SaveChanges(cancellation);
+            await unitOfWork.SaveChanges(cancellation);
 
             //transaction.Commit();
             return petId;

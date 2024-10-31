@@ -39,7 +39,7 @@ namespace PetFamily.Infrastructure.Providers
 
             try
             {
-                await IfBucketsNotExistCreateBucket(files, cancellation);
+                await IfBucketsNotExistCreateBucket(files.Select(f => f.FileInfo.BucketName), cancellation);
 
                 var tasks = files.Select(async file =>
                await PutObject(file, semaphoreSlim, cancellation));
@@ -71,17 +71,17 @@ namespace PetFamily.Infrastructure.Providers
             await semaphoreSlim.WaitAsync(cancellation);
 
             var putObjectArgs = new PutObjectArgs()
-                .WithBucket(fileData.BucketName)
-                .WithStreamData(fileData.Content)
-                .WithObjectSize(fileData.Content.Length)
-                .WithObject(fileData.FilePath.Path);
+                .WithBucket(fileData.FileInfo.BucketName)
+                .WithStreamData(fileData.Stream)
+                .WithObjectSize(fileData.Stream.Length)
+                .WithObject(fileData.FileInfo.filePath.Path);
             try
             {
                 var task = _client.PutObjectAsync(putObjectArgs, cancellation);
 
                 semaphoreSlim.Release();
 
-                return fileData.FilePath;
+                return fileData.FileInfo.filePath;
             }
             catch (Exception ex)
             {
@@ -123,32 +123,44 @@ namespace PetFamily.Infrastructure.Providers
             }
         }
 
-        public async Task<Result<string, Error>> RemoveFile(string fileName, CancellationToken cancellation)
+        public async Task<UnitResult<Error>> RemoveFile(Application.Providers.FileProvider.FileInfo fileInfo, CancellationToken cancellation)
         {
             try
             {
-                RemoveObjectArgs rmArgs = new RemoveObjectArgs()
-                                              .WithBucket(PHOTO)
-                                              .WithObject(fileName);
+                var statArgs = new StatObjectArgs()
+                    .WithBucket(PHOTO)
+                    .WithObject(fileInfo.filePath.Path);
+
+                var objectStat = await _client.StatObjectAsync(statArgs);
+
+                if (objectStat == null)
+                {
+                    return Result.Success<Error>();
+                }
+
+                var rmArgs = new RemoveObjectArgs()
+                    .WithBucket(PHOTO)
+                    .WithObject(fileInfo.filePath.Path);
+
                 await _client.RemoveObjectAsync(rmArgs);
 
-                _logger.LogInformation("{fileName} file successfully deleted ", fileName);
-                return fileName;
+                _logger.LogInformation("{fileName} file successfully deleted ", fileInfo.filePath.Path);
+                return Result.Success<Error>();
 
             }
             catch (MinioException e)
             {
-                _logger.LogInformation("Failed to delete file {fileName} from S3 storage", fileName);
+                _logger.LogInformation("Failed to delete file {fileName} from S3 storage", fileInfo.filePath.Path);
                 return Error.Failure("delete.file", "Failed to delete file from S3 storage");
             }
 
         }
 
         private async Task IfBucketsNotExistCreateBucket(
-        IEnumerable<FileData> filesData,
+        IEnumerable<string> buckets,
         CancellationToken cancellationToken)
         {
-            HashSet<string> bucketNames = [.. filesData.Select(file => file.BucketName)];
+            HashSet<string> bucketNames = [.. buckets];
 
             foreach (var bucketName in bucketNames)
             {
