@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Application.Dtos;
+using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteer;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PetFamily.Infrastructure.Configurations.Read
@@ -28,20 +30,12 @@ namespace PetFamily.Infrastructure.Configurations.Read
             builder.Property(p => p.Name)
                 .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
-            builder.OwnsOne(p => p.Requisites, pbuilder =>
-            {
-                pbuilder.ToJson("requisites");
+            builder.Property(p => p.Photos)
+                   .HasConversion(
+           files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
 
-                pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
-                {
-                    vb.Property(v => v.Description)
-                        .IsRequired()
-                        .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
-                    vb.Property(v => v.Title)
-                        .IsRequired()
-                        .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
-                });
-            });
+           json => JsonSerializer.Deserialize<PetPhotoDto[]>(json, JsonSerializerOptions.Default)!);
+
 
             builder.Property(p => p.DateOfBirth)
                .HasColumnName("birth_date")

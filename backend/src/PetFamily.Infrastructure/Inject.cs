@@ -76,6 +76,7 @@ public static class Inject
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddSingleton<SoftDeleteInterceptor>();
+        services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
         return services;
     }

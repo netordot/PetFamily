@@ -15,6 +15,11 @@
       <PackageReference Include="CSharpFunctionalExtensions" Version="3.0.0" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+      <PackageReference Include="Scrutor" Version="5.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="PetManagement\Commands\" />
     </ItemGroup>
 
 </Project>

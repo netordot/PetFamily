@@ -26,6 +26,11 @@ namespace PetFamily.Application.PetManagement.Queries.GetVolunteersWithPaginatio
         {
             var volunteersQuery = _readDbContext.Volunteers.AsQueryable();
 
+            // пример сортировки при пагинации 
+            volunteersQuery = volunteersQuery
+                .WhereIf(!string.IsNullOrWhiteSpace(query.Title),
+                v => v.Name.Contains(query.Title!));
+
             var result = await volunteersQuery.ToPagedList(query.Page, query.PageSize, cancellation);   
 
             return result;
