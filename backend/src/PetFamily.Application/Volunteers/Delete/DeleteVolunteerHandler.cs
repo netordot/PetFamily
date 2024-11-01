@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Domain.Shared.Errors;
@@ -12,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.Volunteers.Delete
 {
-    public class DeleteVolunteerService 
+    public class DeleteVolunteerHandler : ICommandHandler<Guid, DeleteVolunteerCommand>
     {
         private readonly IVolunteerRepository _volunteerRepository;
-        private readonly ILogger<DeleteVolunteerService> _logger;
+        private readonly ILogger<DeleteVolunteerHandler> _logger;
         private readonly IValidator<DeleteVolunteerCommand> _validator;
 
 
-        public DeleteVolunteerService(
+        public DeleteVolunteerHandler(
             IVolunteerRepository repository, 
-            ILogger<DeleteVolunteerService> logger, 
+            ILogger<DeleteVolunteerHandler> logger, 
             IValidator<DeleteVolunteerCommand> validator)
         {
             _volunteerRepository = repository;
@@ -29,7 +30,7 @@ namespace PetFamily.Application.Volunteers.Delete
             _validator = validator;
         }
 
-        public async Task<Result<Guid, ErrorList>> Delete(DeleteVolunteerCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Guid, ErrorList>> Handle(DeleteVolunteerCommand command, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(command, cancellationToken);
             if(validationResult.IsValid ==false)

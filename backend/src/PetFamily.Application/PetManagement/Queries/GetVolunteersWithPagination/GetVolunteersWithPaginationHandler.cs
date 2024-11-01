@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
@@ -13,7 +14,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PetFamily.Application.PetManagement.Queries.GetVolunteersWithPagination
 {
-    public class GetVolunteersWithPaginationHandler
+    public class GetVolunteersWithPaginationHandler : IQueryHandler<PagedList<VolunteerDto>, GetVolunteersWithPaginationQuery>
     {
         private readonly IReadDbContext _readDbContext;
         public GetVolunteersWithPaginationHandler(IReadDbContext context)

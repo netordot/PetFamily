@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared.Errors;
@@ -9,17 +10,17 @@ using PetFamily.Domain.Volunteer.Details;
 
 namespace PetFamily.Application.Volunteers.UpdateSocials;
 
-public class UpdateSocialsService 
+public class UpdateSocialsHandler : ICommandHandler<Guid, UpdateSocialsCommand>
 {
     private readonly IVolunteerRepository _volunteerRepository;
 
-    private readonly ILogger<UpdateSocialsService> _logger;
+    private readonly ILogger<UpdateSocialsHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UpdateSocialsCommand> _validator;
 
-    public UpdateSocialsService(
+    public UpdateSocialsHandler(
         IVolunteerRepository volunteerRepository,
-        ILogger<UpdateSocialsService> logger,
+        ILogger<UpdateSocialsHandler> logger,
         IUnitOfWork context,
         IValidator<UpdateSocialsCommand> validator)
     {
@@ -29,7 +30,7 @@ public class UpdateSocialsService
         _validator = validator;
     }
 
-    public async Task<Result<Guid, ErrorList>> UpdateSocials(UpdateSocialsCommand command,
+    public async Task<Result<Guid, ErrorList>> Handle(UpdateSocialsCommand command,
         CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);

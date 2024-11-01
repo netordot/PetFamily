@@ -17,7 +17,7 @@ namespace PetFamily.API.Controllers
     {
         [HttpPost]
         public async Task<ActionResult> Create
-            ([FromServices] CreateSpeciesService service,
+            ([FromServices] CreateSpeciesHandler service,
             [FromBody] CreateSpeciesRequest request,
             CancellationToken cancellationToken
             )
@@ -26,7 +26,7 @@ namespace PetFamily.API.Controllers
 
             var speciesCommand = new CreateSpeciesCommand(request.speciesName, speciesId);
 
-            var result =  await service.Create(speciesCommand,cancellationToken);
+            var result =  await service.Handle(speciesCommand,cancellationToken);
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
@@ -35,7 +35,7 @@ namespace PetFamily.API.Controllers
 
         [HttpPatch("{id:guid}/breed")]
         public async Task<ActionResult> AddBreeds
-            ([FromServices] AddBreedService addBreedService,
+            ([FromServices] AddBreedHandler addBreedService,
              [FromRoute] Guid id,
              [FromBody] AddBreedRequest request,
              CancellationToken cancellationToken
@@ -43,7 +43,7 @@ namespace PetFamily.API.Controllers
         {
             var command = new AddBreedCommand(request.breedName, id);
 
-           var result = await addBreedService.AddBreed(command,cancellationToken);
+           var result = await addBreedService.Handle(command,cancellationToken);
             if(result.IsFailure)
                 return result.Error.ToResponse();
 

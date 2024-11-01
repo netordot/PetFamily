@@ -1,4 +1,5 @@
 using FluentValidation;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain;
@@ -12,20 +13,20 @@ using PetFamily.Domain.Volunteer.Details;
 
 namespace PetFamily.Application.Volunteers.Create;
 
-public class CreateVolunteerService 
+public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerCommand>
 {
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateVolunteerCommand> _validator;
 
-    public CreateVolunteerService(IVolunteerRepository volunteerRepository, IUnitOfWork unitOfWork, IValidator<CreateVolunteerCommand> validator)
+    public CreateVolunteerHandler(IVolunteerRepository volunteerRepository, IUnitOfWork unitOfWork, IValidator<CreateVolunteerCommand> validator)
     {
         _volunteerRepository = volunteerRepository;
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
 
-    public async Task<CSharpFunctionalExtensions.Result<Guid, ErrorList>> Create(
+    public async Task<CSharpFunctionalExtensions.Result<Guid, ErrorList>> Handle(
         CreateVolunteerCommand command, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateAsync(command, ct);  

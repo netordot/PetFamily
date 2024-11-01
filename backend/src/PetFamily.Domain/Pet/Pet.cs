@@ -15,6 +15,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     {
 
     }
+    
 
     public VolunteerId VolunteerId { get; private set; }
     public string Name { get; private set; }

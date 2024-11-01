@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
@@ -11,16 +12,16 @@ using PetFamily.Domain.Volunteer;
 
 namespace PetFamily.Application.Volunteers.UpdateMainInfo;
 
-public class UpdateVolunteerService 
+public class UpdateVolunteerHandler : ICommandHandler<Guid, UpdateVolunteerCommand>
 {
     private readonly IVolunteerRepository _volunteerRepository;
-    private readonly ILogger<UpdateVolunteerService> _logger;
+    private readonly ILogger<UpdateVolunteerHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UpdateVolunteerCommand> _validator;
 
-    public UpdateVolunteerService(
+    public UpdateVolunteerHandler(
         IVolunteerRepository volunteerRepository,
-        ILogger<UpdateVolunteerService> logger,
+        ILogger<UpdateVolunteerHandler> logger,
         IUnitOfWork unitOfWork,
         IValidator<UpdateVolunteerCommand> validator)
     {
@@ -30,7 +31,7 @@ public class UpdateVolunteerService
         _validator = validator;
     }
 
-    public async Task<Result<Guid, ErrorList>> Update(UpdateVolunteerCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid, ErrorList>> Handle(UpdateVolunteerCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (validationResult.IsValid == false)

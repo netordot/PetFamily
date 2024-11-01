@@ -18,7 +18,7 @@ using PetFamily.Application.Messaging;
 
 namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 {
-    public class AddPetFilesService
+    public class AddPetFilesHandler
     {
         private readonly string _bucket = "photos";
         private readonly IVolunteerRepository _volunteerRepository;
@@ -26,7 +26,7 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageQueue<IEnumerable<Providers.FileProvider.FileInfo>> _messageQueue;
 
-        public AddPetFilesService(
+        public AddPetFilesHandler(
             IVolunteerRepository repository,
             Providers.IFileProvider fileProvider,
             IUnitOfWork context,
@@ -38,7 +38,7 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
             _messageQueue = messageQueue;
         }
 
-        public async Task<Result<Guid, ErrorList>> AddPetFiles(Guid petId,Guid volunteerId, AddFileCommand command, CancellationToken cancellation)
+        public async Task<Result<Guid, ErrorList>> Handle(Guid petId,Guid volunteerId, AddFileCommand command, CancellationToken cancellation)
         {
             //var transaction = await _context.BeginTransaction(cancellation);
 

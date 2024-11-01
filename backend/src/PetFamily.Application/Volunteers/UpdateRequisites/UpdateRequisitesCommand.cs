@@ -1,3 +1,6 @@
-﻿namespace PetFamily.Application.Volunteers.UpdateRequisites;
+﻿using PetFamily.Application.Abstractions;
+using System.Windows.Input;
 
-public record UpdateRequisitesCommand(RequisiteListDto ListDto, Guid Id);
+namespace PetFamily.Application.Volunteers.UpdateRequisites;
+
+public record UpdateRequisitesCommand(RequisiteListDto ListDto, Guid Id) : Abstractions.ICommand;

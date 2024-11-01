@@ -25,7 +25,7 @@ public class VolunteerController : ValuesController
     public async Task<ActionResult> Create(
         [FromBody] CreateVolunteerRequest request,
         CancellationToken cancellationToken,
-        [FromServices] CreateVolunteerService createVolunteerService)
+        [FromServices] CreateVolunteerHandler createVolunteerService)
     {
         var command = new CreateVolunteerCommand(
             request.FirstName,
@@ -43,7 +43,7 @@ public class VolunteerController : ValuesController
             request.SocialNetworks
             );
 
-        var result = await createVolunteerService.Create(command, cancellationToken);
+        var result = await createVolunteerService.Handle(command, cancellationToken);
 
         if (result.IsFailure)
             return result.Error.ToResponse();
@@ -54,14 +54,14 @@ public class VolunteerController : ValuesController
     [HttpPatch("{id:guid}/main-info")]
     public async Task<ActionResult> UpdateMainInfo(
         [FromRoute] Guid id,
-        [FromServices] UpdateVolunteerService service,
+        [FromServices] UpdateVolunteerHandler service,
         [FromBody] UpdateVolunteerRequest request,
         [FromServices] IValidator<UpdateVolunteerCommand> validator,
         CancellationToken cancellationToken)
     {
         var command = new UpdateVolunteerCommand(request, id);
 
-        var result = await service.Update(command, cancellationToken);
+        var result = await service.Handle(command, cancellationToken);
         if(result.IsFailure)
             return result.Error.ToResponse();
 
@@ -71,7 +71,7 @@ public class VolunteerController : ValuesController
     [HttpPatch("{id:guid}/socials")]
     public async Task<ActionResult> UpdateSocials(
         [FromRoute] Guid id,
-        [FromServices] UpdateSocialsService service,
+        [FromServices] UpdateSocialsHandler service,
         [FromBody] UpdateSocialsRequest request,
         [FromServices] IValidator<UpdateSocialsCommand> validator,
         CancellationToken cancellationToken)
@@ -82,7 +82,7 @@ public class VolunteerController : ValuesController
         //if (!validationResult.IsValid)
         //    return validationResult.ToValidationErrorResponse();
 
-        var result = await service.UpdateSocials
+        var result = await service.Handle
             (command, cancellationToken);
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
@@ -91,13 +91,13 @@ public class VolunteerController : ValuesController
     [HttpPatch("{id:guid}/requisites")]
     public async Task<ActionResult> UpdateRequisites(
         [FromRoute] Guid id,
-        [FromServices] UpdateRequisitesService service,
+        [FromServices] UpdateRequisitesHandler service,
         [FromBody] UpdateRequisitesRequest request,
         CancellationToken cancellationToken)
     {
         var command = new UpdateRequisitesCommand(request.requisites, id);
 
-        var result = await service.UdpateRequisites(command, cancellationToken);
+        var result = await service.Handle(command, cancellationToken);
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
@@ -105,12 +105,12 @@ public class VolunteerController : ValuesController
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(
        [FromRoute] Guid id,
-       [FromServices] DeleteVolunteerService service,
+       [FromServices] DeleteVolunteerHandler service,
        CancellationToken cancellationToken)
     {
         var request = new DeleteVolunteerCommand(id);
 
-        var result = await service.Delete(request, cancellationToken);
+        var result = await service.Handle(request, cancellationToken);
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
@@ -120,7 +120,7 @@ public class VolunteerController : ValuesController
         (
         [FromRoute] Guid id,
         [FromForm] AddPetRequest request,
-        [FromServices] AddPetService addPetService,
+        [FromServices] AddPetHandler addPetService,
         CancellationToken cancellationToken
         )
     {
@@ -140,7 +140,7 @@ public class VolunteerController : ValuesController
             request.BirthDate
             );
 
-        var result = await addPetService.AddPet(command, cancellationToken);
+        var result = await addPetService.Handle(command, cancellationToken);
         if (result.IsFailure)
             return result.Error.ToResponse();
 
@@ -151,7 +151,7 @@ public class VolunteerController : ValuesController
     public async Task<ActionResult> AddPhotosToPet(
         [FromRoute] Guid volunteerId,
         [FromRoute] Guid petId,
-        [FromServices] AddPetFilesService service,
+        [FromServices] AddPetFilesHandler service,
         [FromForm] AddFilesRequest request,
         CancellationToken cancellation
         )
@@ -161,7 +161,7 @@ public class VolunteerController : ValuesController
         var fileDtos = fileProcessor.Process(request.files);
 
         var addFilesCommand = new AddFileCommand(fileDtos);
-        var result = await service.AddPetFiles(petId, volunteerId, addFilesCommand, cancellation);
+        var result = await service.Handle(petId, volunteerId, addFilesCommand, cancellation);
         if (result.IsFailure)
             return result.Error.ToResponse();
 

@@ -39,7 +39,7 @@ namespace PetFamily.Application.Dtos
         public DateTime DateOfBirth { get; init; }
         public DateTime CreatedAt { get; init; }
         public string[] Requisites { get; init; }
-        public string Photos { get; init; }
+        public PetPhotoDto[] Photos { get; init; }
         public int Position { get; init; }
     }
 }

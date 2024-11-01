@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PetFamily.Domain.Pet;
+using PetFamily.Application.Abstractions;
 
 namespace PetFamily.Application.Volunteers.AddPet
 {
@@ -26,7 +27,7 @@ namespace PetFamily.Application.Volunteers.AddPet
         bool IsVaccinated,
         DateTime BirthDate
 
-    );
+    ) : ICommand;
 
     public record SpeciesBreedDto(SpeciesBreed SpeciesBreed);
 }
