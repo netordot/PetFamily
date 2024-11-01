@@ -9,11 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection.Metadata.Ecma335;
 
 namespace PetFamily.Application.Dtos
 {
     public class PetDto
     {
+        public int Id { get; init; }
         public Guid VolunteerId { get; init; }
         public string Name { get; init; }
         public Guid SpeciesId { get; init; }
@@ -23,6 +25,10 @@ namespace PetFamily.Application.Dtos
         public string HealthCondition { get; init; }
         public string PhoneNumber { get; init; }
         //public Address Address { get; private set; }
+
+        public string City { get; init; }
+        public string Street { get; init; }
+        public int BuildingNumber { get; init; }
         public string Address { get; init; }
         public int Status { get; init; }
 

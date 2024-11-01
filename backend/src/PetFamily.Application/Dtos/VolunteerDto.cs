@@ -15,6 +15,7 @@ namespace PetFamily.Application.Dtos
 {
     public class VolunteerDto
     {
+        public Guid Id { get; init; }
         public string Name { get; init; }
         public string[] Requisites { get; init; }
         public string[]? Details { get; init; }

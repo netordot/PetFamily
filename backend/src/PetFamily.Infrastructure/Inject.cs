@@ -22,15 +22,13 @@ public static class Inject
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<WriteDbContext>();
-        services.AddScoped<IVolunteerRepository, VolunteerRepository>();
-        services.AddSingleton<SoftDeleteInterceptor>();
-        services.AddScoped<IFileProvider, MinioProvider>();
-        services.AddScoped<ISpeciesRepository, SpeciesRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
-        services.AddMinio(configuration);
+        services
+            .AddDbContexts()
+            .AddMinio(configuration)
+            .AddRepositories()
+            .AddDatabase()
+            .AddHostedServices()
+            .AddMessaging();
 
         return services;
     }
@@ -48,6 +46,44 @@ public static class Inject
             options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
             options.WithSSL(false);
         });
+
+        return services;
+    }
+
+
+    public static IServiceCollection AddMessaging(this IServiceCollection services)
+    {
+        services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, InMemoryMessageQueue<IEnumerable<FileInfo>>>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddHostedServices(this IServiceCollection services)
+    {
+        services.AddHostedService<FilesCleanUpService>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddDbContexts(this IServiceCollection services)
+    {
+        services.AddScoped<WriteDbContext>();
+        services.AddScoped<IReadDbContext, ReadDbContext>();
+
+        return services;
+    }
+    public static IServiceCollection AddDatabase(this IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddSingleton<SoftDeleteInterceptor>();
+
+        return services;
+    }
+    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+        services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+        services.AddScoped<IFileProvider, MinioProvider>();
 
         return services;
     }
