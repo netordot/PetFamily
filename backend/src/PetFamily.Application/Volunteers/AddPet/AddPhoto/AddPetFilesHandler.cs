@@ -81,9 +81,9 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             var filePaths = command.files.Select(f => FilePath.Create(Guid.NewGuid(), f.fileName).Value);
 
-            var petPhotos = filePaths.Select(p => PetPhoto.Create(p, false, PetPhotoId.NewPetPhotoId()));
+            var petPhotos = filePaths.Select(p => PetPhoto.Create(p, false));
 
-            photos = filePaths.Select(p => PetPhoto.Create(p, false, PetPhotoId.NewPetPhotoId()).Value).ToList();
+            photos = filePaths.Select(p => PetPhoto.Create(p, false).Value).ToList();
 
             var pictures = new ValueObjectList<PetPhoto>(photos);
 

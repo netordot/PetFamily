@@ -34,7 +34,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public Requisites? Requisites { get; private set; }
-    public List<PetPhoto.PetPhoto>? Photos { get; private set; }
+    public IReadOnlyList<PetPhoto.PetPhoto>? Photos { get; private set; }
     public Position Position { get; private set; }
 
     private bool _isDeleted = false;

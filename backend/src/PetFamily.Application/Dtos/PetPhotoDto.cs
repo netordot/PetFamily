@@ -10,5 +10,10 @@ namespace PetFamily.Application.Dtos
     public class PetPhotoDto
     {
         public string PathToStorage { get; set; }
+
+        public PetPhotoDto(string path)
+        {
+            PathToStorage = path;
+        }
     }
 }

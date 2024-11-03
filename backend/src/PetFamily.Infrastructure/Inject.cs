@@ -78,13 +78,15 @@ public static class Inject
         services.AddSingleton<SoftDeleteInterceptor>();
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
         return services;
     }
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IVolunteerRepository, VolunteerRepository>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
-        services.AddScoped<IFileProvider, MinioProvider>();
+        services.AddSingleton<IFileProvider, MinioProvider>();
 
         return services;
     }
