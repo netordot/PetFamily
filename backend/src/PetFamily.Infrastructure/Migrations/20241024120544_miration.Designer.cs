@@ -12,7 +12,7 @@ using PetFamily.Infrastructure;
 
 namespace PetFamily.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(WriteDbContext))]
     [Migration("20241024120544_miration")]
     partial class miration
     {

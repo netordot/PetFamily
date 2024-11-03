@@ -12,7 +12,7 @@ using PetFamily.Infrastructure;
 
 namespace PetFamily.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(WriteDbContext))]
     [Migration("20241008084941_fix socials")]
     partial class fixsocials
     {

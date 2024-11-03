@@ -17,10 +17,10 @@ namespace PetFamily.Infrastructure.Repositories
 {
     public class SpeciesRepository : ISpeciesRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly WriteDbContext _context;
         private ILogger<SpeciesRepository> _logger;
 
-        public SpeciesRepository(ApplicationDbContext applicationDbContext, ILogger<SpeciesRepository> logger)
+        public SpeciesRepository(WriteDbContext applicationDbContext, ILogger<SpeciesRepository> logger)
         {
             _context = applicationDbContext;
             _logger = logger;

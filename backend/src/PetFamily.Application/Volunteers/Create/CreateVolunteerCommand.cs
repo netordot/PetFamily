@@ -1,4 +1,5 @@
-﻿using PetFamily.Application.Volunteers.SharedDtos;
+﻿using PetFamily.Application.Abstractions;
+using PetFamily.Application.Volunteers.SharedDtos;
 
 namespace PetFamily.Application.Volunteers.Create;
 
@@ -16,4 +17,4 @@ public record CreateVolunteerCommand(
     int CorpsNumber,
     List<RequisiteDto> Requisites,
     List<SocialNetworkDto> SocialNetworks
-);
+) : ICommand;

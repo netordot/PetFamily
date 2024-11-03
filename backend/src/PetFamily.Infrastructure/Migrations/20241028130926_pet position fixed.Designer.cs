@@ -12,7 +12,7 @@ using PetFamily.Infrastructure;
 
 namespace PetFamily.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(WriteDbContext))]
     [Migration("20241028130926_pet position fixed")]
     partial class petpositionfixed
     {

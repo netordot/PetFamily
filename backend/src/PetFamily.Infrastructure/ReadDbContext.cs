@@ -1,27 +1,24 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Database;
-using PetFamily.Domain;
-using PetFamily.Domain.Pet.Species;
-using PetFamily.Domain.Volunteer;
+using PetFamily.Application.Dtos;
 using PetFamily.Infrastructure.Interceptors;
-using System.Data;
 
 namespace PetFamily.Infrastructure;
 
-
-public class ApplicationDbContext(IConfiguration configuration,
-    SoftDeleteInterceptor softDeleteInterceptor) : DbContext
+public class ReadDbContext(IConfiguration configuration,
+    SoftDeleteInterceptor softDeleteInterceptor) : DbContext, IReadDbContext
 {
-    public DbSet<Volunteer> Volunteers => Set<Volunteer>();
-    public DbSet<Species> Species => Set<Species>();
+    public DbSet<VolunteerDto> Volunteers => Set<VolunteerDto>();
+    public DbSet<SpeciesDto> Species => Set<SpeciesDto>();
 
     private const string DATABASE = nameof(Database);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(WriteDbContext).Assembly,
+            type => type.FullName?.Contains("Configurations.Read") ?? false);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,6 +28,7 @@ public class ApplicationDbContext(IConfiguration configuration,
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.AddInterceptors(softDeleteInterceptor);
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 
     private ILoggerFactory CreateLoggerFactory()

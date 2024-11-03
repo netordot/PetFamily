@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain;
@@ -10,16 +11,16 @@ using PetFamily.Domain.Shared.Requisites;
 
 namespace PetFamily.Application.Volunteers.UpdateRequisites;
 
-public class UpdateRequisitesService 
+public class UpdateRequisitesHandler : ICommandHandler<Guid, UpdateRequisitesCommand>
 {
     private readonly IVolunteerRepository _volunteerRepository;
-    private readonly ILogger<UpdateRequisitesService> _logger;
+    private readonly ILogger<UpdateRequisitesHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<UpdateRequisitesCommand> _validator;
 
-    public UpdateRequisitesService(
+    public UpdateRequisitesHandler(
         IVolunteerRepository volunteerRepository, 
-        ILogger<UpdateRequisitesService> logger, 
+        ILogger<UpdateRequisitesHandler> logger, 
         IUnitOfWork unitOfWork,
         IValidator<UpdateRequisitesCommand> validator)
     {
@@ -29,7 +30,7 @@ public class UpdateRequisitesService
         _validator = validator;
     }
 
-    public async Task<Result<Guid, ErrorList>> UdpateRequisites(UpdateRequisitesCommand request, CancellationToken ct)
+    public async Task<Result<Guid, ErrorList>> Handle(UpdateRequisitesCommand request, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateAsync(request, ct); 
         if(validationResult.IsValid ==false)

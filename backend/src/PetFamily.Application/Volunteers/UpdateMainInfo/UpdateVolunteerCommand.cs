@@ -1,3 +1,5 @@
-﻿namespace PetFamily.Application.Volunteers.UpdateMainInfo;
+﻿using PetFamily.Application.Abstractions;
 
-public record UpdateVolunteerCommand(UpdateVolunteerRequest dto, Guid id);
+namespace PetFamily.Application.Volunteers.UpdateMainInfo;
+
+public record UpdateVolunteerCommand(UpdateVolunteerRequest dto, Guid id) : ICommand;

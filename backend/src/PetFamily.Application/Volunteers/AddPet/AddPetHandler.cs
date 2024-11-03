@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Providers;
 using PetFamily.Application.Species;
@@ -15,14 +16,14 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.Volunteers.AddPet
 {
-    public class AddPetService
+    public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>   
     {
         private readonly IFileProvider _fileProvider;
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly ISpeciesRepository _speciesRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AddPetService(
+        public AddPetHandler(
             IFileProvider fileProvider,
             IVolunteerRepository volunteerRepository,
             ISpeciesRepository species,
@@ -34,18 +35,18 @@ namespace PetFamily.Application.Volunteers.AddPet
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<Guid, Error>> AddPet(AddPetCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Guid, ErrorList>> Handle(AddPetCommand command, CancellationToken cancellationToken)
         {
             var volunteerResult = await _volunteerRepository.GetById(command.VolunteerId, cancellationToken);
             if (volunteerResult.IsFailure)
             {
-                return volunteerResult.Error;
+                return volunteerResult.Error.ToErrorList();
             }
 
             var speciesBreed = await _speciesRepository
                 .GetSpeciesBreedByNames(command.Species, command.Breed, cancellationToken);
             if (speciesBreed.IsFailure)
-                return speciesBreed.Error;
+                return speciesBreed.Error.ToErrorList();
 
             var phoneNumberResult = volunteerResult.Value.Number;
             var addressResult = volunteerResult.Value.Address;
@@ -74,7 +75,7 @@ namespace PetFamily.Application.Volunteers.AddPet
                 );
 
             if (pet.IsFailure)
-                return pet.Error;
+                return pet.Error.ToErrorList();
 
             volunteerResult.Value.AddPet(pet.Value);
             int a = 10;
