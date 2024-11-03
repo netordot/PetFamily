@@ -14,8 +14,8 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 {
     private bool _isDeleted;
     public FullName Name { get; private set; }
-    public Requisites? Requisites { get; private set; }
-    public VolunteerDetails? Details { get; private set; }
+    public IReadOnlyList<Requisite>? Requisites { get; private set; }
+    public IReadOnlyList<Social>? Socials { get; private set; }
     public Address Address { get; private set; }
 
     public Email Email { get; private set; }
@@ -35,8 +35,8 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         PhoneNumber phoneNumber,
         List<Pet.Pet> pets,
         Address address,
-        Requisites requisites,
-        VolunteerDetails details,
+        List<Requisite> requisites,
+        List<Social> details,
         VolunteerId id) : base(id)
     {
         Name = name;
@@ -47,7 +47,7 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         Pets = pets;
         Address = address;
         Requisites = requisites;
-        Details = details;
+        Socials = details;
     }
 
     public int PetsRequireHome() => Pets.Count(p => p.Status == PetStatus.SearchesForHome);
@@ -61,8 +61,8 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         PhoneNumber phoneNumber,
         List<Pet.Pet>? pets,
         Address address,
-        Requisites requisites,
-        VolunteerDetails details,
+        List<Requisite> requisites,
+        List<Social> details,
         VolunteerId id)
     {
         if (name == null)
@@ -108,12 +108,12 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         Address = address;
     }
 
-    public void UpdateSocials(VolunteerDetails newSocials)
+    public void UpdateSocials(List<Social> newSocials)
     {
-        Details = newSocials;
+        Socials = newSocials;
     }
 
-    public void UdpateRequisites(Requisites requisites)
+    public void UdpateRequisites(List<Requisite> requisites)
     {
         Requisites = requisites;
     }

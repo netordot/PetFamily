@@ -7,6 +7,7 @@ using PetFamily.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,12 +27,25 @@ namespace PetFamily.Application.PetManagement.Queries.GetVolunteersWithPaginatio
         {
             var volunteersQuery = _readDbContext.Volunteers.AsQueryable();
 
-            // пример сортировки при пагинации 
-            volunteersQuery = volunteersQuery
-                .WhereIf(!string.IsNullOrWhiteSpace(query.Title),
-                v => v.Name.Contains(query.Title!));
+            Expression<Func<VolunteerDto, object>> keySelector = query.SortBy.ToLower() switch
+            {
+                "experience" => (volunteer) => volunteer.Experience,
+                // TODO: сделать по остальным так же
+                _ => (volunteer) => volunteer.Id
 
-            var result = await volunteersQuery.ToPagedList(query.Page, query.PageSize, cancellation);   
+            };
+
+            volunteersQuery = query.SortDirection?.ToLower() == "desc"
+                ? volunteersQuery.OrderByDescending(keySelector)
+                : volunteersQuery.OrderBy(keySelector);
+
+
+            // пример сортировки при пагинации 
+            //volunteersQuery = volunteersQuery
+            //    .WhereIf(!string.IsNullOrWhiteSpace(query.Title),
+            //    v => v.Name.Contains(query.Title!));
+
+            var result = await volunteersQuery.ToPagedList(query.Page, query.PageSize, cancellation);
 
             return result;
         }

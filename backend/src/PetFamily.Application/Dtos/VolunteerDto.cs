@@ -25,6 +25,5 @@ namespace PetFamily.Application.Dtos
         public string Description { get; init; }
         public int Experience { get; init; }
         public string Number { get; init; }
-        public PetDto[] Pets { get; init; }
-    }
+        }
 }

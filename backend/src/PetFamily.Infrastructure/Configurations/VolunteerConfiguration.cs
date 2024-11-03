@@ -41,7 +41,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         });
 
 
-        builder.OwnsOne(v => v.Details, pbuilder =>
+        builder.OwnsOne(v => v.Socials, pbuilder =>
         {
             pbuilder.ToJson("socials");
             pbuilder.OwnsMany(pbuilder => pbuilder.SocialNetworks, ssn =>
