@@ -24,7 +24,6 @@ namespace PetFamily.Application.Dtos
         public string Description { get; init; }
         public string HealthCondition { get; init; }
         public string PhoneNumber { get; init; }
-        //public Address Address { get; private set; }
 
         public string City { get; init; }
         public string Street { get; init; }

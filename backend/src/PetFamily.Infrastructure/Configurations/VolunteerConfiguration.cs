@@ -1,8 +1,13 @@
 ﻿using System.Runtime.Intrinsics.X86;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetFamily.Application.Dtos;
+using PetFamily.Application.Volunteers.SharedDtos;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
+using PetFamily.Domain.Volunteer.Details;
+using PetFamily.Infrastructure.Extensions;
 
 namespace PetFamily.Infrastructure.Configurations;
 
@@ -25,32 +30,18 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.Property(v => v.Description)
             .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
 
-        builder.OwnsOne(p => p.Requisites, pbuilder =>
-        {
-            pbuilder.ToJson("requisites");
 
-            pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
-            {
-                vb.Property(v => v.Description)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
-                vb.Property(v => v.Title)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
-            });
-        });
+        builder.Property(v => v.Requisites)
+            .ValueObjectJsonConversion
+            (requisite => new Application.Dtos.RequisiteDto(requisite.Title, requisite.Description),
+                dto => Requisite.Create(dto.Title, dto.Description).Value)
+            .HasColumnName("requisites");
 
+        builder.Property(v => v.Socials)
+            .ValueObjectJsonConversion(
+            social => new SocialDto(social.Name, social.Link),
+            dto => Social.Create(dto.Name, dto.Link).Value);
 
-        builder.OwnsOne(v => v.Socials, pbuilder =>
-        {
-            pbuilder.ToJson("socials");
-            pbuilder.OwnsMany(pbuilder => pbuilder.SocialNetworks, ssn =>
-            {
-                ssn.Property(s => s.Name).IsRequired();
-                ssn.Property(s => s.Link).IsRequired();
-            });
-
-        });
 
         builder.ComplexProperty(v => v.Email, eb => { eb.Property(e => e.Mail).IsRequired(); });
 
