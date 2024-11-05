@@ -22,6 +22,10 @@ namespace PetFamily.Infrastructure.Configurations.Read
                 .WithOne()
                 .HasForeignKey(v => v.Id);
 
+            builder.Property<bool>("_isDeleted")
+               .UsePropertyAccessMode(PropertyAccessMode.Field)
+               .HasColumnName("deleted");
+
 
             builder.Property(v => v.Requisites)
                    .HasConversion(

@@ -30,15 +30,14 @@ namespace PetFamily.Application.Dtos
         public int BuildingNumber { get; init; }
         public string Address { get; init; }
         public int Status { get; init; }
-
         public double Height { get; init; }
         public double Weight { get; init; }
         public bool IsCastrated { get; init; }
         public bool IsVaccinated { get; init; }
         public DateTime DateOfBirth { get; init; }
         public DateTime CreatedAt { get; init; }
-        public string[] Requisites { get; init; }
-        public PetPhotoDto[] Photos { get; init; }
+        public IEnumerable<RequisiteDto> Requisites { get; init; }
+        public IEnumerable<PetPhotoDto> Photos { get; init; }
         public int Position { get; init; }
     }
 }

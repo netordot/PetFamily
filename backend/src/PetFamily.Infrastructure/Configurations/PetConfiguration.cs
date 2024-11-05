@@ -125,26 +125,6 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             dto => PetPhoto.Create(FilePath.Create(dto.PathToStorage).Value, false).Value)
             .HasColumnName("files");
 
-        //    .HasConversion(
-        //    files => JsonSerializer.Serialize(
-        //        files.Select(f => new PetPhotoDto
-        //        {
-        //            PathToStorage = f.Path.Path
-        //        }),
-        //        JsonSerializerOptions.Default),
-
-        //    json => JsonSerializer.Deserialize<List<PetPhotoDto>>(json, JsonSerializerOptions.Default)!
-        //        .Select(dto =>
-        //        PetPhoto.Create(FilePath.Create(dto.PathToStorage).Value, false).Value)
-        //        .ToList(),
-
-        //new ValueComparer<IReadOnlyList<PetPhoto>>(
-        //    (c1, c2) => c1!.SequenceEqual(c2!),
-        //    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-        //    c => (IReadOnlyList<PetPhoto>)c.ToList()))
-        //    .HasColumnType("jsonb")
-        //    .HasColumnName("files");
-
 
         builder.Property<bool>("_isDeleted")
            .UsePropertyAccessMode(PropertyAccessMode.Field)
