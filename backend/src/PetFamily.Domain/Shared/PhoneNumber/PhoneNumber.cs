@@ -14,6 +14,11 @@ public record PhoneNumber
         Number = number;
     }
 
+    private PhoneNumber()
+    {
+        
+    }
+
     public static Result<PhoneNumber, Error> Create(string number)
     {
         if (String.IsNullOrWhiteSpace(number))

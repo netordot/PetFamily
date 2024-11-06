@@ -41,10 +41,10 @@ public class UpdateRequisitesHandler : ICommandHandler<Guid, UpdateRequisitesCom
         if (volunteerResult.IsFailure)
             return new ErrorList([volunteerResult.Error]);
 
-        var requisiteList = request.ListDto.requisites.Select(r => Requisite.Create(r.Title, r.Description)).ToList();
-        var requisitesResult = new Requisites(requisiteList.Select(r => r.Value).ToList());
+        var requisiteList = request.ListDto.requisites.Select(r => Requisite.Create(r.Title, r.Description).Value).ToList();
+        //var requisitesResult = new Requisites(requisiteList.Select(r => r.Value).ToList());
 
-        volunteerResult.Value.UdpateRequisites(requisitesResult);
+        volunteerResult.Value.UdpateRequisites(requisiteList);
 
         _logger.LogInformation("Updated Volunteer requisites with Id {id}", request.Id);
 

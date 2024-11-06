@@ -1,17 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Application.Dtos;
-using PetFamily.Domain;
 using PetFamily.Domain.Pet;
 using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
 using PetFamily.Infrastructure.Extensions;
-using System.Text.Json;
 
-namespace PetFamily.Infrastructure.Configurations;
+namespace PetFamily.Infrastructure.Configurations.Write;
 
 public class PetConfiguration : IEntityTypeConfiguration<Pet>
 {
@@ -37,20 +35,11 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(p => p.Name)
             .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
-        builder.OwnsOne(p => p.Requisites, pbuilder =>
-        {
-            pbuilder.ToJson("requisites");
-
-            pbuilder.OwnsMany(pbuilder => pbuilder.Value, vb =>
-            {
-                vb.Property(v => v.Description)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
-                vb.Property(v => v.Title)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
-            });
-        });
+        builder.Property(p => p.Requisites)
+            .ValueObjectJsonConversion
+            (requisite => new Application.Dtos.RequisiteDto(requisite.Title, requisite.Description),
+                dto => Requisite.Create(dto.Title, dto.Description).Value)
+            .HasColumnName("requisites");
 
         builder.Property(p => p.DateOfBirth)
            .HasColumnName("birth_date")
@@ -123,27 +112,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .ValueObjectJsonConversion(
             file => new PetPhotoDto(file.Path.Path),
             dto => PetPhoto.Create(FilePath.Create(dto.PathToStorage).Value, false).Value)
-            .HasColumnName("files");
-
-        //    .HasConversion(
-        //    files => JsonSerializer.Serialize(
-        //        files.Select(f => new PetPhotoDto
-        //        {
-        //            PathToStorage = f.Path.Path
-        //        }),
-        //        JsonSerializerOptions.Default),
-
-        //    json => JsonSerializer.Deserialize<List<PetPhotoDto>>(json, JsonSerializerOptions.Default)!
-        //        .Select(dto =>
-        //        PetPhoto.Create(FilePath.Create(dto.PathToStorage).Value, false).Value)
-        //        .ToList(),
-
-        //new ValueComparer<IReadOnlyList<PetPhoto>>(
-        //    (c1, c2) => c1!.SequenceEqual(c2!),
-        //    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-        //    c => (IReadOnlyList<PetPhoto>)c.ToList()))
-        //    .HasColumnType("jsonb")
-        //    .HasColumnName("files");
+            .HasColumnName("photos");
 
 
         builder.Property<bool>("_isDeleted")

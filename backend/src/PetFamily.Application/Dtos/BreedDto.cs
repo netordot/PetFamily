@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.Dtos
 {
-    public class SpeciesDto
+    public class BreedDto
     {
-        public Guid Id { get; init; }
-        public IEnumerable<BreedDto> Breeds { get; init; }
+        public Guid  Id { get; init; }
+        public Guid SpeciesId { get; set; }
 
-        public SpeciesDto(Guid id, IEnumerable<BreedDto> breeds)
+        public BreedDto(Guid id, Guid speciesId)
         {
             Id = id;
-            Breeds = breeds;
+            SpeciesId = speciesId;
         }
 
-        private SpeciesDto()
+        private BreedDto()
         {
             
         }
-
     }
 }

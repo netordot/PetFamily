@@ -28,7 +28,8 @@ public static class Inject
             .AddRepositories()
             .AddDatabase()
             .AddHostedServices()
-            .AddMessaging();
+            .AddMessaging()
+            .AddSingleton<IFilesCleanerService, FilesCleanerService>();
 
         return services;
     }

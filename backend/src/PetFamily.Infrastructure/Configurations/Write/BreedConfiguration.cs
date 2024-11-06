@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Domain;
 using PetFamily.Domain.Pet.Breed;
 using PetFamily.Domain.Pet.Species;
 
-namespace PetFamily.Infrastructure.Configurations;
+namespace PetFamily.Infrastructure.Configurations.Write;
 
 public class BreedConfiguration : IEntityTypeConfiguration<Breed>
 {

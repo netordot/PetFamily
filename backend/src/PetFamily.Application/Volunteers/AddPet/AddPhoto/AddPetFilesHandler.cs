@@ -15,10 +15,11 @@ using System.IO.Pipes;
 using PetFamily.Domain.Shared;
 using PetFamily.Application.Database;
 using PetFamily.Application.Messaging;
+using PetFamily.Application.Abstractions;
 
 namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 {
-    public class AddPetFilesHandler
+    public class AddPetFilesHandler 
     {
         private readonly string _bucket = "photos";
         private readonly IVolunteerRepository _volunteerRepository;

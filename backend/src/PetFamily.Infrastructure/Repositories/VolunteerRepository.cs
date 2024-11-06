@@ -29,7 +29,6 @@ public class VolunteerRepository : IVolunteerRepository
     {
         var volunteer = await _context.Volunteers
             .Include(v => v.Pets)
-            .ThenInclude(p => p.Photos)
             .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
 
         if (volunteer == null)
