@@ -25,11 +25,13 @@ namespace PetFamily.Application.PetManagement.Queries.GetVolunteersWithPaginatio
 
         public async Task<PagedList<VolunteerDto>> Handle(GetVolunteersWithPaginationQuery query, CancellationToken cancellation)
         {
+            // TODO: добавить валидацию 
             var volunteersQuery = _readDbContext.Volunteers.AsQueryable();
 
             Expression<Func<VolunteerDto, object>> keySelector = query.SortBy.ToLower() switch
             {
                 "experience" => (volunteer) => volunteer.Experience,
+                
                 // TODO: сделать по остальным так же
                 _ => (volunteer) => volunteer.Id
 
