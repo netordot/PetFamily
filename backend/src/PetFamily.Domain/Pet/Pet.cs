@@ -15,6 +15,11 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     {
 
     }
+
+    private Pet() : base(default)
+    {
+        
+    }
     
 
     public VolunteerId VolunteerId { get; private set; }
@@ -33,7 +38,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public bool IsVaccinated { get; private set; }
     public DateTime DateOfBirth { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public Requisites? Requisites { get; private set; }
+    public IReadOnlyList<Requisite> Requisites { get; private set; } = default!;
     public IReadOnlyList<PetPhoto.PetPhoto>? Photos { get; private set; }
     public Position Position { get; private set; }
 
@@ -46,7 +51,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         string healthCondition,
         PhoneNumber contactPhoneNumber,
         Address address,
-        Requisites? requisites,
+        List<Requisite> requisites,
         PetStatus status,
         double height,
         double weight,
@@ -82,7 +87,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         string healthCondition,
         PhoneNumber contactPhoneNumbers,
         Address address,
-        Requisites? requisites,
+        List<Requisite> requisites,
         PetStatus status,
         double height,
         double weight,

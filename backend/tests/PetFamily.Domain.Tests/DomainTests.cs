@@ -14,7 +14,7 @@ namespace PetFamily.Domain.Tests
 {
     public class DomainTests
     {
-        // сверху будут лежать вспомогательные методы
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         private Volunteer.Volunteer CreateVolunteer()
         {
             var fullName = new FullName("MASOASO", "ASAS", "ASASSASA");
@@ -49,8 +49,8 @@ namespace PetFamily.Domain.Tests
         private SpeciesBreed CreateSpeciesBreed()
         {
             var breedList = new List<Breed>();
-            var species = Species.Create("Собака", breedList, SpeciesId.NewSpeciesId);
-            var breed = Breed.Create("Дворняга", BreedId.NewBreedId, species.Value.Id);
+            var species = Species.Create("пїЅпїЅпїЅпїЅпїЅпїЅ", breedList, SpeciesId.NewSpeciesId);
+            var breed = Breed.Create("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", BreedId.NewBreedId, species.Value.Id);
 
             species.Value.AddBreed(breed.Value);
 
@@ -74,7 +74,7 @@ namespace PetFamily.Domain.Tests
                 "erer",
                 volunteer.Number,
                 volunteer.Address,
-                volunteer.Requisites,
+                volunteer.Requisites.ToList(),
                 petStatus,
                 200,
                 300,

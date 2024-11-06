@@ -44,10 +44,11 @@ public class UpdateSocialsHandler : ICommandHandler<Guid, UpdateSocialsCommand>
             return new ErrorList([volunteerResult.Error]);
         }
 
-        var socialList = command.Dto.socials.Select(s => Social.Create(s.Name, s.Link)).ToList();
+        var socialList = command.Dto.socials.Select(s => Social.Create(s.Name, s.Link).Value).ToList();
 
-        var socialsResult = new VolunteerDetails(socialList.Select(s => s.Value).ToList());
-        volunteerResult.Value.UpdateSocials(socialsResult);
+        //var socialsResult = new VolunteerDetails(socialList.Select(s => s.Value).ToList());
+
+        volunteerResult.Value.UpdateSocials(socialList);
 
         await _unitOfWork.SaveChanges(cancellationToken);
         _logger.LogInformation("Updated Volunteer socials with Id {id}", command.Id);

@@ -17,5 +17,10 @@ namespace PetFamily.Application.Dtos
             Breeds = breeds;
         }
 
+        private SpeciesDto()
+        {
+            
+        }
+
     }
 }

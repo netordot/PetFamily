@@ -18,6 +18,11 @@ namespace PetFamily.Domain.Pet
             Value = value;
         }
 
+        private Position()
+        {
+            
+        }
+
         public Result<Position,Error> Forward()
            => Create(Value +1);
 

@@ -1,10 +1,8 @@
-﻿using System.Runtime.Intrinsics.Arm;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Domain;
 using PetFamily.Domain.Pet.Species;
 
-namespace PetFamily.Infrastructure.Configurations;
+namespace PetFamily.Infrastructure.Configurations.Write;
 
 public class SpeciesConfiguaraiton :IEntityTypeConfiguration<Species>
 {

@@ -13,6 +13,11 @@ namespace PetFamily.Domain.Pet.PetPhoto
     {
         public string Path { get;}
 
+        private FilePath()
+        {
+            
+        }
+
         private FilePath(string path)
         {
             Path = path;

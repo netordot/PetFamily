@@ -1,15 +1,13 @@
-﻿using System.Runtime.Intrinsics.X86;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Application.Dtos;
-using PetFamily.Application.Volunteers.SharedDtos;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
 using PetFamily.Domain.Volunteer.Details;
 using PetFamily.Infrastructure.Extensions;
 
-namespace PetFamily.Infrastructure.Configurations;
+namespace PetFamily.Infrastructure.Configurations.Write;
 
 public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 {

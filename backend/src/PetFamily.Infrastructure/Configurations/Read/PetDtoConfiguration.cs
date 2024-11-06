@@ -35,6 +35,11 @@ namespace PetFamily.Infrastructure.Configurations.Read
            files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
 
            json => JsonSerializer.Deserialize<PetPhotoDto[]>(json, JsonSerializerOptions.Default)!);
+            
+            builder.Property(p => p.Requisites)
+                .HasConversion(
+                    files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
+                   json => JsonSerializer.Deserialize<IEnumerable<RequisiteDto>>(json, JsonSerializerOptions.Default)!); 
 
 
             builder.Property(p => p.DateOfBirth)
@@ -82,8 +87,6 @@ namespace PetFamily.Infrastructure.Configurations.Read
 
             builder.Property(a => a.BuildingNumber)
                 .IsRequired();
-
-
 
             builder.Property(sb => sb.BreedId)
                 .IsRequired()

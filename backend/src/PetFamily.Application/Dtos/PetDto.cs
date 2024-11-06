@@ -15,7 +15,7 @@ namespace PetFamily.Application.Dtos
 {
     public class PetDto
     {
-        public int Id { get; init; }
+        public Guid Id { get; init; }
         public Guid VolunteerId { get; init; }
         public string Name { get; init; }
         public Guid SpeciesId { get; init; }

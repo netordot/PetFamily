@@ -18,12 +18,14 @@ using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
 using PetFamily.Domain.Volunteer.Details;
 using FluentAssertions;
+using PetFamily.Application.Messaging;
+using FileInfo = PetFamily.Application.Providers.FileProvider.FileInfo;
 
 namespace PetFamily.Application.Tests
 {
     public class AddPetFilesServiceTests
     {
-        // вспомогательные методы
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         private Volunteer CreateVolunteer()
         {
             var fullName = new FullName("MASOASO", "ASAS", "ASASSASA");
@@ -58,8 +60,8 @@ namespace PetFamily.Application.Tests
         private SpeciesBreed CreateSpeciesBreed()
         {
             var breedList = new List<Breed>();
-            var species = Domain.Pet.Species.Species.Create("Собака", breedList, SpeciesId.NewSpeciesId);
-            var breed = Breed.Create("Дворняга", BreedId.NewBreedId, species.Value.Id);
+            var species = Domain.Pet.Species.Species.Create("пїЅпїЅпїЅпїЅпїЅпїЅ", breedList, SpeciesId.NewSpeciesId);
+            var breed = Breed.Create("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", BreedId.NewBreedId, species.Value.Id);
 
             species.Value.AddBreed(breed.Value);
 
@@ -81,7 +83,7 @@ namespace PetFamily.Application.Tests
             "erer",
             volunteer.Number,
             volunteer.Address,
-            volunteer.Requisites,
+            volunteer.Requisites.ToList(),
             petStatus,
             200,
             300,
@@ -132,11 +134,15 @@ namespace PetFamily.Application.Tests
             mockFileProvider
                 .Setup(f => f.UploadFile(It.IsAny<List<FileData>>(), ct))
                 .ReturnsAsync(Result.Success<IReadOnlyList<FilePath>, Error>(filePaths));
+            // РІРѕР·РјРѕР¶РЅРѕ РїР»РѕС…Рѕ РјРѕРєРЅСѓС‚Рѕ, РїРµСЂРµСЃРјРѕС‚СЂРµС‚СЊ
+            var mockMessageQueue = new Mock<IMessageQueue<IEnumerable<FileInfo>>>();
+            mockMessageQueue.Setup(m => m.ReadAsync(ct));
 
-            var handler = new AddPetFilesService
+            var handler = new AddPetFilesHandler
                 (mockRepository.Object,
                 mockFileProvider.Object,
-                mockUnitOfWork.Object
+                mockUnitOfWork.Object,
+                mockMessageQueue.Object
                 );
 
 
@@ -146,7 +152,7 @@ namespace PetFamily.Application.Tests
 
             // act
 
-           var result = await handler.AddPetFiles(ownedPet.Id.Value, volunteer.Id, command, ct);
+           var result = await handler.Handle(ownedPet.Id.Value, volunteer.Id, command, ct);
 
 
             // assert

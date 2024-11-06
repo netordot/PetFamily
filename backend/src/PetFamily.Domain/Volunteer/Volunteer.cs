@@ -14,8 +14,8 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 {
     private bool _isDeleted;
     public FullName Name { get; private set; }
-    public IReadOnlyList<Requisite>? Requisites { get; private set; }
-    public IReadOnlyList<Social>? Socials { get; private set; }
+    public IReadOnlyList<Requisite>? Requisites { get; private set; } = default!;
+    public IReadOnlyList<Social>? Socials { get; private set; } = default!;
     public Address Address { get; private set; }
 
     public Email Email { get; private set; }
@@ -26,6 +26,11 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 
     private Volunteer(VolunteerId id) : base(id)
     {
+    }
+
+    private Volunteer() : base(default)
+    {
+        
     }
 
     public Volunteer(FullName name,
@@ -153,31 +158,31 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
     }
 
     public UnitResult<Error> MovePet(Pet.Pet pet, Position position)
-    { 
+    {
         var currentPosition = pet.Position;
 
-        if(currentPosition == position || Pets.Count ==1)
+        if (currentPosition == position || Pets.Count == 1)
         {
             return Result.Success<Error>();
         }
 
         var adjustedPosition = SetPositionIfOutOfRange(position);
-        if(adjustedPosition.IsFailure)
+        if (adjustedPosition.IsFailure)
         {
             return adjustedPosition.Error;
         }
+
         var newPosition = adjustedPosition.Value;
 
         var moveResult = AdjutPositionsBetween(currentPosition, newPosition);
         if (moveResult.IsFailure)
         {
-            return moveResult.Error;    
+            return moveResult.Error;
         }
 
         pet.MovePosition(position);
 
         return Result.Success<Error>();
-
     }
 
     private UnitResult<Error> AdjutPositionsBetween(Position currentPosition, Position newPosition)
@@ -185,7 +190,7 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         if (newPosition.Value < currentPosition.Value)
         {
             var petsToMove = Pets.Where(p => p.Position.Value >= newPosition.Value
-            && p.Position.Value < currentPosition.Value);
+                                             && p.Position.Value < currentPosition.Value);
 
             foreach (var petToMove in petsToMove)
             {
@@ -200,7 +205,7 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         else if (newPosition.Value > currentPosition.Value)
         {
             var petsToMove = Pets.Where(p => p.Position.Value > currentPosition.Value
-            && p.Position.Value <= newPosition.Value);
+                                             && p.Position.Value <= newPosition.Value);
 
             foreach (var petToMove in petsToMove)
             {
@@ -213,10 +218,9 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         }
 
         return Result.Success<Error>();
-
     }
 
-    private Result<Position,Error> SetPositionIfOutOfRange(Position newPosition)
+    private Result<Position, Error> SetPositionIfOutOfRange(Position newPosition)
     {
         if (newPosition.Value <= Pets.Count())
         {
@@ -231,5 +235,4 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 
         return lastPosition.Error;
     }
-
 }

@@ -23,7 +23,8 @@ public static class Inject
        
         services.AddCommands()
             .AddQueries()
-            .AddValidatorsFromAssembly(typeof(Inject).Assembly);
+            .AddValidatorsFromAssembly(typeof(Inject).Assembly)
+            .AddScoped<AddPetFilesHandler>();
 
         return services;
     }

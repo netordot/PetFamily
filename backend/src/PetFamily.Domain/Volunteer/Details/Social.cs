@@ -11,6 +11,11 @@ public record Social
         Link = link;
     }
 
+    private Social()
+    {
+        
+    }
+
     public string Name { get; }
     public string Link { get; }
 

@@ -14,6 +14,11 @@ public record Email
         Mail = mail;
     }
 
+    private Email()
+    {
+        
+    }
+
     public static Result<Email,Error> Create(string mail)
     {
         if (string.IsNullOrWhiteSpace(mail))

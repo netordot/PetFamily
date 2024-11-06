@@ -48,21 +48,21 @@ public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerComma
         var phoneResult = PhoneNumber.Create(command.PhoneNumber).Value;
 
         var requisites =
-            command.Requisites.Select(r => Requisite.Create(r.Title, r.Description)).ToList();
+            command.Requisites.Select(r => Requisite.Create(r.Title, r.Description).Value).ToList();
 
-        var requisitesResult = new Requisites(requisites.Select(x => x.Value).ToList());
+        //var requisitesResult = new Requisites(requisites.Select(x => x.Value).ToList());
 
         var socialList =
-            command.SocialNetworks.Select(s => Social.Create(s.Name, s.Link)).ToList();
+            command.SocialNetworks.Select(s => Social.Create(s.Name, s.Link).Value).ToList();
 
-        var socialsResult = new VolunteerDetails(socialList.Select(s => s.Value).ToList());
+        //var socialsResult = new VolunteerDetails(socialList.Select(s => s.Value).ToList());
 
         var emailResult = Email.Create(command.Email).Value;
 
         var volunteer = Domain.Volunteer.Volunteer.Create(resultName, emailResult,
             command.Description, command.Experience, phoneResult, null,
-            addressResult, requisitesResult,
-            socialsResult, volunteerId);
+            addressResult, requisites,
+            socialList, volunteerId);
 
         Volunteer volunteerResult = volunteer.Value;
 

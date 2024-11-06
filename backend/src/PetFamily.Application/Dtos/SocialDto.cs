@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.Dtos
 {
-    public class SocialDto
+    public record SocialDto
     {
         public string Name { get; init; }
         public string Link { get; init; }

@@ -8,6 +8,7 @@ using PetFamily.Domain;
 using PetFamily.Domain.Pet;
 using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.Domain.Shared.Requisites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.Volunteers.AddPet
 {
-    public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>   
+    public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
     {
         private readonly IFileProvider _fileProvider;
         private readonly IVolunteerRepository _volunteerRepository;
@@ -51,7 +52,8 @@ namespace PetFamily.Application.Volunteers.AddPet
             var phoneNumberResult = volunteerResult.Value.Number;
             var addressResult = volunteerResult.Value.Address;
 
-            var requisitesResult = (volunteerResult.Value.Requisites);
+            // TODO: решить проблему с readonly списками, прийти к единому стандарту
+            var requisites = (volunteerResult.Value.Requisites).ToList();
 
             var petId = PetId.NewPetId;
 
@@ -62,7 +64,7 @@ namespace PetFamily.Application.Volunteers.AddPet
                 command.HealthCondition,
                 phoneNumberResult,
                 addressResult,
-                requisitesResult,
+                requisites,
                 command.status,
                 command.Height,
                 command.Weight,
