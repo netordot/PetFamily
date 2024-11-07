@@ -18,9 +18,32 @@ namespace PetFamily.Infrastructure.Configurations.Read
 
             builder.HasKey(v => v.Id);
 
-            builder.HasMany(v => v.Pets)
-                .WithOne()
-                .HasForeignKey(v => v.Id);
+            builder.Property(v => v.Name)
+                .HasColumnName("name");
+            
+            builder.Property(v => v.MiddleName)
+                .HasColumnName("middle_name"); 
+            
+            builder.Property(v => v.LastName)
+                .HasColumnName("last_name"); 
+            
+            builder.Property(v => v.Street)
+                .HasColumnName("street");
+            
+            builder.Property(v => v.BuildingNumber)
+                .HasColumnName("building_number"); 
+            
+            builder.Property(v => v.CorpsNumber)
+                .HasColumnName("crops_number"); 
+                
+            builder.Property(v => v.Email)
+                .HasColumnName("email_mail");
+
+            builder.Property(v => v.Number)
+                .HasColumnName("number_number");
+            
+            builder.Property(v => v.Description)
+                .HasColumnName("description");
 
             builder.Property<bool>("_isDeleted")
                .UsePropertyAccessMode(PropertyAccessMode.Field)

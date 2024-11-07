@@ -14,6 +14,9 @@ using PetFamily.Application.Volunteers.AddPet.AddPhoto;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.UpdateMainInfo;
 using PetFamily.API.Processors;
+using PetFamily.Application.PetManagement.Queries.GetVolunteersWithPagination;
+using CSharpFunctionalExtensions;
+using PetFamily.Application.PetManagement.Queries.GetVolunteer;
 
 namespace PetFamily.API.Controllers;
 
@@ -167,4 +170,36 @@ public class VolunteerController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200};
     }
+
+    [HttpPost("/getall")]
+    public async Task<ActionResult> GetAllVolunteers(
+        [FromServices] GetVolunteersWithPaginationHandler handler,
+        [FromForm] GetVolunteersWithPaginationRequest request,
+        CancellationToken cancellationToken)
+    {
+
+        var query = new GetVolunteersWithPaginationQuery(request.Page, request.PageSize, request.SortBy, request.SortDirection);
+        var result = await handler.Handle(query, cancellationToken);
+
+        return new ObjectResult(result) { StatusCode = 200 };
+    }
+
+    [HttpGet("{id:guid}/get")]
+    public async Task<ActionResult> GetById(
+        [FromRoute] Guid id,
+        [FromServices] GetVolunteerHandler handler,
+        CancellationToken cancellation)
+    {
+        var command = new GetVolunteerCommand(id);
+
+        var result = await handler.Handle(command, cancellation);
+        if(result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+
+    }
+
 }
