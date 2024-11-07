@@ -12,7 +12,6 @@ namespace PetFamily.Application.Species
         Task<Result<Guid, Error>> Save(Domain.Pet.Species.Species species, CancellationToken cancellationToken = default);
         Task<Result<SpeciesBreed, Error>> GetSpeciesBreedByNames(string speciesName, string breedname,
             CancellationToken cancellation);
-
         Task<Result<Guid, Error>> Delete(Guid Id, CancellationToken cancellationToken = default);
     }
 }

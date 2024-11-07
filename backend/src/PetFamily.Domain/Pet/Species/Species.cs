@@ -39,4 +39,10 @@ public class Species : Domain.Shared.Entity<SpeciesId>
         return Result.Success<Error>();
     }
 
+    public UnitResult<Error> DeleteBreed(Breed.Breed breed)
+    {
+        Breeds.Remove(breed);
+        return Result.Success<Error>();
+    }
+
 }
