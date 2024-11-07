@@ -5,8 +5,8 @@ using PetFamily.API.Extensions;
 using PetFamily.Application.Species;
 using PetFamily.Application.Species.AddBreeds;
 using PetFamily.Application.Species.CreateSpecies;
+using PetFamily.Application.Species.DeleteBreed;
 using PetFamily.Application.Species.DeleteSpecies;
-using PetFamily.Application.Species.GetAllBreeds;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared.Errors;
@@ -71,12 +71,12 @@ namespace PetFamily.API.Controllers
 
         [HttpPatch("{speciesId:guid}/breeds/{breedId:guid}/delete")]
         public async Task<ActionResult> DeleteBreedById(
-            [FromServices] GetAllBreedsHandler handler,
+            [FromServices] DeleteBreedHandler handler,
             [FromRoute] Guid speciesId,
             [FromRoute] Guid breedId,
             CancellationToken cancellation)
         {
-            var command = new GetAllBreedsCommand(speciesId, breedId);
+            var command = new DeleteBreedCommand(speciesId, breedId);
 
             var result = await handler.Handle(command, cancellation);
             if (result.IsFailure)

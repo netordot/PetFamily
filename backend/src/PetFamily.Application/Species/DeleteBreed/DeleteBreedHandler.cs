@@ -2,31 +2,24 @@
 using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
-using PetFamily.Application.Dtos;
-using PetFamily.Application.Models;
 using PetFamily.Domain.Shared.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PetFamily.Application.Species.GetAllBreeds
+namespace PetFamily.Application.Species.DeleteBreed
 {
-    public class GetAllBreedsHandler : ICommandHandler<Guid, GetAllBreedsCommand>
+    public class DeleteBreedHandler : ICommandHandler<Guid, DeleteBreedCommand>
     {
         private readonly IReadDbContext _readDbCOntext;
         private readonly ISpeciesRepository _speciesRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public GetAllBreedsHandler(IReadDbContext context, ISpeciesRepository speciesRepository, IUnitOfWork unitOfWork)
+        public DeleteBreedHandler(IReadDbContext context, ISpeciesRepository speciesRepository, IUnitOfWork unitOfWork)
         {
             _readDbCOntext = context;
             _speciesRepository = speciesRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<Guid, ErrorList>> Handle(GetAllBreedsCommand command, CancellationToken cancellation)
+        public async Task<Result<Guid, ErrorList>> Handle(DeleteBreedCommand command, CancellationToken cancellation)
         {
             // проверить есть ли вообще такая порода
             //есть, смотрим, используется ли она
