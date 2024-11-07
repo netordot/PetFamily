@@ -5,6 +5,7 @@ using PetFamily.API.Extensions;
 using PetFamily.Application.Species;
 using PetFamily.Application.Species.AddBreeds;
 using PetFamily.Application.Species.CreateSpecies;
+using PetFamily.Application.Species.DeleteSpecies;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared.Errors;
@@ -26,11 +27,11 @@ namespace PetFamily.API.Controllers
 
             var speciesCommand = new CreateSpeciesCommand(request.speciesName, speciesId);
 
-            var result =  await service.Handle(speciesCommand,cancellationToken);
+            var result = await service.Handle(speciesCommand, cancellationToken);
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-             return new ObjectResult(result.Value) { StatusCode=201};
+            return new ObjectResult(result.Value) { StatusCode = 201 };
         }
 
         [HttpPatch("{id:guid}/breed")]
@@ -43,11 +44,30 @@ namespace PetFamily.API.Controllers
         {
             var command = new AddBreedCommand(request.breedName, id);
 
-           var result = await addBreedService.Handle(command,cancellationToken);
-            if(result.IsFailure)
+            var result = await addBreedService.Handle(command, cancellationToken);
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
             return new ObjectResult(result.Value) { StatusCode = 201 };
         }
+
+        [HttpDelete("{id:guid}/delete")]
+        public async Task<ActionResult> DeleteSpecies(
+            [FromServices] DeleteSpeciesHandler handler,
+            [FromRoute] Guid id,
+            CancellationToken cancellation)
+        {
+            var command = new DeleteSpeciesCommand(id);
+
+            var result = await handler.Handle(command, cancellation);
+            if (result.IsFailure)
+            {
+                return result.Error.ToResponse();
+            }
+
+            return new ObjectResult(result.Value) { StatusCode = 200 };
+        }
+
     }
+
 }

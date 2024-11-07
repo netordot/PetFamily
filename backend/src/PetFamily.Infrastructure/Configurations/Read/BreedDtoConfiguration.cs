@@ -18,6 +18,9 @@ namespace PetFamily.Infrastructure.Configurations.Read
 
             builder.HasKey(b => b.Id);
 
+            builder.Property(b => b.SpeciesId)
+                .HasColumnName("species_id");
+
 
         }
     }

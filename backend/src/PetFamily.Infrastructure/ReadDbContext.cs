@@ -12,6 +12,8 @@ public class ReadDbContext(IConfiguration configuration,
 {
     public DbSet<VolunteerDto> Volunteers => Set<VolunteerDto>();
     public DbSet<SpeciesDto> Species => Set<SpeciesDto>();
+    public DbSet<PetDto> Pets => Set<PetDto>(); 
+    public DbSet<BreedDto> Breeds => Set<BreedDto>();   
 
     private const string DATABASE = nameof(Database);
 
