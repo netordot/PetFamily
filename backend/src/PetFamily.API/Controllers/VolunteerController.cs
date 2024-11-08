@@ -18,6 +18,8 @@ using PetFamily.Application.PetManagement.Queries.GetVolunteersWithPagination;
 using CSharpFunctionalExtensions;
 using PetFamily.Application.PetManagement.Queries.GetVolunteer;
 using PetFamily.Application.Volunteers.UpdatePetMainInfo;
+using System.Security.Cryptography.X509Certificates;
+using PetFamily.Application.Volunteers.AddNewPhotosToPet;
 
 namespace PetFamily.API.Controllers;
 
@@ -242,6 +244,29 @@ public class VolunteerController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
 
+    }
+
+    [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos/update")]
+    public async Task<ActionResult> AddPetPhotos
+        ([FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] AddNewPhotosToPetHandler handler,
+        [FromForm] AddNewFilesToPetRequest request,
+        CancellationToken cancellation)
+    {
+        await using var fileProcessor = new FormFileProcessor();
+
+        var fileDtos = fileProcessor.Process(request.files);
+        var newFilesCommand = new AddNewPetFilesCommand(fileDtos, petId, volunteerId);
+
+        var result = await handler.Handle(newFilesCommand, cancellation);
+
+        if(result.IsFailure)
+        {
+            return result.Error.ToResponse(); 
+        }
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
 }

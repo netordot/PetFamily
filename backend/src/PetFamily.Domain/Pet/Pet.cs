@@ -147,6 +147,13 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         return Result.Success<Error>();
     }
 
+    public UnitResult<Error> AddNewPhotos(List<PetPhoto.PetPhoto> photos)
+    {
+        var newList = Photos.Concat(photos);
+        Photos = newList.ToList();
+        return Result.Success<Error>();
+    }
+
     public UnitResult<Error> UpdatePet
         (string name,
         SpeciesBreed speciesBreed,

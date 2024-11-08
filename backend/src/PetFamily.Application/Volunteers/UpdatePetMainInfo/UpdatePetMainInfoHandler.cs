@@ -45,12 +45,6 @@ namespace PetFamily.Application.Volunteers.UpdatePetMainInfo
             {
                 return validationResult.ToErrorList();
             }
-            //валидация
-            // проверяем есть ли такой волонтер и пет(вынести в отдельный метод)
-            // проверяем валидность спишесов и брида
-            // создаем все необходимые данные 
-            // апдейтим пет с помощью доменного метода
-            // сохраняемся
 
             var volunteer = await _volunteerRepository.GetById(command.VolunteerId, cancellation);
             if (volunteer.IsFailure)
