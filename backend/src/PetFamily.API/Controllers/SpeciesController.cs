@@ -1,12 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PetFamily.API.Contracts;
 using PetFamily.API.Extensions;
 using PetFamily.Application.Species;
 using PetFamily.Application.Species.AddBreeds;
 using PetFamily.Application.Species.CreateSpecies;
 using PetFamily.Application.Species.DeleteBreed;
 using PetFamily.Application.Species.DeleteSpecies;
+using PetFamily.Application.Species.GetAllSpecies;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared.Errors;
@@ -85,6 +87,17 @@ namespace PetFamily.API.Controllers
             }
 
             return new ObjectResult(result.Value) { StatusCode = 200 };
+        }
+
+        [HttpPost("/species/getall")]
+        public async Task<ActionResult> GetAllSpecies(
+            [FromServices] GetAllSpeciesHandler handler,
+            [FromForm] GetAllSpeciesWithPaginationRequest request,
+            CancellationToken cancellation)
+        {
+            var query = new GetAllSpeciesWithPaginationQuery(request.Page, request.PageSize, request.SortOrder);
+            var result = await handler.Handle(query, cancellation);
+            return new ObjectResult(result) { StatusCode =200};
         }
     }
 
