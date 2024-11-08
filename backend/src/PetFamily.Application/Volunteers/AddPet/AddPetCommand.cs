@@ -15,8 +15,8 @@ namespace PetFamily.Application.Volunteers.AddPet
         Guid VolunteerId,
         // другие файлы и дто по аналогии с волонтером
         string Name,
-        string Species,
-        string Breed,
+        Guid SpeciesId,
+        Guid BreedId,
         string Color,
         string Description,
         string HealthCondition,
