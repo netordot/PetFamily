@@ -10,11 +10,13 @@ namespace PetFamily.Application.Dtos
     {
         public Guid Id { get; init; }
         public IEnumerable<BreedDto> Breeds { get; init; }
+        public string Name { get; init; }
 
-        public SpeciesDto(Guid id, IEnumerable<BreedDto> breeds)
+        public SpeciesDto(Guid id, IEnumerable<BreedDto> breeds, string name)
         {
             Id = id;
             Breeds = breeds;
+            Name = name;
         }
 
         private SpeciesDto()

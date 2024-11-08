@@ -11,9 +11,12 @@ namespace PetFamily.Application.Dtos
     {
         public string PathToStorage { get; set; }
 
-        public PetPhotoDto(string path)
-        {
-            PathToStorage = path;
-        }
+        public bool IsMain { get; set; }
+
+        //public PetPhotoDto(string path, bool isMain)
+        //{
+        //    PathToStorage = path;
+        //    IsMain = isMain;
+        //}
     }
 }

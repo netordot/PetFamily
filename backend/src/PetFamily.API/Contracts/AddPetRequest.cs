@@ -8,8 +8,8 @@ namespace PetFamily.API.Contracts
     // временно speciesBreed не будет указан
     (
         string Name,
-        string Species,
-        string Breed,
+        Guid SpeciesId,
+        Guid BreedId,
         string Color,
         string Description,
         string HealthCondition,

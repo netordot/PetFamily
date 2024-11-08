@@ -130,8 +130,8 @@ public class VolunteerController : ValuesController
         var command = new AddPetCommand(
             id,
             request.Name,
-            request.Species,
-            request.Breed,
+            request.SpeciesId,
+            request.BreedId,
             request.Color,
             request.Description,
             request.HealthCondition,

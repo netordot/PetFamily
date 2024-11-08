@@ -20,7 +20,6 @@ namespace PetFamily.Infrastructure.Configurations.Read
             builder.HasMany(s => s.Breeds)
                 .WithOne()
                 .HasForeignKey(s => s.SpeciesId);
-                
         }
     }
 }

@@ -28,7 +28,6 @@ namespace PetFamily.Application.Dtos
         public string City { get; init; }
         public string Street { get; init; }
         public int BuildingNumber { get; init; }
-        public string Address { get; init; }
         public int Status { get; init; }
         public double Height { get; init; }
         public double Weight { get; init; }

@@ -21,13 +21,10 @@ namespace PetFamily.Infrastructure.Extensions
             return builder.HasConversion(
                 valueObjects => SerializeValueObjectCollection(valueObjects, toDtoSelector),
                 json => DeserializeValueObjectCollection(json, toValueObjectSelector),
-            new ValueComparer<IReadOnlyList<TValueObject>> (
-                (c1,c2) => c1!.SequenceEqual(c2!),
-                c => c.Aggregate(0, (a,v) => HashCode.Combine(a,v!.GetHashCode())), 
-                c => (IReadOnlyList<TValueObject>)c.ToList()))
+                CreateCollectionValueComparer<TValueObject>())
                 .HasColumnType("jsonb");
+          
         }
-
 
         private static string SerializeValueObjectCollection<TValueObject, TDto>(
             IReadOnlyList<TValueObject> valueObjects, Func<TValueObject, TDto> selector)
@@ -44,6 +41,19 @@ namespace PetFamily.Infrastructure.Extensions
 
             return dtos.Select(selector).ToList();
         }
+
+        private static IReadOnlyList<TValueObject> DeserializeDtoCollection<TValueObject, TDto>(
+        string json, Func<TDto, TValueObject> selector)
+        {
+            var dtos = JsonSerializer.Deserialize<IEnumerable<TDto>>(json, JsonSerializerOptions.Default) ?? [];
+
+            return dtos.Select(selector).ToList();
+        }
+
+        private static ValueComparer<IReadOnlyList<T>> CreateCollectionValueComparer<T>() =>
+        new((c1, c2) => c1!.SequenceEqual(c2!),
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v!.GetHashCode())),
+            c => c.ToList());
 
     }
 }

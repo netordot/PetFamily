@@ -12,6 +12,8 @@ namespace PetFamily.Application.Database
     {
         DbSet<SpeciesDto> Species { get; }
         DbSet<VolunteerDto> Volunteers { get; }
+        public DbSet<PetDto> Pets { get; }
+        public DbSet<BreedDto> Breeds { get; }
     }
 
 }

@@ -70,6 +70,14 @@ namespace PetFamily.Infrastructure.Repositories
             return species.Id.Value;
         }
 
+        public async Task<Result<Guid, Error>> Delete(Guid Id, CancellationToken cancellationToken = default)
+        {
+            var speciesToDelete = await GetById(Id, cancellationToken);
+            _context.Species.Remove(speciesToDelete.Value);
+
+            return Id;
+        }
+
         public async Task<Result<SpeciesBreed, Error>> GetSpeciesBreedByNames(string speciesName, string breedname,
             CancellationToken cancellation)
         {
