@@ -20,8 +20,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     {
         
     }
-    
-
+   
     public VolunteerId VolunteerId { get; private set; }
     public string Name { get; private set; }
     public SpeciesBreed SpeciesBreed { get; private set; }
@@ -145,6 +144,39 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
     public UnitResult<Error> UploadPhotos(List<PetPhoto.PetPhoto> photos)
     {
         Photos = photos;
+        return Result.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdatePet
+        (string name,
+        SpeciesBreed speciesBreed,
+        string color,
+        string description,
+        string healthCondition,
+        PhoneNumber contactPhoneNumbers,
+        Address address,
+        List<Requisite> requisites,
+        PetStatus status,
+        double height,
+        double weight,
+        bool isCastrated,
+        bool isVaccinated,
+        DateTime dateOfBirth)
+    {
+        Name = name;
+        SpeciesBreed = speciesBreed; 
+        Color = color;
+        Description = description;
+        HealthCondition = healthCondition;
+        PhoneNumber = contactPhoneNumbers;
+        Address = address;
+        Requisites = requisites;
+        Height = height;
+        Weight = weight;
+        IsCastrated = isCastrated;
+        IsVaccinated = isVaccinated;
+        DateOfBirth = dateOfBirth;
+
         return Result.Success<Error>();
     }
 

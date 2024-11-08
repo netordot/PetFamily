@@ -17,6 +17,7 @@ using PetFamily.API.Processors;
 using PetFamily.Application.PetManagement.Queries.GetVolunteersWithPagination;
 using CSharpFunctionalExtensions;
 using PetFamily.Application.PetManagement.Queries.GetVolunteer;
+using PetFamily.Application.Volunteers.UpdatePetMainInfo;
 
 namespace PetFamily.API.Controllers;
 
@@ -191,6 +192,47 @@ public class VolunteerController : ValuesController
         CancellationToken cancellation)
     {
         var command = new GetVolunteerCommand(id);
+
+        var result = await handler.Handle(command, cancellation);
+        if(result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+
+    }
+
+    [HttpPut("{volunteerId:guid}/pets/{petId:guid}/update")]
+    public async Task<ActionResult> UpdatePetInfo(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromForm] UpdatePetMainInfoRequest request,
+        [FromServices] UpdatePetMainInfoHandler handler,
+        CancellationToken cancellation)
+    {
+        var command = new UpdatePetMainInfoCommand(
+            volunteerId,
+            petId,
+            request.Name,
+            request.SpeciesId,
+            request.BreedId,
+            request.PhoneNumber,
+            request.Color,
+            request.Description,
+            request.HealthCondition,
+            request.City,
+            request.Street,
+            request.BuildingNumber,
+            request.CorpsNumber,
+            request.status,
+            request.Weight,
+            request.Height,
+            request.IsCastrated,
+            request.IsVaccinated,
+            request.BirthDate,
+            request.Requisites
+            );
 
         var result = await handler.Handle(command, cancellation);
         if(result.IsFailure)

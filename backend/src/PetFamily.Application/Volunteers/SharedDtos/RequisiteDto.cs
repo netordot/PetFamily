@@ -1,3 +1,11 @@
-﻿namespace PetFamily.Application.Volunteers.SharedDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public record RequisiteDto(string Title, string Description);
+namespace PetFamily.Application.Volunteers.SharedDtos
+{
+    public record RequisiteDto(string Title, string Description);
+    
+}
