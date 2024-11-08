@@ -9,6 +9,7 @@ using PetFamily.Application.Species.CreateSpecies;
 using PetFamily.Application.Species.DeleteBreed;
 using PetFamily.Application.Species.DeleteSpecies;
 using PetFamily.Application.Species.GetAllSpecies;
+using PetFamily.Application.Species.GetBreedsWithPagination;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared.Errors;
@@ -98,6 +99,25 @@ namespace PetFamily.API.Controllers
             var query = new GetAllSpeciesWithPaginationQuery(request.Page, request.PageSize, request.SortOrder);
             var result = await handler.Handle(query, cancellation);
             return new ObjectResult(result) { StatusCode =200};
+        }
+
+        [HttpPost("{id:guid}/breeds")]
+        public async Task<ActionResult> GetBreedsBySpeciesId(
+            [FromServices] GetBreedsWithPaginationHanlder handler,
+            [FromForm] GetBreedsBySpeciesIdRequest request,
+            [FromRoute] Guid id,
+            CancellationToken cancellation)
+        {
+            var query = new GetBreedsWithPaginationQuery(
+                id, 
+                request.Page, 
+                request.PageSize, 
+                request.OrderBy, 
+                request.Sortby);
+
+            var result = await handler.Handle(query, cancellation);
+
+            return new ObjectResult(result) { StatusCode = 200 };
         }
     }
 
