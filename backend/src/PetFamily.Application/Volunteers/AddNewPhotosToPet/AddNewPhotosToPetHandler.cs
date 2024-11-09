@@ -77,7 +77,7 @@ namespace PetFamily.Application.Volunteers.AddNewPhotosToPet
                 return uploadResult.Error.ToErrorList();
             }
 
-            var filePaths = command.files.Select(f => FilePath.Create(Guid.NewGuid(), f.fileName).Value);
+            var filePaths = uploadResult.Value.Select(f => FilePath.Create(f.Path).Value);
 
             var petPhotos = filePaths.Select(p => PetPhoto.Create(p, false));
 

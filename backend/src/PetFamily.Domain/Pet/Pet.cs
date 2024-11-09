@@ -147,6 +147,13 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         return Result.Success<Error>();
     }
 
+    public void DeletePhoto(PetPhoto.PetPhoto photo)
+    {
+        var photos = Photos.ToList();
+        photos.Remove(photo);
+        Photos = photos;
+    }
+
     public UnitResult<Error> AddNewPhotos(List<PetPhoto.PetPhoto> photos)
     {
         var newList = Photos.Concat(photos);

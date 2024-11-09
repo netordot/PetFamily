@@ -20,6 +20,7 @@ using PetFamily.Application.PetManagement.Queries.GetVolunteer;
 using PetFamily.Application.Volunteers.UpdatePetMainInfo;
 using System.Security.Cryptography.X509Certificates;
 using PetFamily.Application.Volunteers.AddNewPhotosToPet;
+using PetFamily.Application.Volunteers.DeletePetPhoto;
 
 namespace PetFamily.API.Controllers;
 
@@ -68,7 +69,7 @@ public class VolunteerController : ValuesController
         var command = new UpdateVolunteerCommand(request, id);
 
         var result = await service.Handle(command, cancellationToken);
-        if(result.IsFailure)
+        if (result.IsFailure)
             return result.Error.ToResponse();
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
@@ -171,7 +172,7 @@ public class VolunteerController : ValuesController
         if (result.IsFailure)
             return result.Error.ToResponse();
 
-        return new ObjectResult(result.Value) { StatusCode = 200};
+        return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
     [HttpPost("/getall")]
@@ -196,7 +197,7 @@ public class VolunteerController : ValuesController
         var command = new GetVolunteerCommand(id);
 
         var result = await handler.Handle(command, cancellation);
-        if(result.IsFailure)
+        if (result.IsFailure)
         {
             return result.Error.ToResponse();
         }
@@ -237,7 +238,7 @@ public class VolunteerController : ValuesController
             );
 
         var result = await handler.Handle(command, cancellation);
-        if(result.IsFailure)
+        if (result.IsFailure)
         {
             return result.Error.ToResponse();
         }
@@ -261,12 +262,37 @@ public class VolunteerController : ValuesController
 
         var result = await handler.Handle(newFilesCommand, cancellation);
 
-        if(result.IsFailure)
+        if (result.IsFailure)
         {
-            return result.Error.ToResponse(); 
+            return result.Error.ToResponse();
         }
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
+
+    [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos/delete")]
+    public async Task<ActionResult> DeletePetPhoto
+        ([FromForm] DeletePhotoRequest request,
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] DeletePetPhotoHandler handler,
+        CancellationToken cancellation
+        )
+    {
+        var command = new DeletePetPhotoCommand(request.Path, petId, volunteerId);
+
+        var result = await handler.Handle(command, cancellation);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+
+    }
+
+    
+
+    
 
 }
