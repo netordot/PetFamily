@@ -154,6 +154,7 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         Photos = photos;
     }
 
+    // дополнительно протестировать и поработать над тем, чтобы возвращалась сначала главная фотка
     public UnitResult<Error> SetMainPhoto(PetPhoto.PetPhoto mainPhoto)
     {
         if(Photos == null)
@@ -163,7 +164,6 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         var photos = Photos.Select(p => PetPhoto.PetPhoto.Create(p.Path, false).Value).ToList();
         var targetPhotoIndex = photos.IndexOf(Photos.FirstOrDefault(p => p.Path == mainPhoto.Path));
         photos[targetPhotoIndex] = mainPhoto;
-        photos.OrderByDescending(p => p.IsMain);
 
         Photos = photos;
         

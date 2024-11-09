@@ -22,6 +22,7 @@ using System.Security.Cryptography.X509Certificates;
 using PetFamily.Application.Volunteers.AddNewPhotosToPet;
 using PetFamily.Application.Volunteers.DeletePetPhoto;
 using PetFamily.Application.Volunteers.SetPetMainPhoto;
+using PetFamily.Application.Volunteers.SoftDeletePet;
 
 namespace PetFamily.API.Controllers;
 
@@ -310,7 +311,24 @@ public class VolunteerController : ValuesController
         }
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
+    }
 
+    [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/softdelete")]
+    public async Task<ActionResult> SoftDeletePet(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] SoftDeletePetHandler handler,
+        CancellationToken cancellation)
+    {
+        var command = new SoftDeletePetCommand(volunteerId, petId);
+
+        var result = await handler.Handle(command, cancellation);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
 
