@@ -154,6 +154,22 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         Photos = photos;
     }
 
+    public UnitResult<Error> SetMainPhoto(PetPhoto.PetPhoto mainPhoto)
+    {
+        if(Photos == null)
+        {
+            return Errors.General.NotFound();
+        }
+        var photos = Photos.Select(p => PetPhoto.PetPhoto.Create(p.Path, false).Value).ToList();
+        var targetPhotoIndex = photos.IndexOf(Photos.FirstOrDefault(p => p.Path == mainPhoto.Path));
+        photos[targetPhotoIndex] = mainPhoto;
+        photos.OrderByDescending(p => p.IsMain);
+
+        Photos = photos;
+        
+        return Result.Success<Error>(); 
+    }
+
     public UnitResult<Error> AddNewPhotos(List<PetPhoto.PetPhoto> photos)
     {
         var newList = Photos.Concat(photos);

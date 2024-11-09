@@ -21,6 +21,7 @@ using PetFamily.Application.Volunteers.UpdatePetMainInfo;
 using System.Security.Cryptography.X509Certificates;
 using PetFamily.Application.Volunteers.AddNewPhotosToPet;
 using PetFamily.Application.Volunteers.DeletePetPhoto;
+using PetFamily.Application.Volunteers.SetPetMainPhoto;
 
 namespace PetFamily.API.Controllers;
 
@@ -291,8 +292,26 @@ public class VolunteerController : ValuesController
 
     }
 
-    
 
-    
+    [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos/main")]
+    public async Task<ActionResult> SetMainPhoto(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] SetPetMainPhotoHandler handler,
+        [FromForm] SetPetMainPhotoRequest request,
+        CancellationToken cancellation)
+    {
+        var command = new SetPetMainPhotoCommand(volunteerId, petId, request.Path);
+
+        var result = await handler.Handle(command, cancellation);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+
+    }
+
 
 }
