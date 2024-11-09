@@ -25,6 +25,8 @@ using PetFamily.Application.Volunteers.SetPetMainPhoto;
 using PetFamily.Application.Volunteers.SoftDeletePet;
 using Npgsql.Replication.PgOutput.Messages;
 using PetFamily.Application.Volunteers.FullDeletePet;
+using PetFamily.API.Contracts.SharedDtos;
+using PetFamily.Application.Volunteers.ChangePetStatus;
 
 namespace PetFamily.API.Controllers;
 
@@ -349,4 +351,24 @@ public class VolunteerController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
+
+    [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/status")]
+    public async Task<ActionResult> ChangePetStaus(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] ChangePetStatusHandler handler,
+        [FromForm] ChangePetStatusRequest request,
+        CancellationToken cancellation)
+    {
+        var command = new ChangePetStatusCommand(request.Status, volunteerId, petId);
+        var result = await handler.Handle(command, cancellation);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+
+    }
+
 }

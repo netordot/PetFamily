@@ -135,6 +135,11 @@ public class Pet : Shared.Entity<PetId>, ISoftDeletable
         }
     }
 
+    public void SetStatus(PetStatus status)
+    {
+        Status = status;
+    }
+
     public UnitResult<Error> SetPosition(Position number)
     {
         Position = number;
