@@ -1,55 +1,53 @@
-﻿using CSharpFunctionalExtensions;
-using Microsoft.Extensions.FileProviders;
-using PetFamily.Application.Providers;
+﻿using PetFamily.Application.Database;
+using PetFamily.Application.Messaging;
 using PetFamily.Application.Providers.FileProvider;
-using PetFamily.Domain;
 using PetFamily.Domain.Pet.PetPhoto;
-using PetFamily.Domain.Shared.Errors;
+using PetFamily.Domain.Pet;
+using PetFamily.Domain.Shared;
+using PetFamily.Domain.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PetFamily.Domain.Pet;
-using System.IO.Pipes;
-using PetFamily.Domain.Shared;
-using PetFamily.Application.Database;
-using PetFamily.Application.Messaging;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.Extensions.FileProviders;
 using PetFamily.Application.Abstractions;
+using PetFamily.Domain.Shared.Errors;
+using PetFamily.Application.Providers;
+using IFileProvider = PetFamily.Application.Providers.IFileProvider;
 
-namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
+namespace PetFamily.Application.Volunteers.AddNewPhotosToPet
 {
-    public class AddPetFilesHandler 
+    public class AddNewPhotosToPetHandler : ICommandHandler<Guid, AddNewPetFilesCommand>
     {
         private readonly string _bucket = "photos";
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly Providers.IFileProvider _fileProvider;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMessageQueue<IEnumerable<Providers.FileProvider.FileInfo>> _messageQueue;
 
-        public AddPetFilesHandler(
-            IVolunteerRepository repository,
-            Providers.IFileProvider fileProvider,
-            IUnitOfWork context,
+        public AddNewPhotosToPetHandler(IVolunteerRepository repository, 
+            IFileProvider fileProvider, 
+            IUnitOfWork unitOfWork, 
             IMessageQueue<IEnumerable<Providers.FileProvider.FileInfo>> messageQueue)
         {
             _volunteerRepository = repository;
-            _fileProvider = fileProvider;
-            unitOfWork = context;
             _messageQueue = messageQueue;
+            _unitOfWork = unitOfWork;
+            _fileProvider = fileProvider;
         }
-
-        public async Task<Result<Guid, ErrorList>> Handle(Guid petId,Guid volunteerId, AddFileCommand command, CancellationToken cancellation)
+      
+        public async Task<CSharpFunctionalExtensions.Result<Guid, ErrorList>> Handle(AddNewPetFilesCommand command, CancellationToken cancellation)
         {
+            var volunteer = await _volunteerRepository.GetById(command.VolunteerId, cancellation);
 
-            var volunteer = await _volunteerRepository.GetById(volunteerId, cancellation);
-
-            var petToUpdate = volunteer.Value.GetPetById(petId);
-            if(petToUpdate.IsFailure)
+            var petToUpdate = volunteer.Value.GetPetById(command.PetId);
+            if (petToUpdate.IsFailure)
             {
                 return petToUpdate.Error.ToErrorList();
             }
-            
+
 
             List<PetPhoto> photos = [];
             List<FileData> fileContents = [];
@@ -87,13 +85,11 @@ namespace PetFamily.Application.Volunteers.AddPet.AddPhoto
 
             var pictures = new ValueObjectList<PetPhoto>(photos);
 
-            petToUpdate.Value.UploadPhotos(pictures);
+            petToUpdate.Value.AddNewPhotos(pictures);
+            var result =  _volunteerRepository.Save(volunteer.Value, cancellation);
+            await _unitOfWork.SaveChanges(cancellation);
 
-            await unitOfWork.SaveChanges(cancellation);
-
-            //transaction.Commit();
-            return petId;
-
+            return command.PetId;
         }
     }
 }

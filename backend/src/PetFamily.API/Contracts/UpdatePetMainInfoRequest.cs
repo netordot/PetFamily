@@ -1,28 +1,31 @@
-﻿using PetFamily.Application.Volunteers.AddPet;
+﻿using PetFamily.Application.Dtos;
 using PetFamily.Application.Volunteers.SharedDtos;
-using PetFamily.Application.Volunteers.UpdatePetMainInfo;
-using PetFamily.Domain;
-using PetFamily.Domain.Pet;
+using RequisiteDto = PetFamily.Application.Volunteers.SharedDtos.RequisiteDto;
 
 namespace PetFamily.API.Contracts
 {
-    public record AddPetRequest
-    (
-        string Name,
+    public record UpdatePetMainInfoRequest(
+         string Name,
         Guid SpeciesId,
         Guid BreedId,
+        string PhoneNumber,
         string Color,
         string Description,
         string HealthCondition,
+        string City,
+        string Street,
+        int BuildingNumber,
+        int CorpsNumber,
         // пока что статус будет доменным, когда будет фронт, избавиться от доменна в реквесте
-        PetStatus status,
+        Domain.Pet.PetStatus status,
         double Weight,
         double Height,
         bool IsCastrated,
         bool IsVaccinated,
-        DateTime BirthDate
+        DateTime BirthDate,
+        List<RequisiteDto> Requisites
         );
-  
+
 
     
 }
