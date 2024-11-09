@@ -146,6 +146,11 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         return Result.Success<Error>();
     }
 
+    public void HardDeletePet (Pet.Pet pet)
+    {
+        Pets.Remove(pet);
+    }
+
     public Result<Pet.Pet, Error> GetPetById(Guid petId)
     {
         var pet = Pets.FirstOrDefault(p => p.Id == PetId.Create(petId));
