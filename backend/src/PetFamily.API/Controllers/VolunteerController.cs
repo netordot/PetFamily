@@ -28,6 +28,7 @@ using PetFamily.Application.Volunteers.FullDeletePet;
 using PetFamily.API.Contracts.SharedDtos;
 using PetFamily.Application.Volunteers.ChangePetStatus;
 using PetFamily.Application.PetManagement.Queries.GetPetsWithPagination;
+using PetFamily.Application.PetManagement.Queries.GetPet;
 
 namespace PetFamily.API.Controllers;
 
@@ -372,7 +373,7 @@ public class VolunteerController : ValuesController
 
     }
 
-    [HttpPost("{volunteerId:guid}/pets/")]
+    [HttpPost("pets/")]
     public async Task<ActionResult> GetAllPetsWithPagination
         (
         [FromServices] GetPetsWithPaginationHandler handler,
@@ -385,5 +386,24 @@ public class VolunteerController : ValuesController
 
         return new ObjectResult(result) { StatusCode = 200 };
     }
+
+    [HttpPost("pets/{petId:guid}")]
+    public async Task<ActionResult> GetPetById(
+        [FromRoute] Guid petId,
+        [FromServices] GetPetHandler handler,
+        CancellationToken cancellation
+        )
+    {
+        var query = new GetPetQuery(petId);
+        var result = await handler.Handle(query, cancellation);
+
+        if(result == null)
+        {
+            return Errors.General.NotFound(petId).ToResponse();
+        }
+
+        return new ObjectResult(result) { StatusCode = 200 };
+    }
+
 
 }
