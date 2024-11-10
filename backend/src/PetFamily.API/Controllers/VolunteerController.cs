@@ -27,6 +27,7 @@ using Npgsql.Replication.PgOutput.Messages;
 using PetFamily.Application.Volunteers.FullDeletePet;
 using PetFamily.API.Contracts.SharedDtos;
 using PetFamily.Application.Volunteers.ChangePetStatus;
+using PetFamily.Application.PetManagement.Queries.GetPetsWithPagination;
 
 namespace PetFamily.API.Controllers;
 
@@ -369,6 +370,20 @@ public class VolunteerController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
 
+    }
+
+    [HttpPost("{volunteerId:guid}/pets/")]
+    public async Task<ActionResult> GetAllPetsWithPagination
+        (
+        [FromServices] GetPetsWithPaginationHandler handler,
+        [FromForm] GetPetsWithPaginationRequest request,
+        CancellationToken cancellationToken
+        )
+    {
+        var query = request.ToQuery();
+        var result = await handler.Handle(query, cancellationToken);
+
+        return new ObjectResult(result) { StatusCode = 200 };
     }
 
 }
