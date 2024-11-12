@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetFamily.Application", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetFamily.Domain.Tests", "tests\PetFamily.Domain.Tests\PetFamily.Domain.Tests.csproj", "{51C7A014-4816-40B3-B286-F30ABBC29D29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Application.Tests", "PetFamily.Application.Tests\PetFamily.Application.Tests.csproj", "{B9FE9495-9864-413D-81EE-F503BCEA975B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetFamily.Application.Tests", "PetFamily.Application.Tests\PetFamily.Application.Tests.csproj", "{B9FE9495-9864-413D-81EE-F503BCEA975B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Infrastructure.Authentication", "src\PetFamily.Infrastructure.Authentication\PetFamily.Infrastructure.Authentication.csproj", "{D3AF2D85-FC9C-40B7-9E9C-AD9E023A2E87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{B9FE9495-9864-413D-81EE-F503BCEA975B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9FE9495-9864-413D-81EE-F503BCEA975B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9FE9495-9864-413D-81EE-F503BCEA975B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3AF2D85-FC9C-40B7-9E9C-AD9E023A2E87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3AF2D85-FC9C-40B7-9E9C-AD9E023A2E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3AF2D85-FC9C-40B7-9E9C-AD9E023A2E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3AF2D85-FC9C-40B7-9E9C-AD9E023A2E87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
