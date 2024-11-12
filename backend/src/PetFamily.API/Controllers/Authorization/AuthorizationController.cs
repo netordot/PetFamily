@@ -42,7 +42,7 @@ namespace PetFamily.API.Controllers.Authorization
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return new ObjectResult(result.Value) { StatusCode = 200 };
         }
     }
 }

@@ -27,7 +27,8 @@ namespace PetFamily.Infrastructure.Authentication.Providers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             Claim[] claims = [
                 new Claim(CustomClaims.Sub, user.Id.ToString()),
-                new Claim(CustomClaims.Email, user.Email ?? "")
+                new Claim(CustomClaims.Email, user.Email ?? ""),
+                new Claim("Permission", "get.pets")
             ];
 
             var jwtToken = new JwtSecurityToken(

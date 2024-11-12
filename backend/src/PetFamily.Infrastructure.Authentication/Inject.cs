@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PetFamily.Application.AccountManagement.DataModels;
 using PetFamily.Application.Authorization;
+using PetFamily.Infrastructure.Authentication.Attributes;
 using PetFamily.Infrastructure.Authentication.Options;
 using PetFamily.Infrastructure.Authentication.Providers;
 using System;
@@ -33,11 +35,15 @@ namespace PetFamily.Infrastructure.Authentication
             {
                 options.User.RequireUniqueEmail = true;
             })
-                    .AddEntityFrameworkStores<AuthorizationDbContext>();
-
+            .AddEntityFrameworkStores<AuthorizationDbContext>();
 
             services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {
                     var jwtOptions = configuration.GetSection(JwtOptions.JWT).Get<JwtOptions>()
@@ -56,6 +62,21 @@ namespace PetFamily.Infrastructure.Authentication
                 });
 
             services.AddAuthorization();
+            //services.AddAuthorization(options =>
+            //{
+            //    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+            //    .RequireClaim("Role", "User")
+            //    .RequireAuthenticatedUser()
+            //    .Build();
+
+            //    options.AddPolicy("GetAllPetsRequirement", policy =>
+            //    {
+            //        policy.AddRequirements(new PermissionRequirement("Pet"));
+            //    });
+            //});
+
+            services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
+            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
             return services;
         }
