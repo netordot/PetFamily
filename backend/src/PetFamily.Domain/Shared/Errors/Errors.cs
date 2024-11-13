@@ -21,5 +21,20 @@ public static class Errors
             var label = name == null ? "" : " " + name + " ";
             return Error.Validation("length.is.invalid", $"invalid{label}");
         }
+
+        public static Error AlreadyExists(string? name = null)
+        {
+            var label = name == null ? "" : " " + name + " ";
+            return Error.Conflict("already.exists", $"invalid{label}");
+        }
+    }
+
+    public static class User
+    {
+        public static Error InvalidCredentials(string? name = null)
+        {
+            var label = name ?? "value";
+            return Error.Validation("credentials.invalid", $"invalid credentials");
+        }
     }
 }

@@ -29,6 +29,8 @@ using PetFamily.API.Contracts.SharedDtos;
 using PetFamily.Application.Volunteers.ChangePetStatus;
 using PetFamily.Application.PetManagement.Queries.GetPetsWithPagination;
 using PetFamily.Application.PetManagement.Queries.GetPet;
+using Microsoft.AspNetCore.Authorization;
+using PetFamily.Infrastructure.Authentication.Attributes;
 
 namespace PetFamily.API.Controllers;
 
@@ -372,7 +374,7 @@ public class VolunteerController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
 
     }
-
+    [PermissionRequirement("get.pets")]
     [HttpPost("pets/")]
     public async Task<ActionResult> GetAllPetsWithPagination
         (
@@ -404,6 +406,5 @@ public class VolunteerController : ValuesController
 
         return new ObjectResult(result) { StatusCode = 200 };
     }
-
 
 }
