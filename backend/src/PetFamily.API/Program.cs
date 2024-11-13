@@ -12,6 +12,7 @@ using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Repositories;
 using System.Text;
 using PetFamily.Infrastructure.Authentication;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,5 +66,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+//app.UseSerilogRequestLogging();
 
 app.Run();

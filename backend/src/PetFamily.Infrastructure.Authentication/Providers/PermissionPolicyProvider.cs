@@ -25,7 +25,12 @@ namespace PetFamily.Infrastructure.Authentication.Providers
 
         public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
         { 
+            if(string.IsNullOrWhiteSpace(policyName))
+            {
+                return Task.FromResult<AuthorizationPolicy?>(null);
+            }
             var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
                 .AddRequirements(new PermissionRequirementAttribute(policyName))
                 .Build();
 
