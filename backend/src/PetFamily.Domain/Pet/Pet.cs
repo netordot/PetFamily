@@ -3,13 +3,14 @@ using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.PhoneNumber;
-using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
+using PetFamily.SharedKernel.Id;
+using PetFamily.SharedKernel.ValueObjects;
 using System.Reflection.PortableExecutable;
 
 namespace PetFamily.Domain.Pet;
 
-public class Pet : Shared.Entity<PetId>, ISoftDeletable
+public class Pet : SharedKernel.ValueObjects.Entity<PetId>, ISoftDeletable
 {
     private Pet(PetId id) : base(id)
     {

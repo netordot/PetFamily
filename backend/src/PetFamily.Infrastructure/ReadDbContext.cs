@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Database;
-using PetFamily.Application.Dtos;
+using PetFamily.Core.Dtos.PetManagement;
 using PetFamily.Infrastructure.Interceptors;
 
 namespace PetFamily.Infrastructure;

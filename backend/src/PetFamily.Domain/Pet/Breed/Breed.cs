@@ -1,10 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.SharedKernel.Id;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Domain.Pet.Breed;
 
-public class Breed : Shared.Entity<BreedId>
+public class Breed : SharedKernel.ValueObjects.Entity<BreedId>
 {
     public string Name { get; private set; }
     public SpeciesId SpeciesId { get; private set; }

@@ -1,7 +1,4 @@
-﻿using PetFamily.Application.Volunteers.AddPet;
-using PetFamily.Application.Volunteers.SharedDtos;
-using PetFamily.Application.Volunteers.UpdatePetMainInfo;
-using PetFamily.Domain;
+﻿using PetFamily.Domain;
 using PetFamily.Domain.Pet;
 
 namespace PetFamily.API.Contracts

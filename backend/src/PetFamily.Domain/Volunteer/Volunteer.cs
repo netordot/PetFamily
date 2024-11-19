@@ -4,13 +4,13 @@ using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
-using PetFamily.Domain.Shared.Requisites;
-using PetFamily.Domain.Volunteer.Details;
+using PetFamily.SharedKernel.Id;
+using PetFamily.SharedKernel.ValueObjects;
 using System.Runtime.InteropServices.ObjectiveC;
 
 namespace PetFamily.Domain.Volunteer;
 
-public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
+public class Volunteer : SharedKernel.ValueObjects.Entity<VolunteerId>, ISoftDeletable
 {
     private bool _isDeleted;
     public FullName Name { get; private set; }

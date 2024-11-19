@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Application.Dtos;
+using PetFamily.Core.Dtos.PetManagement;
 using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Pet.Species;
-using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteer;
+using PetFamily.SharedKernel.Constraints;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,7 +81,7 @@ namespace PetFamily.Infrastructure.Configurations.Read
             builder.Property(p => p.Photos)
                    .HasConversion(
            files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
-           json => JsonSerializer.Deserialize<IEnumerable<PetPhotoDto>>(json, JsonSerializerOptions.Default)!);
+           json => JsonSerializer.Deserialize<IEnumerable<FileDto>>(json, JsonSerializerOptions.Default)!);
             
             builder.Property(p => p.Requisites)
                 .HasConversion(
@@ -116,11 +116,11 @@ namespace PetFamily.Infrastructure.Configurations.Read
 
             builder.Property(a => a.City)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
             builder.Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
             builder.Property(a => a.BuildingNumber)
                 .IsRequired()

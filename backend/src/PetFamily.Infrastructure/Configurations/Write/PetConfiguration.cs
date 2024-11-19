@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Application.Dtos;
 using PetFamily.Domain.Pet;
+using PetFamily.Core.Extensions;
+using PetFamily.Core.Dtos;
 using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Pet.Species;
-using PetFamily.Domain.Shared;
-using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
-using PetFamily.Infrastructure.Extensions;
+using PetFamily.SharedKernel.Id;
+using PetFamily.SharedKernel.ValueObjects;
+using PetFamily.SharedKernel.Constraints;
+using PetFamily.Application.PetManagement.Commands.Volunteers.SharedDtos;
+using PetFamily.Core.Dtos.PetManagement;
 
 namespace PetFamily.Infrastructure.Configurations.Write;
 
@@ -37,7 +40,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.Property(p => p.Requisites)
             .ValueObjectJsonConversion
-            (requisite => new Application.Dtos.RequisiteDto(requisite.Title, requisite.Description),
+            (requisite => new Core.Dtos.PetManagement.RequisiteDto(requisite.Title, requisite.Description),
                 dto => Requisite.Create(dto.Title, dto.Description).Value)
             .HasColumnName("requisites");
 
@@ -82,11 +85,11 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         {
             ab.Property(a => a.City)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
             ab.Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
             ab.Property(a => a.BuildingNumber)
                 .IsRequired();

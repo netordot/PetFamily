@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.Abstractions;
+﻿using PetFamily.Core.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

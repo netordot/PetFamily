@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Application.Dtos;
-using PetFamily.Domain.Shared;
-using PetFamily.Domain.Shared.Requisites;
+using PetFamily.Core.Dtos.PetManagement;
+using PetFamily.Core.Extensions;
+using PetFamily.CoreCore.Dtos.PetManagement;
 using PetFamily.Domain.Volunteer;
-using PetFamily.Domain.Volunteer.Details;
-using PetFamily.Infrastructure.Extensions;
+using PetFamily.SharedKernel.Constraints;
+using PetFamily.SharedKernel.Id;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Infrastructure.Configurations.Write;
 
@@ -31,7 +32,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.Property(v => v.Requisites)
             .ValueObjectJsonConversion
-            (requisite => new Application.Dtos.RequisiteDto(requisite.Title, requisite.Description),
+            (requisite => new RequisiteDto(requisite.Title, requisite.Description),
                 dto => Requisite.Create(dto.Title, dto.Description).Value)
             .HasColumnName("requisites");
 
@@ -50,15 +51,15 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         {
             vbuilder.Property(n => n.Name)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE)
                 .HasColumnName("name");
 
             vbuilder.Property(v => v.MiddleName)
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE)
                 .HasColumnName("middle_name");
 
             vbuilder.Property(v => v.LastName)
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE)
                 .HasColumnName("last_name");
         });
 
@@ -66,12 +67,12 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         {
             ab.Property(a => a.City)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE)
                 .HasColumnName("city");
 
             ab.Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE)
+                .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE)
                 .HasColumnName("street");
 
             ab.Property(a => a.BuildingNumber)

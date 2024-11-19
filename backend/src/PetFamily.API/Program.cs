@@ -13,6 +13,7 @@ using PetFamily.Infrastructure.Repositories;
 using System.Text;
 using PetFamily.Infrastructure.Authentication;
 using Serilog;
+using PetFamily.Accounts.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +51,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
-    .AddAuthorizationInfrastructure(builder.Configuration);
+    .AddAuthorizationInfrastructure(builder.Configuration)
+    .AddAccountApplication();
 
 
 var app = builder.Build();
@@ -60,7 +62,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    await app.AddMigrations();
+    //await app.AddMigrations();
 }
 
 app.UseHttpsRedirection();

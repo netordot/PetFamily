@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.Volunteers.UpdateRequisites;
+﻿using PetFamily.Application.PetManagement.Commands.Volunteers.UpdateRequisites;
 
 namespace PetFamily.API.Contracts
 {

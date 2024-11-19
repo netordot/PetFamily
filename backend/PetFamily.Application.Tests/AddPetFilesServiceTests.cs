@@ -3,23 +3,22 @@ using Microsoft.Extensions.FileProviders;
 using Moq;
 using PetFamily.Application.Database;
 using PetFamily.Application.Providers;
-using PetFamily.Application.Providers.FileProvider;
-using PetFamily.Application.Volunteers;
-using PetFamily.Application.Volunteers.AddPet.AddPhoto;
 using PetFamily.Domain.Pet.Breed;
 using PetFamily.Domain.Pet;
-using PetFamily.Domain.Pet.PetPhoto;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Errors;
 using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
-using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
-using PetFamily.Domain.Volunteer.Details;
 using FluentAssertions;
-using PetFamily.Application.Messaging;
-using FileInfo = PetFamily.Application.Providers.FileProvider.FileInfo;
+using FileInfo = PetFamily.Core.Providers.FileInfo;
+using PetFamily.Core.Messaging;
+using PetFamily.Application.PetManagement.Commands.Volunteers;
+using PetFamily.Application.PetManagement.Commands.Volunteers.AddPet.AddPhoto;
+using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Id;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Application.Tests
 {

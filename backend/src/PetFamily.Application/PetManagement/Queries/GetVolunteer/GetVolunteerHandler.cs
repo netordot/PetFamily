@@ -1,10 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
-using PetFamily.Application.Dtos;
-using PetFamily.Application.Models;
+using PetFamily.Core.Abstractions;
+using PetFamily.Core.Dtos.PetManagement;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

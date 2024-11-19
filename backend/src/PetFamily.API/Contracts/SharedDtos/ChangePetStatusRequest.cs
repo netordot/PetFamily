@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.Dtos;
+﻿using PetFamily.Core.Dtos.PetManagement;
 
 namespace PetFamily.API.Contracts.SharedDtos
 {

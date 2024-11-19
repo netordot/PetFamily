@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Pet.Species;
+using PetFamily.SharedKernel.Constraints;
+using PetFamily.SharedKernel.Id;
 
 namespace PetFamily.Infrastructure.Configurations.Write;
 
@@ -20,7 +22,7 @@ public class SpeciesConfiguaraiton :IEntityTypeConfiguration<Species>
 
         builder.Property(s => s.Name)
             .IsRequired()
-            .HasMaxLength(Domain.Shared.Constants.MAX_SHORT_TEXT_SIZE);
+            .HasMaxLength(Constants.MAX_SHORT_TEXT_SIZE);
 
         builder.HasMany(s => s.Breeds)
             .WithOne()

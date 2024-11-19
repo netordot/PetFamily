@@ -1,14 +1,13 @@
 using FluentAssertions;
-using PetFamily.Application.Volunteers.SharedDtos;
 using PetFamily.Domain.Pet;
 using PetFamily.Domain.Pet.Breed;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Mails;
 using PetFamily.Domain.Shared.PhoneNumber;
-using PetFamily.Domain.Shared.Requisites;
 using PetFamily.Domain.Volunteer;
-using PetFamily.Domain.Volunteer.Details;
+using PetFamily.SharedKernel.Id;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Domain.Tests
 {

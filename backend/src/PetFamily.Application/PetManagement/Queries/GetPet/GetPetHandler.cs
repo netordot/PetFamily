@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
-using PetFamily.Application.Dtos;
+using PetFamily.Core.Abstractions;
+using PetFamily.Core.Dtos.PetManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

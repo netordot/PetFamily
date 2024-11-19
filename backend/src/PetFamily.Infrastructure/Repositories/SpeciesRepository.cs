@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PetFamily.Domain.Pet;
 using PetFamily.Domain.Pet.Species;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Infrastructure.Repositories
 {

@@ -1,6 +1,4 @@
-﻿using PetFamily.Application.Dtos;
-using PetFamily.Application.Volunteers.SharedDtos;
-using RequisiteDto = PetFamily.Application.Volunteers.SharedDtos.RequisiteDto;
+﻿using RequisiteDto = PetFamily.Application.PetManagement.Commands.Volunteers.SharedDtos.RequisiteDto;
 
 namespace PetFamily.API.Contracts
 {

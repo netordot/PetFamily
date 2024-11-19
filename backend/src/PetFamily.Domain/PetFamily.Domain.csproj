@@ -11,4 +11,8 @@
       <PackageReference Include="CSharpFunctionalExtensions" Version="3.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Shared\PetFamily.SharedKernel\PetFamily.SharedKernel.csproj" />
+    </ItemGroup>
+
 </Project>

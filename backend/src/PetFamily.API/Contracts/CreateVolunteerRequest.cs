@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.Volunteers.SharedDtos;
+﻿using PetFamily.Application.PetManagement.Commands.Volunteers.SharedDtos;
 
 namespace PetFamily.API.Contracts
 {

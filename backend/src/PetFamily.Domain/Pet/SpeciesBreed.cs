@@ -1,4 +1,5 @@
 ﻿using PetFamily.Domain.Pet.Species;
+using PetFamily.SharedKernel.Id;
 
 namespace PetFamily.Domain.Pet;
 

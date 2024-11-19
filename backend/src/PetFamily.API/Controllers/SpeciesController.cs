@@ -13,6 +13,8 @@ using PetFamily.Application.Species.GetBreedsWithPagination;
 using PetFamily.Domain;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.Core.Extensions;
+using PetFamily.SharedKernel.Id;
 
 namespace PetFamily.API.Controllers
 {

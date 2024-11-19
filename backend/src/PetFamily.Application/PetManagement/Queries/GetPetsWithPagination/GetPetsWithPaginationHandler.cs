@@ -1,9 +1,9 @@
-﻿using PetFamily.Application.Abstractions;
-using PetFamily.Application.Database;
-using PetFamily.Application.Dtos;
+﻿using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
-using PetFamily.Application.Models;
 using PetFamily.Application.PetManagement.Queries.GetPetsWithPagination.GetPetsWithPagination;
+using PetFamily.Core.Abstractions;
+using PetFamily.Core.Dtos.PetManagement;
+using PetFamily.Core.Models;
 using PetFamily.Domain.Volunteer;
 using System;
 using System.Collections.Generic;
