@@ -1,5 +1,4 @@
-﻿using PetFamily.Domain.Shared.Errors;
-using PetFamily.SharedKernel.ValueObjects;
+﻿using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Core.Models;
 

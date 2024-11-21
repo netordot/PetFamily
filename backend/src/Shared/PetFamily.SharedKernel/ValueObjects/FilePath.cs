@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

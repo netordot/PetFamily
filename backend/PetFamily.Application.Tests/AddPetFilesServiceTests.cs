@@ -1,24 +1,20 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.FileProviders;
 using Moq;
-using PetFamily.Application.Database;
-using PetFamily.Application.Providers;
-using PetFamily.Domain.Pet.Breed;
-using PetFamily.Domain.Pet;
-using PetFamily.Domain.Pet.Species;
-using PetFamily.Domain.Shared;
-using PetFamily.Domain.Shared.Errors;
-using PetFamily.Domain.Shared.Mails;
-using PetFamily.Domain.Shared.PhoneNumber;
-using PetFamily.Domain.Volunteer;
 using FluentAssertions;
 using FileInfo = PetFamily.Core.Providers.FileInfo;
 using PetFamily.Core.Messaging;
-using PetFamily.Application.PetManagement.Commands.Volunteers;
-using PetFamily.Application.PetManagement.Commands.Volunteers.AddPet.AddPhoto;
 using PetFamily.Core.Providers;
 using PetFamily.SharedKernel.Id;
 using PetFamily.SharedKernel.ValueObjects;
+using PetFamily.Volunteers.Domain.AggregateRoot;
+using PetFamily.Volunteers.Domain.ValueObjects;
+using PetFamily.Volunteers.Domain.Enums;
+using PetFamily.Volunteers.Domain.Entities;
+using PetFamily.Volunteers.Application.Commands.AddPet.AddPhoto;
+using PetFamily.Volunteers.Application;
+using PetFamily.Species.Domain.Entities;
+using PetFamily.Species.Domain.AggregateRoot;
 
 namespace PetFamily.Application.Tests
 {
@@ -59,7 +55,7 @@ namespace PetFamily.Application.Tests
         private SpeciesBreed CreateSpeciesBreed()
         {
             var breedList = new List<Breed>();
-            var species = Domain.Pet.Species.Species.Create("������", breedList, SpeciesId.NewSpeciesId);
+            var species = PetFamily.Species.Domain.AggregateRoot.Species.Create("������", breedList, SpeciesId.NewSpeciesId);
             var breed = Breed.Create("��������", BreedId.NewBreedId, species.Value.Id);
 
             species.Value.AddBreed(breed.Value);
@@ -129,7 +125,7 @@ namespace PetFamily.Application.Tests
                 .Setup(u => u.SaveChanges(ct))
                 .Returns(Task.CompletedTask);
 
-            var mockFileProvider = new Mock<Providers.IFileProvider>();
+            var mockFileProvider = new Mock<Core.Providers.IFileProvider>();
             mockFileProvider
                 .Setup(f => f.UploadFile(It.IsAny<List<FileData>>(), ct))
                 .ReturnsAsync(Result.Success<IReadOnlyList<FilePath>, Error>(filePaths));
@@ -143,9 +139,6 @@ namespace PetFamily.Application.Tests
                 mockUnitOfWork.Object,
                 mockMessageQueue.Object
                 );
-
-
-
 
             var command = new AddFileCommand(files);
 

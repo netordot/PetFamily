@@ -6,7 +6,6 @@ using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 using PetFamily.Application.Database;
-using PetFamily.Application.Providers;
 using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Core.Providers;
 using PetFamily.Domain.Shared.Errors;

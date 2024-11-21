@@ -5,7 +5,7 @@ using PetFamily.Core.Models;
 
 namespace PetFamily.Framework
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
 
     public class ValuesController : ControllerBase

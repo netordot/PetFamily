@@ -1,5 +1,4 @@
-﻿using PetFamily.Application.Providers;
-using PetFamily.Core.Messaging;
+﻿using PetFamily.Core.Messaging;
 using PetFamily.Core.Providers;
 
 namespace PetFamily.Infrastructure.BackGroundServices

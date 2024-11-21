@@ -6,14 +6,14 @@ using Microsoft.OpenApi.Models;
 using Minio;
 using PetFamily.API.Extensions;
 using PetFamily.Application;
-using PetFamily.Application.Volunteers;
 using PetFamily.Infrastructure;
-using PetFamily.Infrastructure.Options;
-using PetFamily.Infrastructure.Repositories;
 using System.Text;
 using PetFamily.Infrastructure.Authentication;
 using Serilog;
 using PetFamily.Accounts.Application;
+using PetFamily.Volunteers.Presentation;
+using PetFamily.Species.Infrastructure;
+using PetFamily.Species.Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,8 +49,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services
-    .AddApplication()
-    .AddInfrastructure(builder.Configuration)
+    .AddVolunteersInfrastructure(builder.Configuration)
+    .AddVolunteersPresentation()
+    .AddVolunteersApplication()
+    .AddSpeciesApplication()
+    .AddSpeciesInfrastructure(builder.Configuration)
+    .AddSpeciesPresentation()
     .AddAuthorizationInfrastructure(builder.Configuration)
     .AddAccountApplication();
 

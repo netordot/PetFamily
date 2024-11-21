@@ -1,6 +1,6 @@
 ﻿using PetFamily.SharedKernel.ValueObjects;
 
-namespace PetFamily.Domain.Shared.Errors;
+namespace PetFamily.SharedKernel.Other;
 
 public static class Errors
 {

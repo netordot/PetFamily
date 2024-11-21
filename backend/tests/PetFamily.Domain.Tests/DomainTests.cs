@@ -1,20 +1,19 @@
 using FluentAssertions;
-using PetFamily.Domain.Pet;
-using PetFamily.Domain.Pet.Breed;
-using PetFamily.Domain.Pet.Species;
-using PetFamily.Domain.Shared;
-using PetFamily.Domain.Shared.Mails;
-using PetFamily.Domain.Shared.PhoneNumber;
-using PetFamily.Domain.Volunteer;
 using PetFamily.SharedKernel.Id;
 using PetFamily.SharedKernel.ValueObjects;
+using PetFamily.Volunteers.Domain.AggregateRoot;
+using PetFamily.Volunteers.Domain.Enums;
+using PetFamily.Volunteers.Domain.ValueObjects;
+using PetFamily.Volunteers.Domain.Entities;
+using PetFamily.Species.Domain.Entities;
+using PetFamily.Species.Domain.AggregateRoot;
 
 namespace PetFamily.Domain.Tests
 {
     public class DomainTests
     {
         // ������ ����� ������ ��������������� ������
-        private Volunteer.Volunteer CreateVolunteer()
+        private Volunteer CreateVolunteer()
         {
             var fullName = new FullName("MASOASO", "ASAS", "ASASSASA");
             var email = Email.Create("sodksokdos@mail.co").Value;
@@ -26,10 +25,10 @@ namespace PetFamily.Domain.Tests
             var social = Social.Create("sdfnsdkjfksdj", "dsfksdjfkdsjfk");
             var socialList = new List<Social>();
             socialList.Add(social.Value);
-            var petList = new List<Pet.Pet>();
+            var petList = new List<Pet>();
 
 
-            var volunteer = Volunteer.Volunteer.Create(
+            var volunteer = Volunteer.Create(
                 fullName,
                 email,
                 "sodoosodiisodosid",
@@ -48,7 +47,7 @@ namespace PetFamily.Domain.Tests
         private SpeciesBreed CreateSpeciesBreed()
         {
             var breedList = new List<Breed>();
-            var species = Species.Create("������", breedList, SpeciesId.NewSpeciesId);
+            var species = Species.Domain.AggregateRoot.Species.Create("������", breedList, SpeciesId.NewSpeciesId);
             var breed = Breed.Create("��������", BreedId.NewBreedId, species.Value.Id);
 
             species.Value.AddBreed(breed.Value);
@@ -58,14 +57,14 @@ namespace PetFamily.Domain.Tests
             return speciesBreed;
         }
 
-        private void CreatePets(Volunteer.Volunteer volunteer)
+        private void CreatePets(Volunteer volunteer)
         {
             var speciesBreed = CreateSpeciesBreed();
             PetStatus petStatus = PetStatus.NeedsHelp;
 
             for (int i = 1; i <= 7; i++)
             {
-                var pet = Pet.Pet.Create
+                var pet = Pet.Create
                 (i.ToString(),
                 speciesBreed,
                 "black",

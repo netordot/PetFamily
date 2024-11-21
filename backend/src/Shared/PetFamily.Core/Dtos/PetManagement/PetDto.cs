@@ -1,6 +1,4 @@
-﻿
-using PetFamily.Domain.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,7 +30,7 @@ namespace PetFamily.Core.Dtos.PetManagement
         public DateTime DateOfBirth { get; init; }
         public DateTime CreatedAt { get; init; }
         public IEnumerable<RequisiteDto> Requisites { get; init; }
-        public IEnumerable<FileDto> Photos { get; init; }
+        public IEnumerable<ReadFileDto> Photos { get; init; }
         public int Position { get; init; }
     }
 }

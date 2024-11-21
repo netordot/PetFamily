@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using PetFamily.Core.Models;
-using PetFamily.Domain.Shared.Errors;
 using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.API.Middlewares;
