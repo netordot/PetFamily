@@ -26,6 +26,9 @@ namespace PetFamily.Volunteers.Infrastructure.Data
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(WriteDbContext).Assembly,
                 type => type.FullName?.Contains("Configurations.Read") ?? false);
+
+            modelBuilder.HasDefaultSchema("volunteers");
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

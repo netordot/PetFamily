@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.Framework.Attributes
+namespace PetFamily.Framework.Authorization.Attributes
 {
     public class PermissionRequirementAttribute : AuthorizeAttribute, IAuthorizationRequirement
     {

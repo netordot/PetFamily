@@ -35,8 +35,9 @@ using PetFamily.Volunteers.Presentation.Pets.Contracts;
 using PetFamily.Volunteers.Application.Querries.GetPet;
 using PetFamily.Volunteers.Application.Commands.UpdateSocials;
 using PetFamily.Volunteers.Presentation.Processors;
-using PetFamily.Framework.Attributes;
 using PetFamily.Volunteers.Application.Commands.UpdatePetMainInfo;
+using PetFamily.Framework.Authorization.Attributes;
+using PetFamily.Framework.Authorization;
 
 namespace PetFamily.API.Controllers;
 
@@ -44,6 +45,7 @@ namespace PetFamily.API.Controllers;
 [Route("[controller]")]
 public class VolunteersController : ValuesController
 {
+    [PermissionRequirement(Policies.PetManagement.Create)]
     [HttpPost]
     public async Task<ActionResult> Create(
         [FromBody] CreateVolunteerRequest request,
@@ -73,7 +75,7 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 201 };
     }
-
+    [PermissionRequirement(Policies.PetManagement.Update)]
     [HttpPatch("{id:guid}/main-info")]
     public async Task<ActionResult> UpdateMainInfo(
         [FromRoute] Guid id,
@@ -92,6 +94,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
+    [PermissionRequirement(Policies.PetManagement.Update)]
     [HttpPatch("{id:guid}/socials")]
     public async Task<ActionResult> UpdateSocials(
         [FromRoute] Guid id,
@@ -108,6 +111,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
+    [PermissionRequirement(Policies.PetManagement.Update)]
     [HttpPatch("{id:guid}/requisites")]
     public async Task<ActionResult> UpdateRequisites(
         [FromRoute] Guid id,
@@ -122,6 +126,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
+    [PermissionRequirement(Policies.PetManagement.Delete)]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(
        [FromRoute] Guid id,
@@ -134,7 +139,7 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
-
+    [PermissionRequirement(Policies.PetManagement.CreatePet)]
     [HttpPost("{id:guid}/pet")]
     public async Task<ActionResult> AddPet
         (
@@ -167,6 +172,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 201 };
     }
 
+    [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos")]
     public async Task<ActionResult> AddPhotosToPet(
         [FromRoute] Guid volunteerId,
@@ -188,6 +194,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
+    [PermissionRequirement(Policies.PetManagement.Get)]
     [HttpPost("/getall")]
     public async Task<ActionResult> GetAllVolunteers(
         [FromServices] GetVolunteersWithPaginationHandler handler,
@@ -200,7 +207,7 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result) { StatusCode = 200 };
     }
-
+    [PermissionRequirement(Policies.PetManagement.Get)]
     [HttpGet("{id:guid}/get")]
     public async Task<ActionResult> GetById(
         [FromRoute] Guid id,
@@ -218,7 +225,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
 
     }
-
+    [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPut("{volunteerId:guid}/pets/{petId:guid}/update")]
     public async Task<ActionResult> UpdatePetInfo(
         [FromRoute] Guid volunteerId,
@@ -259,7 +266,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
 
     }
-
+    [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos/update")]
     public async Task<ActionResult> AddPetPhotos
         ([FromRoute] Guid volunteerId,
@@ -282,7 +289,7 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
-
+    [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos/delete")]
     public async Task<ActionResult> DeletePetPhoto
         ([FromForm] DeletePhotoRequest request,
@@ -304,7 +311,7 @@ public class VolunteersController : ValuesController
 
     }
 
-
+    [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos/main")]
     public async Task<ActionResult> SetMainPhoto(
         [FromRoute] Guid volunteerId,
@@ -324,6 +331,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
+    [PermissionRequirement(Policies.PetManagement.DeletePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/softdelete")]
     public async Task<ActionResult> SoftDeletePet(
         [FromRoute] Guid volunteerId,
@@ -342,6 +350,7 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
+    [PermissionRequirement(Policies.PetManagement.DeletePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/fulldelete")]
     public async Task<ActionResult> FullDeletePet(
         [FromRoute] Guid volunteerId,
@@ -358,7 +367,7 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
-
+    [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/status")]
     public async Task<ActionResult> ChangePetStaus(
         [FromRoute] Guid volunteerId,

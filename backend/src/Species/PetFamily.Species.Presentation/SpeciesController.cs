@@ -6,6 +6,8 @@ using PetFamily.Application.Species.AddBreeds;
 using PetFamily.Application.Species.CreateSpecies;
 using PetFamily.Application.Species.DeleteBreed;
 using PetFamily.Core.Extensions;
+using PetFamily.Framework.Authorization;
+using PetFamily.Framework.Authorization.Attributes;
 using PetFamily.SharedKernel.Id;
 using PetFamily.Species.Application.Commands.AddBreeds;
 using PetFamily.Species.Application.Commands.CreateSpecies;
@@ -21,6 +23,7 @@ namespace PetFamily.API.Controllers
     [ApiController]
     public class SpeciesController : ControllerBase
     {
+        [PermissionRequirement(Policies.SpeciesManagement.Create)]
         [HttpPost]
         public async Task<ActionResult> Create
             ([FromServices] CreateSpeciesHandler service,
@@ -39,6 +42,7 @@ namespace PetFamily.API.Controllers
             return new ObjectResult(result.Value) { StatusCode = 201 };
         }
 
+        [PermissionRequirement(Policies.SpeciesManagement.CreateBreed)]
         [HttpPatch("{id:guid}/breed")]
         public async Task<ActionResult> AddBreeds
             ([FromServices] AddBreedHandler addBreedService,
@@ -55,7 +59,7 @@ namespace PetFamily.API.Controllers
 
             return new ObjectResult(result.Value) { StatusCode = 201 };
         }
-
+        [PermissionRequirement(Policies.SpeciesManagement.Delete)]
         [HttpDelete("{id:guid}/delete")]
         public async Task<ActionResult> DeleteSpecies(
             [FromServices] DeleteSpeciesHandler handler,
@@ -72,7 +76,7 @@ namespace PetFamily.API.Controllers
 
             return new ObjectResult(result.Value) { StatusCode = 200 };
         }
-
+        [PermissionRequirement(Policies.SpeciesManagement.DeleteBreed)]
         [HttpPatch("{speciesId:guid}/breeds/{breedId:guid}/delete")]
         public async Task<ActionResult> DeleteBreedById(
             [FromServices] DeleteBreedHandler handler,
@@ -91,6 +95,7 @@ namespace PetFamily.API.Controllers
             return new ObjectResult(result.Value) { StatusCode = 200 };
         }
 
+        [PermissionRequirement(Policies.SpeciesManagement.Get)]
         [HttpPost("/species/getall")]
         public async Task<ActionResult> GetAllSpecies(
             [FromServices] GetAllSpeciesHandler handler,
@@ -101,7 +106,7 @@ namespace PetFamily.API.Controllers
             var result = await handler.Handle(query, cancellation);
             return new ObjectResult(result) { StatusCode =200};
         }
-
+        [PermissionRequirement(Policies.SpeciesManagement.GetBreed)]
         [HttpPost("{id:guid}/breeds")]
         public async Task<ActionResult> GetBreedsBySpeciesId(
             [FromServices] GetBreedsWithPaginationHanlder handler,

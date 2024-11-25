@@ -1,18 +1,14 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using PetFamily.Accounts.Infrastructure;
-using PetFamily.Application.AccountManagement.DataModels;
-using PetFamily.Application.Authorization;
-using PetFamily.Infrastructure.Authentication.Options;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using PetFamily.Accounts.Infrastructure.Options;
+using PetFamily.Application.AccountManagement.DataModels;
+using PetFamily.Application.Authorization;
+using PetFamily.SharedKernel.Constraints;
 
-namespace PetFamily.Infrastructure.Authentication.Providers
+namespace PetFamily.Accounts.Infrastructure.Providers
 {
     public class JwtTokenProvider : ITokenProvider
     {
@@ -27,9 +23,8 @@ namespace PetFamily.Infrastructure.Authentication.Providers
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             Claim[] claims = [
-                new Claim(CustomClaims.Sub, user.Id.ToString()),
-                new Claim(CustomClaims.Email, user.Email ?? ""),
-                new Claim("Permission", "get.pets")
+                new Claim(CustomClaims.Email, user.Email),
+                new Claim(CustomClaims.Id, user.Id.ToString())
             ];
 
             var jwtToken = new JwtSecurityToken(
@@ -37,7 +32,7 @@ namespace PetFamily.Infrastructure.Authentication.Providers
                 audience: _options.Audience,
                 expires: DateTime.UtcNow.AddMinutes(Int32.Parse(_options.ExpiredMinutesTime)),
                 signingCredentials: credentials,
-                claims: claims);    
+                claims: claims);
 
             var stringToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetFamily.Framework;
-using PetFamily.Framework.Attributes;
 using PetFamily.Volunteers.Application.Querries.GetPet;
 using PetFamily.Volunteers.Presentation.Pets.Contracts;
 using PetFamily.SharedKernel.ValueObjects;
@@ -12,6 +11,8 @@ using System.Threading.Tasks;
 using PetFamily.Volunteers.Application.Querries.GetPetsWithPagination;
 using PetFamily.SharedKernel.Other;
 using PetFamily.Core.Extensions;
+using PetFamily.Framework.Authorization;
+using PetFamily.Framework.Authorization.Attributes;
 
 namespace PetFamily.Volunteers.Presentation.Pets
 {
@@ -19,7 +20,7 @@ namespace PetFamily.Volunteers.Presentation.Pets
     [Route("[controller]")]
     public class PetsController : ValuesController
     {
-        [PermissionRequirement("get.pets")]
+        [PermissionRequirement(Policies.PetManagement.Get)]
         [HttpPost("pets/")]
         public async Task<ActionResult> GetAllPetsWithPagination
        (
@@ -33,7 +34,7 @@ namespace PetFamily.Volunteers.Presentation.Pets
 
             return new ObjectResult(result) { StatusCode = 200 };
         }
-
+        [PermissionRequirement(Policies.PetManagement.GetPet)]
         [HttpPost("pets/{petId:guid}")]
         public async Task<ActionResult> GetPetById(
             [FromRoute] Guid petId,

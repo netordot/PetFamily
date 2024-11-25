@@ -8,12 +8,17 @@ using PetFamily.API.Extensions;
 using PetFamily.Application;
 using PetFamily.Infrastructure;
 using System.Text;
-using PetFamily.Infrastructure.Authentication;
 using Serilog;
 using PetFamily.Accounts.Application;
+using PetFamily.Accounts.Infrastructure;
 using PetFamily.Volunteers.Presentation;
 using PetFamily.Species.Infrastructure;
 using PetFamily.Species.Presentation;
+using PetFamily.Accounts.Infrastructure.Seeding;
+using Microsoft.AspNetCore.Authorization;
+using PetFamily.Framework.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using PetFamily.Accounts.Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,10 +61,19 @@ builder.Services
     .AddSpeciesInfrastructure(builder.Configuration)
     .AddSpeciesPresentation()
     .AddAuthorizationInfrastructure(builder.Configuration)
-    .AddAccountApplication();
+    .AddAccountApplication()
+    .AddAccountsPresentation()
+    .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>()
+    .AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
+
 
 
 var app = builder.Build();
+
+var accountsSeeder = app.Services.GetRequiredService<AdminAccountsSeeder>();
+
+// убрать тут cancellation 
+await accountsSeeder.Seed(CancellationToken.None);
 
 if (app.Environment.IsDevelopment())
 {

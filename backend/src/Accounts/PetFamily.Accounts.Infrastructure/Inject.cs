@@ -1,40 +1,62 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PetFamily.Accounts.Application;
+using PetFamily.Accounts.Infrastructure.Data;
+using PetFamily.Accounts.Infrastructure.Managers;
+using PetFamily.Accounts.Infrastructure.Options;
+using PetFamily.Accounts.Infrastructure.Providers;
+using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Application.AccountManagement.DataModels;
 using PetFamily.Application.Authorization;
-using PetFamily.Infrastructure.Authentication.Options;
-using PetFamily.Infrastructure.Authentication.Providers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PetFamily.Infrastructure.Authentication
+namespace PetFamily.Accounts.Infrastructure
 {
     public static class Inject
     {
         public static IServiceCollection AddAuthorizationInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<AuthorizationDbContext>();
+            //var adminOptions = new AdminOptions
+            //{
+            //    Email = Environment.GetEnvironmentVariable("ADMIN_EMAIL"),
+            //    UserName = Environment.GetEnvironmentVariable("ADMIN_USERNAME"),
+            //    Password = Environment.GetEnvironmentVariable("ADMIN_PASSWORD"),
+            //};
+
+            //services.Configure<AdminOptions>(options =>
+            //{
+            //    configuration.GetSection(AdminOptions.ADMIN).Bind(options);
+            //    options.Email = adminOptions.Email;
+            //    options.UserName = adminOptions.UserName;
+            //    options.Password = adminOptions.Password;
+            //});
+
+            services.AddScoped<AccountsDbContext>();
 
             services.AddOptions<JwtOptions>();
 
             services.Configure<JwtOptions>(
                 configuration.GetSection(JwtOptions.JWT));
 
+            services.Configure<AdminOptions>(
+               configuration.GetSection(AdminOptions.ADMIN));
+
             services.AddTransient<ITokenProvider, JwtTokenProvider>();
+            services.AddScoped<IAccountManager, AccountManager>();
+
+            services.AddSingleton<AdminAccountsSeeder>();
+
+            services.AddScoped<AdminAccountsSeederService>();
 
 
             services.AddIdentity<User, Role>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-            })
-            .AddEntityFrameworkStores<AuthorizationDbContext>();
+                {
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<AccountsDbContext>();
 
             services
                 .AddAuthentication(options =>
@@ -55,30 +77,27 @@ namespace PetFamily.Infrastructure.Authentication
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
                         ValidateIssuer = true,
                         ValidateAudience = true,
-                        ValidateLifetime = true, 
+                        ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                     };
                 });
 
             services.AddAuthorization();
-            
-            // services.AddAuthorization(options =>
-            // {
-            //     options.DefaultPolicy = new AuthorizationPolicyBuilder()
-            //     .RequireClaim("Role", "User")
-            //     .RequireAuthenticatedUser()
-            //     .Build();
-            //
-            //     options.AddPolicy("GetAllPetsRequirement", policy =>
-            //     {
-            //         policy.AddRequirements(new PermissionRequirement("Pet"));
-            //     });
-            // });
 
-            services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
-            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+            //services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
+
+            services.AddManagers();
 
             return services;
+        }
+
+        private static IServiceCollection AddManagers(this IServiceCollection services )
+        {
+            services.AddScoped<IAccountManager, AccountManager>();
+            services.AddScoped<PermissionManager>();
+            services.AddScoped<RolePermissionManager>();
+
+            return services;    
         }
 
     }

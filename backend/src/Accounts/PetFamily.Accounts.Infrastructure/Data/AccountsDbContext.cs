@@ -1,20 +1,26 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetFamily.Accounts.Domain.DataModels;
 using PetFamily.Application.AccountManagement.DataModels;
-using System.Text.Json;
 
-namespace PetFamily.Infrastructure.Authentication
+namespace PetFamily.Accounts.Infrastructure.Data
 {
-    public class AuthorizationDbContext(IConfiguration configuration) : IdentityDbContext<User,Role, Guid>
+    public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext<User,Role, Guid>
     {
         private const string DATABASE = nameof(Database);
 
-        //public DbSet<User> Users { get; set; }  
-        //public DbSet<Role> Roles { get; set; }    
-           
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<ParticipantAccount> ParticipantAccounts { get; set; }
+        public DbSet<VolunteerAccount> VolunteerAccounts { get; set; }
+        public DbSet<AdminAccount> AdminAccounts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -29,31 +35,8 @@ namespace PetFamily.Infrastructure.Authentication
             modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("role_claims");
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("user_roles");
 
-            modelBuilder.Entity<User>()
-                .Property(u => u.SocialNetworks)
-                .HasConversion(
-                u => JsonSerializer.Serialize(u, JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<List<SocialNetwork>>(json, JsonSerializerOptions.Default)!);
-
-            modelBuilder.Entity<RolePermission>()
-                .HasOne(rp => rp.Role)
-                .WithMany(r => r.RolePermissions)
-                .HasForeignKey(rp => rp.RoleId);
-
-            modelBuilder.Entity<RolePermission>()
-                .HasOne(rp => rp.Permission)
-                .WithMany()
-                .HasForeignKey(rp => rp.PermissionId);
-
-            modelBuilder.Entity<Permission>()
-                .HasIndex(p => p.Code)
-                .IsUnique();
-
-            modelBuilder.Entity<Permission>()
-                .Property(p => p.Description).HasMaxLength(200);
-
-            modelBuilder.Entity<RolePermission>()
-                .HasKey(rp => new { rp.RoleId, rp.PermissionId });
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AccountsDbContext).Assembly);
+                           
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

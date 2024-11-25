@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PetFamily.Accounts.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialauthorization2 : Migration
+    public partial class AccountsInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,8 +17,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    code = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                    code = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,9 +102,75 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_role_permissions_roles_role_id",
+                        name: "fk_role_permissions_role_role_id",
                         column: x => x.role_id,
                         principalTable: "roles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "admin_accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: true),
+                    middle_name = table.Column<string>(type: "text", nullable: true),
+                    name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_admin_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_admin_accounts_user_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "participant_accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: true),
+                    middle_name = table.Column<string>(type: "text", nullable: true),
+                    name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_participant_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_participant_accounts_user_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "role_user",
+                columns: table => new
+                {
+                    roles_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    users_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_role_user", x => new { x.roles_id, x.users_id });
+                    table.ForeignKey(
+                        name: "fk_role_user_role_roles_id",
+                        column: x => x.roles_id,
+                        principalTable: "roles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_role_user_user_users_id",
+                        column: x => x.users_id,
+                        principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -195,6 +260,40 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "volunteer_accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    experience = table.Column<int>(type: "integer", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: true),
+                    middle_name = table.Column<string>(type: "text", nullable: true),
+                    name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_volunteer_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_volunteer_accounts_user_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_admin_accounts_user_id",
+                table: "admin_accounts",
+                column: "user_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_participant_accounts_user_id",
+                table: "participant_accounts",
+                column: "user_id",
+                unique: true);
+
             migrationBuilder.CreateIndex(
                 name: "ix_permissions_code",
                 table: "permissions",
@@ -210,6 +309,11 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 name: "ix_role_permissions_permission_id",
                 table: "role_permissions",
                 column: "permission_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_role_user_users_id",
+                table: "role_user",
+                column: "users_id");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -242,16 +346,31 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 table: "users",
                 column: "normalized_user_name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_volunteer_accounts_user_id",
+                table: "volunteer_accounts",
+                column: "user_id",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "admin_accounts");
+
+            migrationBuilder.DropTable(
+                name: "participant_accounts");
+
+            migrationBuilder.DropTable(
                 name: "role_claims");
 
             migrationBuilder.DropTable(
                 name: "role_permissions");
+
+            migrationBuilder.DropTable(
+                name: "role_user");
 
             migrationBuilder.DropTable(
                 name: "user_claims");
@@ -264,6 +383,9 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "user_tokens");
+
+            migrationBuilder.DropTable(
+                name: "volunteer_accounts");
 
             migrationBuilder.DropTable(
                 name: "permissions");

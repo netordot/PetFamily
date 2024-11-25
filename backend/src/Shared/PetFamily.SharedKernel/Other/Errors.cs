@@ -38,5 +38,11 @@ public static class Errors
             var label = name ?? "value";
             return Error.Validation("credentials.invalid", $"invalid credentials");
         }
+
+        public static Error UnableToCreate(string? name = null)
+        {
+            var label = name ?? "value";
+            return Error.Validation("unable.create", $"unable to create");
+        }
     }
 }
