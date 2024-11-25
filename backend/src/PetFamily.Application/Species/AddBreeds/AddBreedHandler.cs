@@ -9,7 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using PetFamily.Domain.Pet.Species;
 using PetFamily.Application.Database;
-using PetFamily.Application.Abstractions;
+using PetFamily.Core.Abstractions;
+using PetFamily.SharedKernel.ValueObjects;
+using PetFamily.SharedKernel.Id;
+using PetFamily.Core.Providers;
 
 namespace PetFamily.Application.Species.AddBreeds
 {

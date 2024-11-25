@@ -9,5 +9,6 @@ namespace PetFamily.Application.AccountManagement.DataModels
 {
     public class Role : IdentityRole<Guid>
     {
+        public List<RolePermission> RolePermissions { get; set; }
     }
 }

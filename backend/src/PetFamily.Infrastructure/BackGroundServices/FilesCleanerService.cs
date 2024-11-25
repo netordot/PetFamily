@@ -1,15 +1,15 @@
-﻿using PetFamily.Application.Messaging;
-using PetFamily.Application.Providers;
+﻿using PetFamily.Core.Messaging;
+using PetFamily.Core.Providers;
 
 namespace PetFamily.Infrastructure.BackGroundServices
 {
     public class FilesCleanerService : IFilesCleanerService
     {
         private readonly IFileProvider _fileProvider;
-        private readonly IMessageQueue<IEnumerable<Application.Providers.FileProvider.FileInfo>> _messageQueue;
+        private readonly IMessageQueue<IEnumerable<Core.Providers.FileInfo>> _messageQueue;
 
         public FilesCleanerService(IFileProvider fileProvider,
-            IMessageQueue<IEnumerable<Application.Providers.FileProvider.FileInfo>> messageQueue)
+            IMessageQueue<IEnumerable<Core.Providers.FileInfo>> messageQueue)
         {
             _fileProvider = fileProvider;
             _messageQueue = messageQueue;

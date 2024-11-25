@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PetFamily.Application.Providers;
 using PetFamily.Application.Providers.FileProvider;
+using PetFamily.Core.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

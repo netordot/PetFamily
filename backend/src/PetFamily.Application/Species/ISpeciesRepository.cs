@@ -2,6 +2,7 @@
 using PetFamily.Domain;
 using PetFamily.Domain.Pet;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Application.Species
 {

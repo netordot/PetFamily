@@ -6,10 +6,10 @@ using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 using PetFamily.Application.Database;
-using PetFamily.Application.Providers;
 using PetFamily.Application.Providers.FileProvider;
-using PetFamily.Domain.Pet.PetPhoto;
+using PetFamily.Core.Providers;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -95,7 +95,7 @@ namespace PetFamily.Infrastructure.Providers
 
         }
 
-        public async Task<Result<string, Error>> GetFile(GetFileProvider provider, CancellationToken cancellation)
+        public async Task<Result<string, Error>> GetFile(Core.Providers.GetFileProvider provider, CancellationToken cancellation)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace PetFamily.Infrastructure.Providers
             }
         }
 
-        public async Task<UnitResult<Error>> RemoveFile(Application.Providers.FileProvider.FileInfo fileInfo, CancellationToken cancellation)
+        public async Task<UnitResult<Error>> RemoveFile(Core.Providers.FileInfo fileInfo, CancellationToken cancellation)
         {
             try
             {

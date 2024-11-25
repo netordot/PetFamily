@@ -1,9 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared.Errors;
+using PetFamily.SharedKernel.Id;
+using PetFamily.SharedKernel.Other;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Domain.Pet.Species;
 
-public class Species : Domain.Shared.Entity<SpeciesId>
+public class Species : SharedKernel.ValueObjects.Entity<SpeciesId>
 {
     public string  Name { get; private set; }
     //TODO: инкапсулировать взаимодействие с листом

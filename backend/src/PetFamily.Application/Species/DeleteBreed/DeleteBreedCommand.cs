@@ -1,5 +1,7 @@
-﻿namespace PetFamily.Application.Species.DeleteBreed
+﻿using PetFamily.Core.Abstractions;
+
+namespace PetFamily.Application.Species.DeleteBreed
 {
-    public record DeleteBreedCommand(Guid Speciesid, Guid BreedId) : Abstractions.ICommand;
+    public record DeleteBreedCommand(Guid Speciesid, Guid BreedId) : ICommand;
 
 }

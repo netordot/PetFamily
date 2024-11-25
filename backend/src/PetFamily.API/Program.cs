@@ -6,13 +6,19 @@ using Microsoft.OpenApi.Models;
 using Minio;
 using PetFamily.API.Extensions;
 using PetFamily.Application;
-using PetFamily.Application.Volunteers;
 using PetFamily.Infrastructure;
-using PetFamily.Infrastructure.Options;
-using PetFamily.Infrastructure.Repositories;
 using System.Text;
-using PetFamily.Infrastructure.Authentication;
 using Serilog;
+using PetFamily.Accounts.Application;
+using PetFamily.Accounts.Infrastructure;
+using PetFamily.Volunteers.Presentation;
+using PetFamily.Species.Infrastructure;
+using PetFamily.Species.Presentation;
+using PetFamily.Accounts.Infrastructure.Seeding;
+using Microsoft.AspNetCore.Authorization;
+using PetFamily.Framework.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using PetFamily.Accounts.Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,19 +54,33 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services
-    .AddApplication()
-    .AddInfrastructure(builder.Configuration)
-    .AddAuthorizationInfrastructure(builder.Configuration);
+    .AddVolunteersInfrastructure(builder.Configuration)
+    .AddVolunteersPresentation()
+    .AddVolunteersApplication()
+    .AddSpeciesApplication()
+    .AddSpeciesInfrastructure(builder.Configuration)
+    .AddSpeciesPresentation()
+    .AddAuthorizationInfrastructure(builder.Configuration)
+    .AddAccountApplication()
+    .AddAccountsPresentation()
+    .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>()
+    .AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
+
 
 
 var app = builder.Build();
+
+var accountsSeeder = app.Services.GetRequiredService<AdminAccountsSeeder>();
+
+// убрать тут cancellation 
+await accountsSeeder.Seed(CancellationToken.None);
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    await app.AddMigrations();
+    //await app.AddMigrations();
 }
 
 app.UseHttpsRedirection();

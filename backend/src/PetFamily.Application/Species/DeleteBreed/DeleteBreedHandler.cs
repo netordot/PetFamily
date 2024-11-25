@@ -1,8 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
+using PetFamily.Core.Abstractions;
+using PetFamily.Core.Providers;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Application.Species.DeleteBreed
 {

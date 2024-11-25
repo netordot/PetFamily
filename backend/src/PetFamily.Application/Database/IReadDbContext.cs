@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Dtos;
+using PetFamily.Core.Dtos.PetManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

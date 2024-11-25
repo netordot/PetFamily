@@ -1,8 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
+using PetFamily.Core.Abstractions;
+using PetFamily.Core.Providers;
 using PetFamily.Domain.Shared.Errors;
+using PetFamily.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
