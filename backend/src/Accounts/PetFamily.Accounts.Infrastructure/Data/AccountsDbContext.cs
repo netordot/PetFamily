@@ -20,6 +20,7 @@ namespace PetFamily.Accounts.Infrastructure.Data
         public DbSet<ParticipantAccount> ParticipantAccounts { get; set; }
         public DbSet<VolunteerAccount> VolunteerAccounts { get; set; }
         public DbSet<AdminAccount> AdminAccounts { get; set; }
+        public DbSet<RefreshSession> RefreshSessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

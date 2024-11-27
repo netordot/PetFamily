@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.AccountManagement.Commands
+namespace PetFamily.Accounts.Application.Commands.Register
 {
     public class RegisterUserHandler : ICommandHandler<Guid, RegisterUserCommand>
     {
@@ -43,14 +43,14 @@ namespace PetFamily.Application.AccountManagement.Commands
                 return Errors.General.AlreadyExists(command.Email).ToErrorList();
             }
 
-            var role = await  _roleManager.FindByNameAsync(ParticipantAccount.PARTICIPANT);
-            if(role == null)
+            var role = await _roleManager.FindByNameAsync(ParticipantAccount.PARTICIPANT);
+            if (role == null)
             {
                 return Errors.General.NotFound().ToErrorList();
             }
 
             var user = User.CreateParticipant(command.Email, role, command.UserName);
-            if(user.IsFailure)
+            if (user.IsFailure)
             {
                 return user.Error.ToErrorList();
             }
@@ -71,7 +71,7 @@ namespace PetFamily.Application.AccountManagement.Commands
 
                 var fullName = new FullName("tset", "tst", "test");
 
-                var perticipantAccount = new ParticipantAccount 
+                var perticipantAccount = new ParticipantAccount
                 { FullName = fullName, User = user.Value, Id = Guid.NewGuid() };
 
                 await _accountManager.AddParticipantAccount(perticipantAccount);
@@ -84,7 +84,7 @@ namespace PetFamily.Application.AccountManagement.Commands
 
             }
 
-            catch 
+            catch
             {
                 transaction.Rollback();
                 return Error.Failure("transaction.failed", "transaction has failed").ToErrorList();

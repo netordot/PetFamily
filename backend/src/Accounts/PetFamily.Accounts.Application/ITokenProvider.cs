@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.Authorization
+namespace PetFamily.Accounts.Application
 {
     public interface ITokenProvider
     {
         public string GenerateAccessToken(User user);
+        public Task<Guid> GenerateRefreshToken(User user, CancellationToken cancellation);
     }
 }

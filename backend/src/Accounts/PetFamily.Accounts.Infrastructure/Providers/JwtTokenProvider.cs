@@ -3,9 +3,11 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PetFamily.Accounts.Application;
+using PetFamily.Accounts.Domain.DataModels;
+using PetFamily.Accounts.Infrastructure.Data;
 using PetFamily.Accounts.Infrastructure.Options;
 using PetFamily.Application.AccountManagement.DataModels;
-using PetFamily.Application.Authorization;
 using PetFamily.SharedKernel.Constraints;
 
 namespace PetFamily.Accounts.Infrastructure.Providers
@@ -13,10 +15,15 @@ namespace PetFamily.Accounts.Infrastructure.Providers
     public class JwtTokenProvider : ITokenProvider
     {
         private readonly JwtOptions _options;
+        private readonly AccountsDbContext _context;
 
-        public JwtTokenProvider(IOptions<JwtOptions> options)
+        public JwtTokenProvider(
+            IOptions<JwtOptions> options,
+            AccountsDbContext context
+            )
         {
             _options = options.Value;
+            _context = context;
         }
         public string GenerateAccessToken(User user)
         {
@@ -39,5 +46,22 @@ namespace PetFamily.Accounts.Infrastructure.Providers
             return stringToken.ToString();
 
         }
+
+        public async Task<Guid> GenerateRefreshToken(User user, CancellationToken cancellation)
+        {
+            var token = new RefreshSession()
+            {
+                RefreshToken = Guid.NewGuid(),
+                UserId = user.Id,
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(30)
+            };
+
+            await _context.RefreshSessions.AddAsync(token);
+            await _context.SaveChangesAsync();
+
+            return token.RefreshToken;
+        }
+
     }
 }

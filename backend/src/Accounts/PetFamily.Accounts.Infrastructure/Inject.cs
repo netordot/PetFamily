@@ -11,28 +11,13 @@ using PetFamily.Accounts.Infrastructure.Options;
 using PetFamily.Accounts.Infrastructure.Providers;
 using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Application.AccountManagement.DataModels;
-using PetFamily.Application.Authorization;
 
 namespace PetFamily.Accounts.Infrastructure
 {
     public static class Inject
     {
         public static IServiceCollection AddAuthorizationInfrastructure(this IServiceCollection services, IConfiguration configuration)
-        {
-            //var adminOptions = new AdminOptions
-            //{
-            //    Email = Environment.GetEnvironmentVariable("ADMIN_EMAIL"),
-            //    UserName = Environment.GetEnvironmentVariable("ADMIN_USERNAME"),
-            //    Password = Environment.GetEnvironmentVariable("ADMIN_PASSWORD"),
-            //};
-
-            //services.Configure<AdminOptions>(options =>
-            //{
-            //    configuration.GetSection(AdminOptions.ADMIN).Bind(options);
-            //    options.Email = adminOptions.Email;
-            //    options.UserName = adminOptions.UserName;
-            //    options.Password = adminOptions.Password;
-            //});
+        { 
 
             services.AddScoped<AccountsDbContext>();
 
@@ -51,6 +36,7 @@ namespace PetFamily.Accounts.Infrastructure
 
             services.AddScoped<AdminAccountsSeederService>();
 
+            services.AddTransient<IRefreshSessionManager, RefreshSessionManager>();
 
             services.AddIdentity<User, Role>(options =>
                 {
