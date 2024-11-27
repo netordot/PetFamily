@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace PetFamily.Application.AccountManagement.Commands
+namespace PetFamily.Accounts.Application.Commands.Register
 {
     public record RegisterUserCommand(string Email, string UserName, string Password) : Core.Abstractions.ICommand;
 }

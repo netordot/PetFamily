@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Accounts.Presentation
 {
+
     public class AccountsContract : IAccountsContract
     {
         private readonly PermissionManager _permissionManager;
