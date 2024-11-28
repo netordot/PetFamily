@@ -1,17 +1,18 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
-
 using PetFamily.Core.Messaging;
 using PetFamily.Core.Providers;
 using PetFamily.Infrastructure.BackGroundServices;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Repositories;
 using PetFamily.Volunteers.Application;
+using PetFamily.Volunteers.Infrastructure.BackgroundServices;
 using PetFamily.Volunteers.Infrastructure.Data;
 using PetFamily.Volunteers.Infrastructure.Files;
 using PetFamily.Volunteers.Infrastructure.Messaging;
 using PetFamily.Volunteers.Infrastructure.Options;
+using PetFamily.Volunteers.Infrastructure.Services;
 using System.Runtime.CompilerServices;
 using FileInfo = PetFamily.Core.Providers.FileInfo;
 
@@ -28,7 +29,8 @@ public static class Inject
             .AddDatabase()
             .AddHostedServices()
             .AddMessaging()
-            .AddSingleton<IFilesCleanerService, FilesCleanerService>();
+            .AddSingleton<IFilesCleanerService, FilesCleanerService>()
+            .AddScoped<ISoftDeletableVolunteersEntitiesCleanerService, SoftDeletableVolunteersEntitiesCleanerService>();
 
         return services;
     }
@@ -61,6 +63,7 @@ public static class Inject
     public static IServiceCollection AddHostedServices(this IServiceCollection services)
     {
         services.AddHostedService<FilesCleanUpService>();
+        services.AddHostedService<SoftDeletableEntitiesCleanUpService>();
 
         return services;
     }

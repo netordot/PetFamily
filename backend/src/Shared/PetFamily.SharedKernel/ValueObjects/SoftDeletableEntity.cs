@@ -38,12 +38,12 @@ namespace PetFamily.SharedKernel.ValueObjects
 
 
 
-        public void Delete() 
+        public virtual void Delete() 
         {   
             IsDeleted = true;
             DeletionDate = DateTime.UtcNow;    
         }
-        public void Restore() 
+        public virtual void Restore() 
         {
             IsDeleted = false;
             DeletionDate = null;

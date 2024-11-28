@@ -9,9 +9,8 @@ using System.Runtime.InteropServices.ObjectiveC;
 
 namespace PetFamily.Volunteers.Domain.AggregateRoot;
 
-public class Volunteer : SharedKernel.ValueObjects.Entity<VolunteerId>, ISoftDeletable
+public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
 {
-    private bool _isDeleted;
     public FullName Name { get; private set; }
     public IReadOnlyList<Requisite>? Requisites { get; private set; } = default!;
     public IReadOnlyList<Social>? Socials { get; private set; } = default!;
@@ -122,20 +121,6 @@ public class Volunteer : SharedKernel.ValueObjects.Entity<VolunteerId>, ISoftDel
         Requisites = requisites;
     }
 
-    public void Delete()
-    {
-        if (!_isDeleted)
-            _isDeleted = true;
-    }
-
-    public void Restore()
-    {
-        if (_isDeleted)
-        {
-            _isDeleted = false;
-        }
-    }
-
     public UnitResult<Error> AddPet(Pet pet)
     {
         var serialNumber = Position.Create(Pets.Count + 1);
@@ -239,4 +224,23 @@ public class Volunteer : SharedKernel.ValueObjects.Entity<VolunteerId>, ISoftDel
 
         return lastPosition.Error;
     }
+
+    public override void Delete()
+    {
+        base.Delete();
+        foreach (var pet in Pets)
+        {
+            pet.Delete();
+        }
+    }
+
+    public override void Restore()
+    {
+        base.Restore();
+        foreach (var pet in Pets)
+        {
+            pet.Restore();
+        }
+    }
+
 }
