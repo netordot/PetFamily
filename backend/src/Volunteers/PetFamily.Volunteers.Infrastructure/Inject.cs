@@ -10,7 +10,6 @@ using PetFamily.Infrastructure.Repositories;
 using PetFamily.Volunteers.Application;
 using PetFamily.Volunteers.Infrastructure.Data;
 using PetFamily.Volunteers.Infrastructure.Files;
-using PetFamily.Volunteers.Infrastructure.Interceptors;
 using PetFamily.Volunteers.Infrastructure.Messaging;
 using PetFamily.Volunteers.Infrastructure.Options;
 using System.Runtime.CompilerServices;
@@ -76,7 +75,6 @@ public static class Inject
     public static IServiceCollection AddDatabase(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddSingleton<SoftDeleteInterceptor>();
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
