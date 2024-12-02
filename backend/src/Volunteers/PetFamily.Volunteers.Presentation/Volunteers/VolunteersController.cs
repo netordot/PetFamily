@@ -37,6 +37,7 @@ using PetFamily.Volunteers.Presentation.Processors;
 using PetFamily.Volunteers.Application.Commands.UpdatePetMainInfo;
 using PetFamily.Framework.Authorization.Attributes;
 using PetFamily.Framework.Authorization;
+using PetFamily.Volunteers.Application.Commands.SoftDeleteVolunteer;
 
 namespace PetFamily.API.Controllers;
 
@@ -138,6 +139,26 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
+
+
+    [PermissionRequirement(Policies.PetManagement.Delete)]
+    [HttpDelete("soft/{id:guid}")]
+    public async Task<ActionResult> SoftDeleteVolunteer(
+       [FromRoute] Guid id,
+       [FromServices] SoftDeleteVolunteerHandler handler,
+       CancellationToken cancellation)
+    {
+        var command = new SoftDeleteVolunteerCommand(id);
+
+        var result = await handler.Handle(command, cancellation);
+        if (result.IsFailure)
+        {
+            return result.Error.ToResponse();
+        }
+
+        return new ObjectResult(result.Value) { StatusCode = 200 };
+    }
+
     [PermissionRequirement(Policies.PetManagement.CreatePet)]
     [HttpPost("{id:guid}/pet")]
     public async Task<ActionResult> AddPet

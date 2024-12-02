@@ -43,14 +43,13 @@ public class VolunteerRepository : IVolunteerRepository
     public Guid Save(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         _context.Volunteers.Attach(volunteer);
-
         return volunteer.Id.Value;
     }
 
     public Guid Delete(Volunteer volunteer, CancellationToken cancellationToken)
     {
         _context.Volunteers.Remove(volunteer);
-
+        _context.SaveChanges();
         return volunteer.Id.Value;
     }
 
