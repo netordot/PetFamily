@@ -71,7 +71,7 @@ namespace PetFamily.Accounts.Infrastructure.Seeding
 
             await _userManager.CreateAsync(user.Value, _adminOptions.Password);
 
-            var fullName = new FullName("", "", "");
+            var fullName = new FullName("admin", "admin", "admin");
 
              await _accountManager.AddAdminAccount
                 (new AdminAccount() { FullName = fullName, User = user.Value, Id = Guid.NewGuid() });

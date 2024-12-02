@@ -12,6 +12,7 @@ using PetFamily.Volunteers.Infrastructure.Data;
 using PetFamily.Volunteers.Infrastructure.Files;
 using PetFamily.Volunteers.Infrastructure.Messaging;
 using PetFamily.Volunteers.Infrastructure.Options;
+using PetFamily.Volunteers.Infrastructure.Repositories;
 using PetFamily.Volunteers.Infrastructure.Services;
 using System.Runtime.CompilerServices;
 using FileInfo = PetFamily.Core.Providers.FileInfo;

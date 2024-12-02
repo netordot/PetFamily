@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PetFamily.SharedKernel.ValueObjects
 {
-    public abstract class SoftDeletableEntity<TId> : Entity<TId>
+    public abstract class SoftDeletableEntity<TId> : Entity<TId> where TId : notnull
     {
-        public TId Id { get; protected set; }
+       // public TId Id { get; protected set; }
         protected SoftDeletableEntity(TId id) : base(id)
         {
         }

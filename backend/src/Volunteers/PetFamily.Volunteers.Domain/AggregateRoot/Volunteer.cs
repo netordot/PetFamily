@@ -26,11 +26,6 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
     {
     }
 
-    private Volunteer() : base(default)
-    {
-
-    }
-
     public Volunteer(FullName name,
         Email email,
         string description,

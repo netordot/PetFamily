@@ -20,6 +20,8 @@ using PetFamily.Framework.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Accounts.Presentation;
 
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();

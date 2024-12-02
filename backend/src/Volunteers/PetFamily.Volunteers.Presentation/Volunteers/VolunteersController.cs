@@ -9,7 +9,6 @@ using PetFamily.Application.PetManagement.Queries.GetPetsWithPagination;
 using Microsoft.AspNetCore.Authorization;
 using PetFamily.Core.Extensions;
 using PetFamily.Application.PetManagement.Commands.Volunteers.AddPet;
-using PetFamily.Application.PetManagement.Commands.Volunteers.Create;
 using PetFamily.Application.PetManagement.Commands.Volunteers.SetPetMainPhoto;
 using PetFamily.Application.PetManagement.Commands.Volunteers.UpdateMainInfo;
 using PetFamily.Application.PetManagement.Commands.Volunteers.UpdatePetMainInfo;
