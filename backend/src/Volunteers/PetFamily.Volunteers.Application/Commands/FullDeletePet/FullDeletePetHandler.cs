@@ -58,7 +58,7 @@ namespace PetFamily.Application.Volunteers.FullDeletePet
 
             volunteer.Value.HardDeletePet(pet.Value);
 
-            _volunteerRepository.Save(volunteer.Value);
+           await  _volunteerRepository.Save(volunteer.Value, cancellation);
             await _unitOfWork.SaveChanges(cancellation);
 
             return pet.Value.Id.Value;
