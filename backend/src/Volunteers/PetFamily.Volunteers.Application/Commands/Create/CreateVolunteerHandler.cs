@@ -1,17 +1,15 @@
 using FluentValidation;
 using PetFamily.Application.Extensions;
-using PetFamily.Application.PetManagement.Commands.Volunteers;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
 using PetFamily.Core.Providers;
 using PetFamily.SharedKernel.Id;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Application;
-using PetFamily.Volunteers.Application.Commands.Create;
 using PetFamily.Volunteers.Domain.AggregateRoot;
 using PetFamily.Volunteers.Domain.ValueObjects;
 
-namespace PetFamily.Application.PetManagement.Commands.Volunteers.Create;
+namespace PetFamily.Volunteers.Application.Commands.Create;
 
 public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerCommand>
 {

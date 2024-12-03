@@ -38,7 +38,7 @@ public class SoftDeletePetHandler : ICommandHandler<Guid, SoftDeletePetCommand>
         }
 
         pet.Value.Delete();
-        _volunteerRepository.Save(volunteer.Value);
+        await _volunteerRepository.Save(volunteer.Value, cancellation);
         await _unitOfWork.SaveChanges(cancellation);
 
         return pet.Value.Id.Value;

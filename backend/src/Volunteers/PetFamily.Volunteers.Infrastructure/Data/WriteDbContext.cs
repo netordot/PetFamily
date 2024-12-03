@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Volunteers.Domain.AggregateRoot;
-using PetFamily.Volunteers.Infrastructure.Interceptors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Volunteers.Infrastructure.Data
 {
-    public class WriteDbContext(IConfiguration configuration,
-     SoftDeleteInterceptor softDeleteInterceptor) : DbContext
+    public class WriteDbContext(IConfiguration configuration) : DbContext
     {
         readonly ILoggerFactory _loggerFactory = new LoggerFactory();
 
@@ -33,7 +31,6 @@ namespace PetFamily.Volunteers.Infrastructure.Data
             optionsBuilder.UseNpgsql(configuration.GetConnectionString(nameof(DATABASE)));
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.AddInterceptors(softDeleteInterceptor);
             optionsBuilder.UseLoggerFactory(_loggerFactory).EnableSensitiveDataLogging().LogTo(Console.WriteLine);
 
             optionsBuilder.UseNpgsql(configuration.GetConnectionString(nameof(DATABASE)),

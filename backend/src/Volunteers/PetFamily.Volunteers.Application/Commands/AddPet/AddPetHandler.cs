@@ -91,6 +91,7 @@ namespace PetFamily.Application.PetManagement.Commands.Volunteers.AddPet
             volunteerResult.Value.AddPet(pet.Value);
             int a = 10;
 
+            await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
             await _unitOfWork.SaveChanges(cancellationToken);
 
             return petId.Value;

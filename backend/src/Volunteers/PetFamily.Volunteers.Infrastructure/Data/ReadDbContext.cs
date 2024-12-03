@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Core.Dtos.PetManagement;
 using PetFamily.Volunteers.Application;
-using PetFamily.Volunteers.Infrastructure.Interceptors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +11,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Volunteers.Infrastructure.Data
 {
-    public class ReadDbContext(IConfiguration configuration,
-    SoftDeleteInterceptor softDeleteInterceptor) : DbContext, IReadDbContext
+    public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
     {
         readonly ILoggerFactory _loggerFactory = new LoggerFactory();
 
@@ -40,7 +38,6 @@ namespace PetFamily.Volunteers.Infrastructure.Data
             optionsBuilder.UseNpgsql(configuration.GetConnectionString(nameof(DATABASE)),
                 x => x.MigrationsHistoryTable("__MyMigrationsHistory", "public"));
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.AddInterceptors(softDeleteInterceptor);
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }
 

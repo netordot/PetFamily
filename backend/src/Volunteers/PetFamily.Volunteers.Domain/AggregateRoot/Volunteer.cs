@@ -9,9 +9,8 @@ using System.Runtime.InteropServices.ObjectiveC;
 
 namespace PetFamily.Volunteers.Domain.AggregateRoot;
 
-public class Volunteer : SharedKernel.ValueObjects.Entity<VolunteerId>, ISoftDeletable
+public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
 {
-    private bool _isDeleted;
     public FullName Name { get; private set; }
     public IReadOnlyList<Requisite>? Requisites { get; private set; } = default!;
     public IReadOnlyList<Social>? Socials { get; private set; } = default!;
@@ -25,11 +24,6 @@ public class Volunteer : SharedKernel.ValueObjects.Entity<VolunteerId>, ISoftDel
 
     private Volunteer(VolunteerId id) : base(id)
     {
-    }
-
-    private Volunteer() : base(default)
-    {
-
     }
 
     public Volunteer(FullName name,
@@ -120,20 +114,6 @@ public class Volunteer : SharedKernel.ValueObjects.Entity<VolunteerId>, ISoftDel
     public void UdpateRequisites(List<Requisite> requisites)
     {
         Requisites = requisites;
-    }
-
-    public void Delete()
-    {
-        if (!_isDeleted)
-            _isDeleted = true;
-    }
-
-    public void Restore()
-    {
-        if (_isDeleted)
-        {
-            _isDeleted = false;
-        }
     }
 
     public UnitResult<Error> AddPet(Pet pet)
@@ -239,4 +219,23 @@ public class Volunteer : SharedKernel.ValueObjects.Entity<VolunteerId>, ISoftDel
 
         return lastPosition.Error;
     }
+
+    public override void Delete()
+    {
+        base.Delete();
+        foreach (var pet in Pets)
+        {
+            pet.Delete();
+        }
+    }
+
+    public override void Restore()
+    {
+        base.Restore();
+        foreach (var pet in Pets)
+        {
+            pet.Restore();
+        }
+    }
+
 }

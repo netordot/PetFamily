@@ -6,7 +6,7 @@ using PetFamily.Volunteers.Application;
 using PetFamily.Volunteers.Domain.AggregateRoot;
 using PetFamily.Volunteers.Infrastructure.Data;
 
-namespace PetFamily.Infrastructure.Repositories;
+namespace PetFamily.Volunteers.Infrastructure.Repositories;
 
 public class VolunteerRepository : IVolunteerRepository
 {
@@ -17,9 +17,11 @@ public class VolunteerRepository : IVolunteerRepository
         _context = context;
     }
 
+   // пока что тут лежит saveChanges, есть проблема с unit of work, c di связана, скоро будет задача на это
     public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         await _context.Volunteers.AddAsync(volunteer);
+        await  _context.SaveChangesAsync();
 
         return volunteer.Id;
     }
@@ -37,18 +39,18 @@ public class VolunteerRepository : IVolunteerRepository
 
         return volunteer;
     }
-
-    public Guid Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+    
+    public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         _context.Volunteers.Attach(volunteer);
-
+        await _context.SaveChangesAsync(cancellationToken);
         return volunteer.Id.Value;
     }
 
     public Guid Delete(Volunteer volunteer, CancellationToken cancellationToken)
     {
         _context.Volunteers.Remove(volunteer);
-
+        _context.SaveChanges();
         return volunteer.Id.Value;
     }
 

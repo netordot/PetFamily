@@ -95,7 +95,7 @@ namespace PetFamily.Volunteers.Application.Commands.UpdatePetMainInfo
             var result = _volunteerRepository.Save(volunteer.Value, cancellation);
             await _unitOfWork.SaveChanges(cancellation);
 
-            return result;
+            return result.Result;
         }
     }
 }

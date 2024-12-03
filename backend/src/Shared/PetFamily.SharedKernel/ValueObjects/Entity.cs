@@ -7,4 +7,5 @@ public abstract class Entity<TId> where TId : notnull
     {
         Id = id;
     }
+
 }

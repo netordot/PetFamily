@@ -40,6 +40,7 @@ namespace PetFamily.Accounts.Infrastructure
 
             services.AddIdentity<User, Role>(options =>
                 {
+                    //TODO: добавить другие опции
                     options.User.RequireUniqueEmail = true;
                 })
                 .AddEntityFrameworkStores<AccountsDbContext>();

@@ -44,18 +44,21 @@ namespace PetFamily.Application.Volunteers.FullDeletePet
                 return command.PetId;
             }
 
-            if (pet.Value.Photos.Count() != 0)
+            if (pet.Value.Photos != null)
             {
-                var s3Result = await DeleteFilesFromS3(pet.Value, cancellation);
-                if (s3Result.IsFailure)
+                if (pet.Value.Photos.Count != 0)
                 {
-                    return s3Result.Error.ToErrorList();
+                    var s3Result = await DeleteFilesFromS3(pet.Value, cancellation);
+                    if (s3Result.IsFailure)
+                    {
+                        return s3Result.Error.ToErrorList();
+                    }
                 }
             }
 
             volunteer.Value.HardDeletePet(pet.Value);
 
-            _volunteerRepository.Save(volunteer.Value);
+           await  _volunteerRepository.Save(volunteer.Value, cancellation);
             await _unitOfWork.SaveChanges(cancellation);
 
             return pet.Value.Id.Value;

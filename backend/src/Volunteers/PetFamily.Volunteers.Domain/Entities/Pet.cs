@@ -8,7 +8,7 @@ using System.Reflection.PortableExecutable;
 
 namespace PetFamily.Volunteers.Domain.Entities;
 
-public class Pet : SharedKernel.ValueObjects.Entity<PetId>, ISoftDeletable
+public sealed class Pet : SoftDeletableEntity<PetId>
 {
     private Pet(PetId id) : base(id)
     {
@@ -39,8 +39,6 @@ public class Pet : SharedKernel.ValueObjects.Entity<PetId>, ISoftDeletable
     public IReadOnlyList<Requisite> Requisites { get; private set; } = default!;
     public IReadOnlyList<PetPhoto>? Photos { get; private set; }
     public Position Position { get; private set; }
-
-    private bool _isDeleted = false;
 
     private Pet(string name,
         SpeciesBreed speciesBreed,
@@ -118,20 +116,6 @@ public class Pet : SharedKernel.ValueObjects.Entity<PetId>, ISoftDeletable
             createdAt,
             petPhotos,
             id);
-    }
-
-    public void Delete()
-    {
-        if (!_isDeleted)
-            _isDeleted = true;
-    }
-
-    public void Restore()
-    {
-        if (_isDeleted)
-        {
-            _isDeleted = false;
-        }
     }
 
     public void SetStatus(PetStatus status)
@@ -245,5 +229,13 @@ public class Pet : SharedKernel.ValueObjects.Entity<PetId>, ISoftDeletable
         Position = position;
     }
 
+    public override void Restore()
+    {
+        base.Restore(); 
+    }
 
+    public override void Delete()
+    {
+        base.Delete();
+    }
 }
