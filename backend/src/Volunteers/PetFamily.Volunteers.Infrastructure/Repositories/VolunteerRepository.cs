@@ -39,10 +39,11 @@ public class VolunteerRepository : IVolunteerRepository
 
         return volunteer;
     }
-
-    public Guid Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+    
+    public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         _context.Volunteers.Attach(volunteer);
+        await _context.SaveChangesAsync(cancellationToken);
         return volunteer.Id.Value;
     }
 
