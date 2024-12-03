@@ -26,8 +26,5 @@ public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteer
         RuleFor(c => c.FirstName).MaximumLength(Constants.MAX_SHORT_TEXT_SIZE);
         RuleFor(c => c.LastName).MaximumLength(Constants.MAX_SHORT_TEXT_SIZE);
         RuleFor(c => c.MiddleName).MaximumLength(Constants.MAX_SHORT_TEXT_SIZE);
-
-        RuleForEach(c => c.SocialNetworks).MustBeValueObject(s => Social.Create(s.Name, s.Link));
-        RuleForEach(c => c.Requisites).MustBeValueObject(r => Requisite.Create(r.Title, r.Description));
     }
 }
