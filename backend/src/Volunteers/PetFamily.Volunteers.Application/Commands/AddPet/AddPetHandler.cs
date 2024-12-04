@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.PetManagement.Commands.Volunteers;
+using PetFamily.Application.PetManagement.Commands.Volunteers.AddPet;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
 using PetFamily.SharedKernel.Id;
@@ -18,7 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.PetManagement.Commands.Volunteers.AddPet
+namespace PetFamily.Volunteers.Application.Commands.AddPet
 {
     public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
     {
@@ -50,6 +50,12 @@ namespace PetFamily.Application.PetManagement.Commands.Volunteers.AddPet
                 return volunteerResult.Error.ToErrorList();
             }
 
+            // можно сделать отдельные ошибки для волонтера
+            if(volunteerResult.Value.IsDeleted ==  true)
+            {
+                return Errors.General.NotFound().ToErrorList();
+            }
+
             if (await _speciesContract.SpeciesBreedExists(command.SpeciesId, command.BreedId, cancellationToken) == false)
             {
                 return Errors.General.NotFound().ToErrorList();
@@ -61,10 +67,10 @@ namespace PetFamily.Application.PetManagement.Commands.Volunteers.AddPet
             var addressResult = volunteerResult.Value.Address;
 
             // TODO: решить проблему с readonly списками, прийти к единому стандарту
-            var requisites = volunteerResult.Value.Requisites.ToList();
+            var requisites = command.Requisites.Select(r => Requisite.Create(r.Title, r.Description).Value).ToList();
 
             var petId = PetId.NewPetId;
-            var status = (PetStatus)(int)(command.status);
+            var status = (PetStatus)(int)command.status;
 
             var pet = Pet.Create(command.Name,
                 speciesBreed,

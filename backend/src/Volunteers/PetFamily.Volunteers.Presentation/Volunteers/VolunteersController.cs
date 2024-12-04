@@ -36,6 +36,7 @@ using PetFamily.Volunteers.Application.Commands.UpdatePetMainInfo;
 using PetFamily.Framework.Authorization.Attributes;
 using PetFamily.Framework.Authorization;
 using PetFamily.Volunteers.Application.Commands.SoftDeleteVolunteer;
+using PetFamily.Volunteers.Application.Commands.AddPet;
 
 namespace PetFamily.API.Controllers;
 
@@ -160,7 +161,7 @@ public class VolunteersController : ValuesController
     public async Task<ActionResult> AddPet
         (
         [FromRoute] Guid id,
-        [FromForm] AddPetRequest request,
+        [FromBody] AddPetRequest request,
         [FromServices] AddPetHandler addPetService,
         CancellationToken cancellationToken
         )
@@ -178,7 +179,8 @@ public class VolunteersController : ValuesController
             request.Height,
             request.IsCastrated,
             request.IsVaccinated,
-            request.BirthDate
+            request.BirthDate,
+            request.Requisites.ToList()
             );
 
         var result = await addPetService.Handle(command, cancellationToken);

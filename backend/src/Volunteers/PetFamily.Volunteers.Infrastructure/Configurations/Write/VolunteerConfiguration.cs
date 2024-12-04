@@ -30,16 +30,16 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             .HasMaxLength(Constants.MAX_LONG_TEXT_SIZE);
 
 
-        builder.Property(v => v.Requisites)
-            .ValueObjectJsonConversion
-            (requisite => new RequisiteDto(requisite.Title, requisite.Description),
-                dto => Requisite.Create(dto.Title, dto.Description).Value)
-            .HasColumnName("requisites");
+        //builder.Property(v => v.Requisites)
+        //    .ValueObjectJsonConversion
+        //    (requisite => new RequisiteDto(requisite.Title, requisite.Description),
+        //        dto => Requisite.Create(dto.Title, dto.Description).Value)
+        //    .HasColumnName("requisites");
 
-        builder.Property(v => v.Socials)
-            .ValueObjectJsonConversion(
-            social => new SocialDto(social.Name, social.Link),
-            dto => Social.Create(dto.Name, dto.Link).Value);
+        //builder.Property(v => v.Socials)
+        //    .ValueObjectJsonConversion(
+        //    social => new SocialDto(social.Name, social.Link),
+        //    dto => Social.Create(dto.Name, dto.Link).Value);
 
 
         builder.ComplexProperty(v => v.Email, eb => { eb.Property(e => e.Mail).IsRequired(); });

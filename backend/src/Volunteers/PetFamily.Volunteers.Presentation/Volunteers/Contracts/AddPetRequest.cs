@@ -16,7 +16,8 @@ namespace PetFamily.Volunteers.Presentation.Volunteers.Contracts
         double Height,
         bool IsCastrated,
         bool IsVaccinated,
-        DateTime BirthDate
+        DateTime BirthDate,
+        IEnumerable<RequisiteDto> Requisites
         );
 
 
