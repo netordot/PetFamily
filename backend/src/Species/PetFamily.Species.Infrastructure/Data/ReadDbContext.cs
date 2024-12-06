@@ -17,6 +17,9 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(WriteDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Read") ?? false);
+
+        modelBuilder.HasDefaultSchema("species");
+
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

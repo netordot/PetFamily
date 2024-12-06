@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetFamily.Species.Infrastructure.Data;
@@ -10,29 +11,48 @@ using PetFamily.Species.Infrastructure.Data;
 
 namespace PetFamily.Species.Infrastructure.Migrations
 {
-    [DbContext(typeof(ReadDbContext))]
-    partial class ReadDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(WriteDbContext))]
+    [Migration("20241206182811_species_write_initial")]
+    partial class species_write_initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("species")
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PetFamily.Core.Dtos.PetManagement.BreedDto", b =>
+            modelBuilder.Entity("PetFamily.Species.Domain.AggregateRoot.Species", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_species");
+
+                    b.ToTable("species", (string)null);
+                });
+
+            modelBuilder.Entity("PetFamily.Species.Domain.Entities.Breed", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
                     b.Property<Guid>("SpeciesId")
@@ -45,30 +65,12 @@ namespace PetFamily.Species.Infrastructure.Migrations
                     b.HasIndex("SpeciesId")
                         .HasDatabaseName("ix_breeds_species_id");
 
-                    b.ToTable("breeds", "species");
+                    b.ToTable("breeds", (string)null);
                 });
 
-            modelBuilder.Entity("PetFamily.Core.Dtos.PetManagement.SpeciesDto", b =>
+            modelBuilder.Entity("PetFamily.Species.Domain.Entities.Breed", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_species");
-
-                    b.ToTable("species", "species");
-                });
-
-            modelBuilder.Entity("PetFamily.Core.Dtos.PetManagement.BreedDto", b =>
-                {
-                    b.HasOne("PetFamily.Core.Dtos.PetManagement.SpeciesDto", null)
+                    b.HasOne("PetFamily.Species.Domain.AggregateRoot.Species", null)
                         .WithMany("Breeds")
                         .HasForeignKey("SpeciesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -76,7 +78,7 @@ namespace PetFamily.Species.Infrastructure.Migrations
                         .HasConstraintName("fk_breeds_species_species_id");
                 });
 
-            modelBuilder.Entity("PetFamily.Core.Dtos.PetManagement.SpeciesDto", b =>
+            modelBuilder.Entity("PetFamily.Species.Domain.AggregateRoot.Species", b =>
                 {
                     b.Navigation("Breeds");
                 });

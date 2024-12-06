@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -19,7 +20,7 @@ namespace PetFamily.Accounts.Infrastructure
         public static IServiceCollection AddAuthorizationInfrastructure(this IServiceCollection services, IConfiguration configuration)
         { 
 
-            services.AddScoped<AccountsDbContext>();
+            services.AddDatabase();
 
             services.AddOptions<JwtOptions>();
 
@@ -43,7 +44,7 @@ namespace PetFamily.Accounts.Infrastructure
                     //TODO: добавить другие опции
                     options.User.RequireUniqueEmail = true;
                 })
-                .AddEntityFrameworkStores<AccountsDbContext>();
+                .AddEntityFrameworkStores<AccountsWriteDbContext>();
 
             services
                 .AddAuthentication(options =>
@@ -87,5 +88,12 @@ namespace PetFamily.Accounts.Infrastructure
             return services;    
         }
 
+        private static IServiceCollection AddDatabase(this IServiceCollection services)
+        {
+            services.AddScoped<AccountsReadDbContext>();
+            services.AddScoped<AccountsWriteDbContext>();
+
+            return services;
+        }
     }
 }

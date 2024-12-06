@@ -15,11 +15,11 @@ namespace PetFamily.Accounts.Infrastructure.Providers
     public class JwtTokenProvider : ITokenProvider
     {
         private readonly JwtOptions _options;
-        private readonly AccountsDbContext _context;
+        private readonly AccountsWriteDbContext _context;
 
         public JwtTokenProvider(
             IOptions<JwtOptions> options,
-            AccountsDbContext context
+            AccountsWriteDbContext context
             )
         {
             _options = options.Value;

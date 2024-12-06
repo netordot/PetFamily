@@ -65,7 +65,5 @@ namespace PetFamily.Application.AccountManagement.DataModels
             SocialNetworks = socialNetworks.ToList();
         }
 
-
-
     }
 }

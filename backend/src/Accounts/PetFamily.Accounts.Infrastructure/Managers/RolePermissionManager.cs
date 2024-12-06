@@ -12,11 +12,11 @@ namespace PetFamily.Accounts.Infrastructure.Managers
 {
     public class RolePermissionManager
     {
-        private readonly AccountsDbContext _accountsDbContext;
+        private readonly AccountsWriteDbContext _accountsDbContext;
         private readonly IUnitOfWork _unitOfWork;
 
         public RolePermissionManager(
-            AccountsDbContext accountsDbContext, 
+            AccountsWriteDbContext accountsDbContext, 
             IUnitOfWork unitofWork)
         {
             _accountsDbContext = accountsDbContext;

@@ -18,12 +18,8 @@ namespace PetFamily.Application.AccountManagement.DataModels
         public FullName FullName { get; set; }
 
         private List<Requisite> _requisites = [];
-        private List<SocialNetwork> _socialNetworks = [];
 
-        public void UpdateSocails(IEnumerable<SocialNetwork> socials)
-        {
-            _socialNetworks = socials.ToList();
-        }
+        public IReadOnlyList<Requisite> Requisites => _requisites;  
 
         public void UpdateRequisites(IEnumerable<Requisite> requisites)
         {
