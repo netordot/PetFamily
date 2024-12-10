@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using PetFamily.Volunteers.Application.Commands.FullDeletePet;
 using PetFamily.Volunteers.Application;
 using PetFamily.Volunteers.Domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using PetFamily.SharedKernel.Constraints;
 
 namespace PetFamily.Application.Volunteers.FullDeletePet
 {
@@ -23,7 +25,7 @@ namespace PetFamily.Application.Volunteers.FullDeletePet
         private readonly Core.Providers.IFileProvider _fileProvider;
         private readonly string _bucket = "photos";
 
-        public FullDeletePetHandler(IVolunteerRepository volunteerRepository, IUnitOfWork unitOfWork, Core.Providers.IFileProvider fileProvider)
+        public FullDeletePetHandler(IVolunteerRepository volunteerRepository, [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork, Core.Providers.IFileProvider fileProvider)
         {
             _volunteerRepository = volunteerRepository;
             _unitOfWork = unitOfWork;
@@ -58,7 +60,6 @@ namespace PetFamily.Application.Volunteers.FullDeletePet
 
             volunteer.Value.HardDeletePet(pet.Value);
 
-           await  _volunteerRepository.Save(volunteer.Value, cancellation);
             await _unitOfWork.SaveChanges(cancellation);
 
             return pet.Value.Id.Value;

@@ -1,22 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using PetFamily.Accounts.Infrastructure.Data;
 using PetFamily.Core.Providers;
-using PetFamily.Volunteers.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 
-namespace PetFamily.Volunteers.Infrastructure
+namespace PetFamily.Accounts.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly WriteDbContext _context;
+        private readonly AccountsWriteDbContext _context;
 
-        public UnitOfWork(WriteDbContext context)
+        public UnitOfWork(AccountsWriteDbContext context)
         {
             _context = context;
         }

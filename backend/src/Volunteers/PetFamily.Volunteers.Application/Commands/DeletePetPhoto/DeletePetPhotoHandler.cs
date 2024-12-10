@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Application;
 using System;
@@ -20,7 +22,7 @@ namespace PetFamily.Volunteers.Application.Commands.DeletePetPhoto
         private readonly IUnitOfWork _unitOfWork;
 
         public DeletePetPhotoHandler(IFileProvider fileProvider,
-            IUnitOfWork unitOfWork,
+           [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork,
             IVolunteerRepository volunteerRepository)
         {
             _fileProvider = fileProvider;
@@ -60,7 +62,6 @@ namespace PetFamily.Volunteers.Application.Commands.DeletePetPhoto
 
             pet.Value.DeletePhoto(photoToRemove);
 
-            _volunteerRepository.Save(volunteer.Value);
             await _unitOfWork.SaveChanges(cancellation);
 
             return pet.Value.Id.Value;

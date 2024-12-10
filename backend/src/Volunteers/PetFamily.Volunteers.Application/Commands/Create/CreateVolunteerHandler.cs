@@ -1,8 +1,10 @@
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Extensions;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Id;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Application;
@@ -17,7 +19,9 @@ public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerComma
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateVolunteerCommand> _validator;
 
-    public CreateVolunteerHandler(IVolunteerRepository volunteerRepository, IUnitOfWork unitOfWork, IValidator<CreateVolunteerCommand> validator)
+    public CreateVolunteerHandler(IVolunteerRepository volunteerRepository,
+        [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork,
+        IValidator<CreateVolunteerCommand> validator)
     {
         _volunteerRepository = volunteerRepository;
         _unitOfWork = unitOfWork;
@@ -63,7 +67,7 @@ public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerComma
 
         Volunteer volunteerResult = volunteer.Value;
 
-        var result = await _volunteerRepository.Add(volunteerResult, CancellationToken.None);
+        var result = await _volunteerRepository.Add(volunteerResult, ct);
 
         await _unitOfWork.SaveChanges(ct);
 

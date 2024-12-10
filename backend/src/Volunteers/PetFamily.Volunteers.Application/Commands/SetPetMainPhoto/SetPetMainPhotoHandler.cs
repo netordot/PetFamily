@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.PetManagement.Commands.Volunteers;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Application;
@@ -20,7 +22,7 @@ namespace PetFamily.Application.PetManagement.Commands.Volunteers.SetPetMainPhot
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public SetPetMainPhotoHandler(IVolunteerRepository volunteerRepository, IUnitOfWork unitOfWork)
+        public SetPetMainPhotoHandler(IVolunteerRepository volunteerRepository, [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork)
         {
             _volunteerRepository = volunteerRepository;
             _unitOfWork = unitOfWork;
@@ -48,7 +50,6 @@ namespace PetFamily.Application.PetManagement.Commands.Volunteers.SetPetMainPhot
             var mainPhoto = PetPhoto.Create(FilePath.Create(command.Path).Value, true);
 
             pet.Value.SetMainPhoto(mainPhoto.Value);
-            _volunteerRepository.Save(volunteer.Value, cancellation);
             await _unitOfWork.SaveChanges(cancellation);
 
             return pet.Value.Id.Value;

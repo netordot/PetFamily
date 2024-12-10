@@ -11,6 +11,8 @@ using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Core.Messaging;
 using PetFamily.Core.Providers;
 using PetFamily.Volunteers.Domain.ValueObjects;
+using Microsoft.Extensions.DependencyInjection;
+using PetFamily.SharedKernel.Constraints;
 
 namespace PetFamily.Volunteers.Application.Commands.AddNewPhotosToPet
 {
@@ -24,8 +26,8 @@ namespace PetFamily.Volunteers.Application.Commands.AddNewPhotosToPet
 
         public AddNewPhotosToPetHandler(IVolunteerRepository repository,
             IFileProvider fileProvider,
-            IUnitOfWork unitOfWork,
-            IMessageQueue<IEnumerable<Core.Providers.FileInfo>> messageQueue)
+            IMessageQueue<IEnumerable<Core.Providers.FileInfo>> messageQueue,
+            [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork)
         {
             _volunteerRepository = repository;
             _messageQueue = messageQueue;
@@ -82,7 +84,6 @@ namespace PetFamily.Volunteers.Application.Commands.AddNewPhotosToPet
             //var pictures = new ValueObjectList<PetPhoto>(photos);
 
             petToUpdate.Value.AddNewPhotos(photos);
-            var result = _volunteerRepository.Save(volunteer.Value, cancellation);
             await _unitOfWork.SaveChanges(cancellation);
 
             return command.PetId;

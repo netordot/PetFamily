@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,8 @@ using PetFamily.Accounts.Infrastructure.Options;
 using PetFamily.Accounts.Infrastructure.Providers;
 using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Application.AccountManagement.DataModels;
+using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 
 namespace PetFamily.Accounts.Infrastructure
 {
@@ -92,6 +95,7 @@ namespace PetFamily.Accounts.Infrastructure
         {
             services.AddScoped<IAccountsReadDbContext,AccountsReadDbContext>();
             services.AddScoped<AccountsWriteDbContext>();
+            services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(ModuleNames.Accounts);
 
             return services;
         }

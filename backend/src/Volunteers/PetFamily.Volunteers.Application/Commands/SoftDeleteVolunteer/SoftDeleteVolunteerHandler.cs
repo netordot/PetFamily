@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace PetFamily.Volunteers.Application.Commands.SoftDeleteVolunteer
         private readonly IVolunteerRepository _volunteerRepository;
 
         public SoftDeleteVolunteerHandler(
-            IUnitOfWork unitOfWork,
+            [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork,
             IVolunteerRepository volunteerRepository)
         {
             _unitOfWork = unitOfWork;
@@ -34,7 +36,6 @@ namespace PetFamily.Volunteers.Application.Commands.SoftDeleteVolunteer
 
             // далльше будет только через юнит оф ворк, по другому и не получится
 
-            _volunteerRepository.Save(volunteer.Value);
             await _unitOfWork.SaveChanges(cancellation);
 
             return command.Id;

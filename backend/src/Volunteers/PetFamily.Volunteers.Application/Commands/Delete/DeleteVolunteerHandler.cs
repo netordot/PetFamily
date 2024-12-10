@@ -1,9 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Extensions;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
+using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -18,16 +21,18 @@ namespace PetFamily.Volunteers.Application.Commands.Delete
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly ILogger<DeleteVolunteerHandler> _logger;
         private readonly IValidator<DeleteVolunteerCommand> _validator;
-
+        private readonly IUnitOfWork _unitOfWork;
 
         public DeleteVolunteerHandler(
             IVolunteerRepository repository,
             ILogger<DeleteVolunteerHandler> logger,
-            IValidator<DeleteVolunteerCommand> validator)
+            IValidator<DeleteVolunteerCommand> validator,
+            [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork)
         {
             _volunteerRepository = repository;
             _logger = logger;
             _validator = validator;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<Guid, ErrorList>> Handle(DeleteVolunteerCommand command, CancellationToken cancellationToken)
@@ -45,6 +50,7 @@ namespace PetFamily.Volunteers.Application.Commands.Delete
             }
 
             var result = _volunteerRepository.Delete(volunteerResult.Value, cancellationToken);
+            await _unitOfWork.SaveChanges(cancellationToken);
 
             _logger.LogInformation("Updated deleted Volunteer with Id {result}", result);
 

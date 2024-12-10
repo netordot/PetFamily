@@ -6,7 +6,6 @@ using Microsoft.OpenApi.Models;
 using Minio;
 using PetFamily.API.Extensions;
 using PetFamily.Application;
-using PetFamily.Infrastructure;
 using System.Text;
 using Serilog;
 using PetFamily.Accounts.Application;
@@ -19,6 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 using PetFamily.Framework.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Accounts.Presentation;
+using PetFamily.Volunteers.Infrastructure;
 
 DotNetEnv.Env.Load();
 

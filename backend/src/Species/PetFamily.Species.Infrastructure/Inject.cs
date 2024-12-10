@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Core.Messaging;
 using PetFamily.Core.Providers;
 using PetFamily.Infrastructure.Repositories;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.Species.Application;
 using PetFamily.Species.Infrastructure.Data;
 using System.Runtime.CompilerServices;
@@ -31,7 +32,7 @@ public static class Inject
     }
     public static IServiceCollection AddDatabase(this IServiceCollection services)
     {
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(ModuleNames.Species);
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 

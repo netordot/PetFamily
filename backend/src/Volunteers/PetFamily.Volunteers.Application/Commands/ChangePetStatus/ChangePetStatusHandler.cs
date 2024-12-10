@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Dtos.PetManagement;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Application;
@@ -19,7 +21,8 @@ namespace PetFamily.Volunteers.Application.Commands.ChangePetStatus
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ChangePetStatusHandler(IVolunteerRepository volunteerRepository, IUnitOfWork unitOfWork)
+        public ChangePetStatusHandler(IVolunteerRepository volunteerRepository,
+            [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork)
         {
             _volunteerRepository = volunteerRepository;
             _unitOfWork = unitOfWork;
@@ -47,7 +50,7 @@ namespace PetFamily.Volunteers.Application.Commands.ChangePetStatus
             var status = (PetStatus)(int)command.Status;
             pet.Value.SetStatus(status);
 
-            _volunteerRepository.Save(volunteer.Value);
+            
             await _unitOfWork.SaveChanges(cancellation);
 
             return pet.Value.Id.Value;

@@ -9,7 +9,7 @@ namespace PetFamily.Core.Providers
 {
     public interface IUnitOfWork
     {
-        Task<IDbTransaction> BeginTransaction(CancellationToken cancellation);
-        Task SaveChanges(CancellationToken cancellation);
+        Task<IDbTransaction> BeginTransaction(CancellationToken cancellation = default);
+        Task SaveChanges(CancellationToken cancellation=default);
     }
 }

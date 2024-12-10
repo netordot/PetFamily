@@ -11,6 +11,8 @@ using PetFamily.Core.Messaging;
 using PetFamily.Core.Providers;
 using PetFamily.Volunteers.Application;
 using PetFamily.Volunteers.Domain.ValueObjects;
+using Microsoft.Extensions.DependencyInjection;
+using PetFamily.SharedKernel.Constraints;
 
 namespace PetFamily.Volunteers.Application.Commands.AddPet.AddPhoto
 {
@@ -19,18 +21,18 @@ namespace PetFamily.Volunteers.Application.Commands.AddPet.AddPhoto
         private readonly string _bucket = "photos";
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly Core.Providers.IFileProvider _fileProvider;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMessageQueue<IEnumerable<Core.Providers.FileInfo>> _messageQueue;
 
         public AddPetFilesHandler(
             IVolunteerRepository repository,
             Core.Providers.IFileProvider fileProvider,
-            IUnitOfWork context,
+            [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork,
             IMessageQueue<IEnumerable<Core.Providers.FileInfo>> messageQueue)
         {
             _volunteerRepository = repository;
             _fileProvider = fileProvider;
-            unitOfWork = context;
+            _unitOfWork = unitOfWork;
             _messageQueue = messageQueue;
         }
 
@@ -84,7 +86,7 @@ namespace PetFamily.Volunteers.Application.Commands.AddPet.AddPhoto
 
             petToUpdate.Value.UploadPhotos(photos);
 
-            await unitOfWork.SaveChanges(cancellation);
+            await _unitOfWork.SaveChanges(cancellation);
 
             //transaction.Commit();
             return petId;
