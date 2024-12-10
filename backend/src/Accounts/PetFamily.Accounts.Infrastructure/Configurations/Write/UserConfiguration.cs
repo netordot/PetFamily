@@ -33,6 +33,8 @@ namespace PetFamily.Accounts.Infrastructure.Configurations.Write
 
             builder.HasKey(u => u.Id);
 
+            // дропунть бд и переделать с hasForeigh Key, чтобы не дублировалась колонка
+            // или написать лямбду
             builder.HasOne(u => u.AdminAccount)
                 .WithOne(a => a.User)
                 .HasForeignKey<AdminAccount>("user_id")
