@@ -17,7 +17,7 @@ namespace PetFamily.Accounts.Infrastructure.Configurations.Read
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(n => n.FristName).HasColumnName("name");
+            builder.Property(n => n.FristName).HasColumnName("first_name");
             builder.Property(n => n.LastName).HasColumnName("last_name");
             builder.Property(n => n.MiddleName).HasColumnName("middle_name");
         }

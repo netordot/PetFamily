@@ -49,8 +49,12 @@ namespace PetFamily.Accounts.Infrastructure.Configurations.Write
                 .IsRequired(false);
 
 
-
-
+            builder.ComplexProperty(a => a.FullName, nb =>
+            {
+                nb.Property(n => n.Name).HasColumnName("first_name");
+                nb.Property(n => n.LastName).HasColumnName("last_name");
+                nb.Property(n => n.MiddleName).HasColumnName("middle_name");
+            });
         }
     }
 }

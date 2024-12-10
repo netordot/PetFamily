@@ -20,7 +20,7 @@ namespace PetFamily.Accounts.Infrastructure.Configurations.Read
 
             builder.HasKey(u => u.Id);
 
-            builder.Property(u => u.SocialNewroks)
+            builder.Property(u => u.SocialNetworks)
                 .HasConversion(
            files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
            json => JsonSerializer.Deserialize<IEnumerable<SocialDto>>(json, JsonSerializerOptions.Default)!);
@@ -43,6 +43,15 @@ namespace PetFamily.Accounts.Infrastructure.Configurations.Read
                     ur => ur.HasOne(u => u.Role).WithMany().HasForeignKey(ur => ur.RoleId),
                     ur => ur.HasOne(u => u.User).WithMany().HasForeignKey(ur => ur.UserId)
                 );
+
+            builder.Property(u => u.FristName)
+                .HasColumnName("first_name");
+
+            builder.Property(u => u.MiddleName)
+                .HasColumnName("middle_name");
+
+            builder.Property(u => u.LastName)
+                .HasColumnName("last_name");
 
 
                 

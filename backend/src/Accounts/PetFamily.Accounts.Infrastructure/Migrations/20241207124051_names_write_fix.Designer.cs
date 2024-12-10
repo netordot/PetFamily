@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetFamily.Accounts.Infrastructure.Data;
@@ -12,9 +13,11 @@ using PetFamily.Accounts.Infrastructure.Data;
 namespace PetFamily.Accounts.Infrastructure.Migrations
 {
     [DbContext(typeof(AccountsWriteDbContext))]
-    partial class AccountsWriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241207124051_names_write_fix")]
+    partial class names_write_fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,7 +266,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("first_name");
+                                .HasColumnName("fisrt_name");
                         });
 
                     b.HasKey("Id")

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetFamily.Accounts.Infrastructure.Data;
@@ -12,9 +13,11 @@ using PetFamily.Accounts.Infrastructure.Data;
 namespace PetFamily.Accounts.Infrastructure.Migrations
 {
     [DbContext(typeof(AccountsWriteDbContext))]
-    partial class AccountsWriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241207094108_user_roles_fix")]
+    partial class user_roles_fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,7 +187,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("first_name");
+                                .HasColumnName("name");
                         });
 
                     b.HasKey("Id")
@@ -263,7 +266,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("first_name");
+                                .HasColumnName("name");
                         });
 
                     b.HasKey("Id")
@@ -425,24 +428,6 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("user_name");
-
-                    b.ComplexProperty<Dictionary<string, object>>("FullName", "PetFamily.Application.AccountManagement.DataModels.User.FullName#FullName", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("LastName")
-                                .HasColumnType("text")
-                                .HasColumnName("last_name");
-
-                            b1.Property<string>("MiddleName")
-                                .HasColumnType("text")
-                                .HasColumnName("middle_name");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("first_name");
-                        });
 
                     b.HasKey("Id")
                         .HasName("pk_users");

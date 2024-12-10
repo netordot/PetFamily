@@ -53,7 +53,6 @@ namespace PetFamily.Accounts.Infrastructure.Managers
                     RoleId = role.Id
                 });
 
-               
             }
 
             await _accountsDbContext.SaveChangesAsync();

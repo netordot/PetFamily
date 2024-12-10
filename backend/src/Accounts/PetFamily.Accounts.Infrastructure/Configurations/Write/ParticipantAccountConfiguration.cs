@@ -15,7 +15,7 @@ namespace PetFamily.Accounts.Infrastructure.Configurations.Write
         {
             builder.ComplexProperty(p => p.FullName, nb =>
             {
-                nb.Property(n => n.Name).HasColumnName("name");
+                nb.Property(n => n.Name).HasColumnName("first_name");
                 nb.Property(n => n.LastName).HasColumnName("last_name");
                 nb.Property(n => n.MiddleName).HasColumnName("middle_name");
             });

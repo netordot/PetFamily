@@ -33,6 +33,7 @@ namespace PetFamily.Accounts.Infrastructure.Data
             modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("user_tokens");
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("user_logins");
             modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("role_claims");
+            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("user_roles");
             //modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("user_roles");
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AccountsWriteDbContext).Assembly,

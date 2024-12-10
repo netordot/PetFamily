@@ -90,7 +90,7 @@ namespace PetFamily.Accounts.Infrastructure
 
         private static IServiceCollection AddDatabase(this IServiceCollection services)
         {
-            services.AddScoped<AccountsReadDbContext>();
+            services.AddScoped<IAccountsReadDbContext,AccountsReadDbContext>();
             services.AddScoped<AccountsWriteDbContext>();
 
             return services;
