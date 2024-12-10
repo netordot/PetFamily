@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Accounts.Infrastructure.Data;
 using PetFamily.Application.AccountManagement.DataModels;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +18,8 @@ namespace PetFamily.Accounts.Infrastructure.Managers
         private readonly IUnitOfWork _unitOfWork;
 
         public RolePermissionManager(
-            AccountsWriteDbContext accountsDbContext, 
-            IUnitOfWork unitofWork)
+            AccountsWriteDbContext accountsDbContext,
+            [FromKeyedServices(ModuleNames.Accounts)] IUnitOfWork unitofWork)
         {
             _accountsDbContext = accountsDbContext;
             _unitOfWork = unitofWork;

@@ -29,6 +29,7 @@ public class WriteDbContext(IConfiguration configuration) : DbContext
         optionsBuilder.EnableSensitiveDataLogging();
     }
 
+
     private ILoggerFactory CreateLoggerFactory()
     => LoggerFactory.Create(builder => { builder.AddConsole(); });
 

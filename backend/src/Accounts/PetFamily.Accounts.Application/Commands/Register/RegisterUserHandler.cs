@@ -1,10 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Domain.DataModels;
 using PetFamily.Application.AccountManagement.DataModels;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
 using System;
@@ -26,7 +28,7 @@ namespace PetFamily.Accounts.Application.Commands.Register
         public RegisterUserHandler(UserManager<User> userManager,
             RoleManager<Role> roleManager,
             IAccountManager accountManager,
-            IUnitOfWork unitOfWork)
+           [FromKeyedServices(ModuleNames.Accounts)] IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -35,7 +37,6 @@ namespace PetFamily.Accounts.Application.Commands.Register
         }
         public async Task<Result<Guid, ErrorList>> Handle(RegisterUserCommand command, CancellationToken cancellation)
         {
-            // проверить что нет такого пользователя
 
             var existedUser = await _userManager.FindByEmailAsync(command.Email);
             if (existedUser != null)
@@ -54,12 +55,10 @@ namespace PetFamily.Accounts.Application.Commands.Register
             {
                 return user.Error.ToErrorList();
             }
-            // оборачиваем создание юзера в транзакцию
 
             using IDbTransaction transaction = await _unitOfWork.BeginTransaction(cancellation);
             try
             {
-                // в значении value user все кроме 2х значений == null
                 var result = await _userManager.CreateAsync(user.Value, command.Password);
 
                 if (result.Succeeded == false)
@@ -68,8 +67,6 @@ namespace PetFamily.Accounts.Application.Commands.Register
 
                     return new ErrorList(errors);
                 }
-
-                //var fullName = new FullName("tset", "tst", "test");
 
                 var perticipantAccount = new ParticipantAccount
                 { FullName = user.Value.FullName, User = user.Value, Id = Guid.NewGuid() };

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Infrastructure.Managers;
 using PetFamily.Accounts.Infrastructure.Options;
 using PetFamily.Application.AccountManagement.DataModels;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -31,7 +33,7 @@ namespace PetFamily.Accounts.Infrastructure.Seeding
             RoleManager<Role> roleManager,
             RolePermissionManager rolePermissionManager,
             IOptions<AdminOptions> adminOptions,
-            IUnitOfWork unitOfWork,
+            [FromKeyedServices(ModuleNames.Accounts)] IUnitOfWork unitOfWork,
             IAccountManager accountManager,
             UserManager<User> userManager)
         {

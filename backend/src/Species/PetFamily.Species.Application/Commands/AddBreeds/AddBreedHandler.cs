@@ -11,6 +11,8 @@ using PetFamily.Core.Providers;
 using PetFamily.Species.Application.Commands.AddBreeds;
 using PetFamily.Species.Application;
 using PetFamily.Species.Domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using PetFamily.SharedKernel.Constraints;
 
 namespace PetFamily.Application.Species.AddBreeds
 {
@@ -19,7 +21,8 @@ namespace PetFamily.Application.Species.AddBreeds
         private readonly ISpeciesRepository _speciesRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AddBreedHandler(ISpeciesRepository repository, IUnitOfWork unitOfWork)
+        public AddBreedHandler(ISpeciesRepository repository,
+            [FromKeyedServices(ModuleNames.Species)] IUnitOfWork unitOfWork)
         {
             _speciesRepository = repository;
             _unitOfWork = unitOfWork;

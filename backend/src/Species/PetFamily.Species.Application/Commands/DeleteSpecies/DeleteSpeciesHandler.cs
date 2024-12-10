@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Species.Application;
 using PetFamily.Volunteers.Presentation;
@@ -21,8 +23,8 @@ namespace PetFamily.Species.Application.Commands.DeleteSpecies
         private readonly IVolunteersContract _volunteerContract;
 
         public DeleteSpeciesHandler(IReadDbContext context, 
-            ISpeciesRepository species, 
-            IUnitOfWork unitOfWork, 
+            ISpeciesRepository species,
+           [FromKeyedServices(ModuleNames.Species)] IUnitOfWork unitOfWork, 
             IVolunteersContract volunteersContract)
         {
             _readDbContext = context;
@@ -30,14 +32,8 @@ namespace PetFamily.Species.Application.Commands.DeleteSpecies
             _unitOfWork = unitOfWork;
             _volunteerContract = volunteersContract;
         }
-        // контракт с VolunteersModule
         public async Task<Result<Guid, ErrorList>> Handle(DeleteSpeciesCommand command, CancellationToken cancellation)
         {
-            // проверяем есть ли спишес(если нет возвращаем успех, тк спишеса уже нет)
-            // если есть проверяем есть ли животные с таким айдишником
-            // если есть вернуть ошибку конфликт
-            // если нет, удаляем и кидаем статускод 200
-
             var species = await _readDbContext.Species.FirstOrDefaultAsync(s => s.Id == command.id);
             if (species == null)
             {

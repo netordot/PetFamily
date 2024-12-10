@@ -1,9 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Accounts.Domain.DataModels;
 using PetFamily.Application.AccountManagement.DataModels;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
 using System;
@@ -23,7 +25,7 @@ namespace PetFamily.Accounts.Application.Commands.Refresh
 
         public RefreshHandler(
             IRefreshSessionManager refreshSessionManager,
-            IUnitOfWork unitOfWork,
+            [FromKeyedServices(ModuleNames.Accounts)] IUnitOfWork unitOfWork,
             ITokenProvider tokenProvider,
             UserManager<User> userManager
             )
@@ -36,12 +38,6 @@ namespace PetFamily.Accounts.Application.Commands.Refresh
 
         public async Task<Result<JwtTokenResult, ErrorList>> Handle(RefreshCommand command, CancellationToken cancellation)
         {
-            // валидация 
-            //  проверяем есть ли сессия
-            // копируем сессию, старую сносим
-            // проверяем не протухла ли сессия (проверяем уже копию)
-            // генерим токенрезалт
-
             var session = await _refreshSessionManager.GetSessionByToken(command.refreshToken, cancellation);
 
             if(session.IsFailure)
