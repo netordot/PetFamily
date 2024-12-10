@@ -1,9 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.PetManagement.Commands.Volunteers.AddPet;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Id;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
@@ -33,7 +35,7 @@ namespace PetFamily.Volunteers.Application.Commands.AddPet
             IVolunteerRepository volunteerRepository,
             IReadDbContext context,
             ISpeciesContract speciesContract,
-            IUnitOfWork unitOfWork)
+           [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork)
         {
             _fileProvider = fileProvider;
             _volunteerRepository = volunteerRepository;
@@ -97,7 +99,7 @@ namespace PetFamily.Volunteers.Application.Commands.AddPet
             volunteerResult.Value.AddPet(pet.Value);
             int a = 10;
 
-            await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
+            //await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
             await _unitOfWork.SaveChanges(cancellationToken);
 
             return petId.Value;

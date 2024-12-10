@@ -9,7 +9,6 @@ namespace PetFamily.Species.Infrastructure.Data;
 
 public class WriteDbContext(IConfiguration configuration) : DbContext
 {
-    // the line where ex occurs
     public DbSet<Species.Domain.AggregateRoot.Species> Species => Set<Species.Domain.AggregateRoot.Species>();
 
     private const string DATABASE = nameof(Database);

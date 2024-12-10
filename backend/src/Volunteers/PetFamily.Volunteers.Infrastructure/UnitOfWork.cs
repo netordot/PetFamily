@@ -21,14 +21,14 @@ namespace PetFamily.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IDbTransaction> BeginTransaction(CancellationToken cancellation)
+        public async Task<IDbTransaction> BeginTransaction(CancellationToken cancellation = default)
         {
             var transaction = await _context.Database.BeginTransactionAsync(cancellation);
 
             return transaction.GetDbTransaction();
         }
 
-        public async Task SaveChanges(CancellationToken cancellation)
+        public async Task SaveChanges(CancellationToken cancellation = default)
         {
             await _context.SaveChangesAsync(cancellation);
         }
