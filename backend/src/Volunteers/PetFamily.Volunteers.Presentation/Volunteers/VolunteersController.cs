@@ -12,7 +12,6 @@ using PetFamily.Application.PetManagement.Commands.Volunteers.AddPet;
 using PetFamily.Application.PetManagement.Commands.Volunteers.SetPetMainPhoto;
 using PetFamily.Application.PetManagement.Commands.Volunteers.UpdateMainInfo;
 using PetFamily.Application.PetManagement.Commands.Volunteers.UpdatePetMainInfo;
-using PetFamily.Application.PetManagement.Commands.Volunteers.UpdateRequisites;
 using PetFamily.Application.PetManagement.Commands.Volunteers.UpdateSocials;
 using PetFamily.Application.Volunteers.FullDeletePet;
 using PetFamily.Framework;
@@ -32,12 +31,12 @@ using PetFamily.Volunteers.Application.Commands.FullDeletePet;
 using PetFamily.Volunteers.Application.Commands.ChangePetStatus;
 using PetFamily.Volunteers.Presentation.Pets.Contracts;
 using PetFamily.Volunteers.Application.Querries.GetPet;
-using PetFamily.Volunteers.Application.Commands.UpdateSocials;
 using PetFamily.Volunteers.Presentation.Processors;
 using PetFamily.Volunteers.Application.Commands.UpdatePetMainInfo;
 using PetFamily.Framework.Authorization.Attributes;
 using PetFamily.Framework.Authorization;
 using PetFamily.Volunteers.Application.Commands.SoftDeleteVolunteer;
+using PetFamily.Volunteers.Application.Commands.AddPet;
 
 namespace PetFamily.API.Controllers;
 
@@ -63,9 +62,7 @@ public class VolunteersController : ValuesController
             request.City,
             request.Street,
             request.BuildingNumber,
-            request.CorpsNumber,
-            request.Requisites,
-            request.SocialNetworks
+            request.CorpsNumber
             );
 
         var result = await createVolunteerService.Handle(command, cancellationToken);
@@ -94,37 +91,37 @@ public class VolunteersController : ValuesController
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
 
-    [PermissionRequirement(Policies.PetManagement.Update)]
-    [HttpPatch("{id:guid}/socials")]
-    public async Task<ActionResult> UpdateSocials(
-        [FromRoute] Guid id,
-        [FromServices] UpdateSocialsHandler service,
-        [FromBody] UpdateSocialsRequest request,
-        [FromServices] IValidator<UpdateSocialsCommand> validator,
-        CancellationToken cancellationToken)
-    {
-        var command = new UpdateSocialsCommand(id, request.socials);
+    //[PermissionRequirement(Policies.PetManagement.Update)]
+    //[HttpPatch("{id:guid}/socials")]
+    //public async Task<ActionResult> UpdateSocials(
+    //    [FromRoute] Guid id,
+    //    [FromServices] UpdateSocialsHandler service,
+    //    [FromBody] UpdateSocialsRequest request,
+    //    [FromServices] IValidator<UpdateSocialsCommand> validator,
+    //    CancellationToken cancellationToken)
+    //{
+    //    var command = new UpdateSocialsCommand(id, request.socials);
 
-        var result = await service.Handle
-            (command, cancellationToken);
+    //    var result = await service.Handle
+    //        (command, cancellationToken);
 
-        return new ObjectResult(result.Value) { StatusCode = 200 };
-    }
+    //    return new ObjectResult(result.Value) { StatusCode = 200 };
+    //}
 
-    [PermissionRequirement(Policies.PetManagement.Update)]
-    [HttpPatch("{id:guid}/requisites")]
-    public async Task<ActionResult> UpdateRequisites(
-        [FromRoute] Guid id,
-        [FromServices] UpdateRequisitesHandler service,
-        [FromBody] UpdateRequisitesRequest request,
-        CancellationToken cancellationToken)
-    {
-        var command = new UpdateRequisitesCommand(request.requisites, id);
+    //[PermissionRequirement(Policies.PetManagement.Update)]
+    //[HttpPatch("{id:guid}/requisites")]
+    //public async Task<ActionResult> UpdateRequisites(
+    //    [FromRoute] Guid id,
+    //    [FromServices] UpdateRequisitesHandler service,
+    //    [FromBody] UpdateRequisitesRequest request,
+    //    CancellationToken cancellationToken)
+    //{
+    //    var command = new UpdateRequisitesCommand(request.requisites, id);
 
-        var result = await service.Handle(command, cancellationToken);
+    //    var result = await service.Handle(command, cancellationToken);
 
-        return new ObjectResult(result.Value) { StatusCode = 200 };
-    }
+    //    return new ObjectResult(result.Value) { StatusCode = 200 };
+    //}
 
     [PermissionRequirement(Policies.PetManagement.Delete)]
     [HttpDelete("{id:guid}")]
@@ -164,7 +161,7 @@ public class VolunteersController : ValuesController
     public async Task<ActionResult> AddPet
         (
         [FromRoute] Guid id,
-        [FromForm] AddPetRequest request,
+        [FromBody] AddPetRequest request,
         [FromServices] AddPetHandler addPetService,
         CancellationToken cancellationToken
         )
@@ -182,7 +179,8 @@ public class VolunteersController : ValuesController
             request.Height,
             request.IsCastrated,
             request.IsVaccinated,
-            request.BirthDate
+            request.BirthDate,
+            request.Requisites.ToList()
             );
 
         var result = await addPetService.Handle(command, cancellationToken);

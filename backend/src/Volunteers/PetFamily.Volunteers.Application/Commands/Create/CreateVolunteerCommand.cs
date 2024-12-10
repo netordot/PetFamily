@@ -15,7 +15,5 @@ public record CreateVolunteerCommand(
     string City,
     string Street,
     int BuildingNumber,
-    int CorpsNumber,
-    List<RequisiteDto> Requisites,
-    List<SocialDto> SocialNetworks
+    int CorpsNumber
 ) : ICommand;

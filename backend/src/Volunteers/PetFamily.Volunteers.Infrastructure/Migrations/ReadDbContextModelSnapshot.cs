@@ -191,16 +191,6 @@ namespace PetFamily.Volunteers.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("number_number");
 
-                    b.Property<string>("Requisites")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("requisites");
-
-                    b.Property<string>("Socials")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("socials");
-
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("text")

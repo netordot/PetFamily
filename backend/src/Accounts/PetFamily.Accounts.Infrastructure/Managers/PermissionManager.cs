@@ -11,9 +11,9 @@ namespace PetFamily.Accounts.Infrastructure.Managers
 {
     public class PermissionManager
     {
-        private readonly AccountsDbContext _accountsDbContext;
+        private readonly AccountsWriteDbContext _accountsDbContext;
 
-        public PermissionManager(AccountsDbContext accountsDbContext)
+        public PermissionManager(AccountsWriteDbContext accountsDbContext)
         {
             _accountsDbContext = accountsDbContext;
         }

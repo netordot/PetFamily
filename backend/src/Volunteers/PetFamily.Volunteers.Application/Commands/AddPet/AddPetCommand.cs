@@ -24,7 +24,8 @@ namespace PetFamily.Application.PetManagement.Commands.Volunteers.AddPet
         double Height,
         bool IsCastrated,
         bool IsVaccinated,
-        DateTime BirthDate
+        DateTime BirthDate,
+        List<RequisiteDto> Requisites
 
     ) : ICommand;
 }

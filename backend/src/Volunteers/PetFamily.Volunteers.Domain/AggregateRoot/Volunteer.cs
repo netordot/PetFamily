@@ -12,8 +12,8 @@ namespace PetFamily.Volunteers.Domain.AggregateRoot;
 public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
 {
     public FullName Name { get; private set; }
-    public IReadOnlyList<Requisite>? Requisites { get; private set; } = default!;
-    public IReadOnlyList<Social>? Socials { get; private set; } = default!;
+    //public IReadOnlyList<Requisite>? Requisites { get; private set; } = default!;
+    //public IReadOnlyList<Social>? Socials { get; private set; } = default!;
     public Address Address { get; private set; }
 
     public Email Email { get; private set; }
@@ -33,8 +33,8 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         PhoneNumber phoneNumber,
         List<Pet> pets,
         Address address,
-        List<Requisite> requisites,
-        List<Social> details,
+      //  List<Requisite> requisites,
+      //  List<Social> details,
         VolunteerId id) : base(id)
     {
         Name = name;
@@ -44,8 +44,8 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         Number = phoneNumber;
         Pets = pets;
         Address = address;
-        Requisites = requisites;
-        Socials = details;
+        //Requisites = requisites;
+        //Socials = details;
     }
 
     public int PetsRequireHome() => Pets.Count(p => p.Status == PetStatus.SearchesForHome);
@@ -59,8 +59,8 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         PhoneNumber phoneNumber,
         List<Pet>? pets,
         Address address,
-        List<Requisite> requisites,
-        List<Social> details,
+        //List<Requisite> requisites,
+        //List<Social> details,
         VolunteerId id)
     {
         if (name == null)
@@ -85,8 +85,8 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
             phoneNumber,
             pets,
             address,
-            requisites,
-            details,
+            //requisites,
+            //details,
             id);
     }
 
@@ -106,15 +106,15 @@ public sealed class Volunteer : SoftDeletableEntity<VolunteerId>
         Address = address;
     }
 
-    public void UpdateSocials(List<Social> newSocials)
-    {
-        Socials = newSocials;
-    }
+    //public void UpdateSocials(List<Social> newSocials)
+    //{
+    //    Socials = newSocials;
+    //}
 
-    public void UdpateRequisites(List<Requisite> requisites)
-    {
-        Requisites = requisites;
-    }
+    //public void UdpateRequisites(List<Requisite> requisites)
+    //{
+    //    Requisites = requisites;
+    //}
 
     public UnitResult<Error> AddPet(Pet pet)
     {

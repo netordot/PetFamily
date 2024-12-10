@@ -23,8 +23,7 @@ namespace PetFamily.Core.Dtos.PetManagement
         public string Description { get; init; }
         public int Experience { get; init; }
         public string Number { get; init; }
-        public IEnumerable<RequisiteDto> Requisites { get; init; }
-        public IEnumerable<SocialDto> Socials { get; init; }
+        
 
     }
 }

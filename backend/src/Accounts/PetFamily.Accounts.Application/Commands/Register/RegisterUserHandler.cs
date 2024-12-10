@@ -69,11 +69,12 @@ namespace PetFamily.Accounts.Application.Commands.Register
                     return new ErrorList(errors);
                 }
 
-                var fullName = new FullName("tset", "tst", "test");
+                //var fullName = new FullName("tset", "tst", "test");
 
                 var perticipantAccount = new ParticipantAccount
-                { FullName = fullName, User = user.Value, Id = Guid.NewGuid() };
+                { FullName = user.Value.FullName, User = user.Value, Id = Guid.NewGuid() };
 
+                user.Value.ParticipantAccount = perticipantAccount;
                 await _accountManager.AddParticipantAccount(perticipantAccount);
 
                 await _unitOfWork.SaveChanges(cancellation);

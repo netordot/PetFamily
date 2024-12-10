@@ -15,9 +15,9 @@ namespace PetFamily.Accounts.Infrastructure.Managers
 {
     public class RefreshSessionManager : IRefreshSessionManager
     {
-        private readonly AccountsDbContext _context;
+        private readonly AccountsWriteDbContext _context;
 
-        public RefreshSessionManager(AccountsDbContext context)
+        public RefreshSessionManager(AccountsWriteDbContext context)
         {
             _context = context;
         }

@@ -13,9 +13,9 @@ namespace PetFamily.Accounts.Infrastructure.Managers
 {
     public class AccountManager : IAccountManager
     {
-        private readonly AccountsDbContext _accountsDbContext;
+        private readonly AccountsWriteDbContext _accountsDbContext;
 
-        public AccountManager(AccountsDbContext accountsDbContext)
+        public AccountManager(AccountsWriteDbContext accountsDbContext)
         {
             _accountsDbContext = accountsDbContext;
         }

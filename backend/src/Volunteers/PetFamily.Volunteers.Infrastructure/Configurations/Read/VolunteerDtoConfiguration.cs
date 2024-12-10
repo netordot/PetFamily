@@ -51,16 +51,16 @@ namespace PetFamily.Infrastructure.Configurations.Read
                .HasColumnName("deleted");
 
 
-            builder.Property(v => v.Requisites)
-                   .HasConversion(
-           files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
-           json => JsonSerializer.Deserialize<IEnumerable<RequisiteDto>>(json, JsonSerializerOptions.Default)!);
+           // builder.Property(v => v.Requisites)
+           //        .HasConversion(
+           //files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
+           //json => JsonSerializer.Deserialize<IEnumerable<RequisiteDto>>(json, JsonSerializerOptions.Default)!);
 
 
-            builder.Property(v => v.Socials)
-                   .HasConversion(
-           files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
-           json => JsonSerializer.Deserialize<IEnumerable<SocialDto>>(json, JsonSerializerOptions.Default)!);
+           // builder.Property(v => v.Socials)
+           //        .HasConversion(
+           //files => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
+           //json => JsonSerializer.Deserialize<IEnumerable<SocialDto>>(json, JsonSerializerOptions.Default)!);
 
 
         }

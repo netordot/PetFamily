@@ -48,14 +48,6 @@ namespace PetFamily.Volunteers.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
-                    b.Property<string>("Requisites")
-                        .HasColumnType("jsonb")
-                        .HasColumnName("requisites");
-
-                    b.Property<string>("Socials")
-                        .HasColumnType("jsonb")
-                        .HasColumnName("socials");
-
                     b.Property<bool>("_isDeleted")
                         .HasColumnType("boolean")
                         .HasColumnName("deleted");

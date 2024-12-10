@@ -19,17 +19,20 @@ namespace PetFamily.Application.AccountManagement.DataModels
         }
         private User(string email,
             List<Role> roles, 
-            string userName)
+            string userName,
+            FullName fullName)
         {
             Roles = roles;
             UserName = userName;
             Email = email; 
+            FullName = fullName;
         }
         public List<SocialNetwork> SocialNetworks { get; set; } = [];
         public List<Role> Roles { get; set; }
         public AdminAccount? AdminAccount { get; set; }
         public VolunteerAccount? VolunteerAccount { get; set; }
         public ParticipantAccount? ParticipantAccount { get; set; }
+        public FullName FullName { get; set; }
 
         public static Result<User,Error> CreateParticipant(string email, Role role, string userName )
         {
@@ -38,7 +41,9 @@ namespace PetFamily.Application.AccountManagement.DataModels
                 return Errors.General.ValueIsInvalid("role");
             }
 
-            return new User(email, [role], userName);
+            var tempName = new FullName(" ", " ", " ");
+
+            return new User(email, [role], userName, tempName);
         }
         public static Result<User, Error> CreateVolunteer(string email, Role role, string userName)
         {
@@ -46,8 +51,9 @@ namespace PetFamily.Application.AccountManagement.DataModels
             {
                 return Errors.General.ValueIsInvalid("role");
             }
+            var tempName = new FullName(" ", " ", " ");
 
-            return new User(email, [role], userName);
+            return new User(email, [role], userName, tempName);
         }
 
         public static Result<User, Error> CreateAdmin(string email, Role role, string userName)
@@ -57,15 +63,16 @@ namespace PetFamily.Application.AccountManagement.DataModels
                 return Errors.General.ValueIsInvalid("role");
             }
 
-            return new User(email, [role], userName);
+            var tempName = new FullName(" ", " ", " ");
+
+
+            return new User(email, [role], userName, tempName);
         }
 
         public void UpdateSocialNetworks(IEnumerable<SocialNetwork> socialNetworks)
         {
             SocialNetworks = socialNetworks.ToList();
         }
-
-
 
     }
 }

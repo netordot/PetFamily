@@ -6,6 +6,9 @@ using PetFamily.Framework;
 using PetFamily.Core.Extensions;
 using PetFamily.Accounts.Application.Commands.Register;
 using PetFamily.Accounts.Application.Commands.Refresh;
+using PetFamily.Accounts.Application.Queries.GetAccountById;
+using PetFamily.Framework.Authorization.Attributes;
+using PetFamily.Framework.Authorization;
 
 namespace PetFamily.Accounts.Presentation.Controllers.Authorization
 {
@@ -16,7 +19,7 @@ namespace PetFamily.Accounts.Presentation.Controllers.Authorization
         private const string REFRESH_TOKEN = "refresh_token";
 
         [HttpPost("registration")]
-        public async Task<ActionResult> Register( 
+        public async Task<ActionResult> Register(
             [FromBody] RegisterUserRequest request,
             [FromServices] RegisterUserHandler handler,
             CancellationToken cancellation
@@ -24,7 +27,7 @@ namespace PetFamily.Accounts.Presentation.Controllers.Authorization
         {
             var command = new RegisterUserCommand(request.Email, request.UserName, request.Password);
             var result = await handler.Handle(command, cancellation);
-            if(result.IsFailure)
+            if (result.IsFailure)
             {
                 return result.Error.ToResponse();
             }
@@ -53,9 +56,9 @@ namespace PetFamily.Accounts.Presentation.Controllers.Authorization
         [HttpPost("refresh")]
         public async Task<ActionResult> Refresh(
             [FromServices] RefreshHandler handler,
-            CancellationToken cancellation )
+            CancellationToken cancellation)
         {
-            if(HttpContext.Request.Cookies.TryGetValue(REFRESH_TOKEN, out var refreshToken) == false)
+            if (HttpContext.Request.Cookies.TryGetValue(REFRESH_TOKEN, out var refreshToken) == false)
             {
                 return Unauthorized();
             }
@@ -70,7 +73,20 @@ namespace PetFamily.Accounts.Presentation.Controllers.Authorization
 
             HttpContext.Response.Cookies.Append(REFRESH_TOKEN, result.Value.RefreshToken.ToString());
 
-            return new ObjectResult(result.Value) { StatusCode = 200 };   
+            return new ObjectResult(result.Value) { StatusCode = 200 };
+        }
+
+        [HttpGet("{id:guid}/get")]
+        public async Task<ActionResult> GetById(
+            [FromRoute] Guid id,
+            [FromServices] GetAccountByIdHandler handler,
+            CancellationToken cancellation)
+        {
+            var query = new GetAccountByIdQuery(id);
+
+            var result = await handler.Handle(query, cancellation);
+
+            return new ObjectResult(result) { StatusCode = 200 };
         }
     }
 }
