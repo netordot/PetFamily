@@ -1,10 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Extensions;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Domain.ValueObjects;
 
@@ -20,7 +22,7 @@ public class UpdateVolunteerHandler : ICommandHandler<Guid, UpdateVolunteerComma
     public UpdateVolunteerHandler(
         IVolunteerRepository volunteerRepository,
         ILogger<UpdateVolunteerHandler> logger,
-        IUnitOfWork unitOfWork,
+       [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork,
         IValidator<UpdateVolunteerCommand> validator)
     {
         _volunteerRepository = volunteerRepository;

@@ -1,10 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Extensions;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
 using PetFamily.Core.Providers;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Id;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
@@ -30,7 +32,7 @@ namespace PetFamily.Volunteers.Application.Commands.UpdatePetMainInfo
 
         public UpdatePetMainInfoHandler(IReadDbContext readDbContext,
             IVolunteerRepository volunteerRepository,
-            IUnitOfWork unitOfWork,
+            [FromKeyedServices(ModuleNames.Volunteers)] IUnitOfWork unitOfWork,
             ISpeciesContract speciesContract,
             IValidator<UpdatePetMainInfoCommand> validator)
         {
@@ -92,10 +94,9 @@ namespace PetFamily.Volunteers.Application.Commands.UpdatePetMainInfo
                 command.IsVaccinated,
                 command.BirthDate);
 
-            var result = _volunteerRepository.Save(volunteer.Value, cancellation);
             await _unitOfWork.SaveChanges(cancellation);
 
-            return result.Result;
+            return pet.Value.Id.Value;
         }
     }
 }
