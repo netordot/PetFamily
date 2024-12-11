@@ -5,7 +5,6 @@ using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Application.Commands.UpdatePetMainInfo;
-using PetFamily.Volunteers.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

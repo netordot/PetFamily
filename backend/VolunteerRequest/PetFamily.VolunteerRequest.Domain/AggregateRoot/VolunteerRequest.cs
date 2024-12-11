@@ -3,6 +3,7 @@ using PetFamily.SharedKernel.Id;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.VolunteerRequest.Domain.Enums;
+using PetFamily.VolunteerRequest.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
         public Guid AdminId { get; private set; }
         public Guid UserId { get; private set; }
         public string RejectionComment { get; private set; } = string.Empty;
-        public string VolunteerInfo { get; private set; } = string.Empty;
+        public VolunteerRequestInfo VolunteerInfo { get; private set; }
         public VolunteerRequestStatus Status { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
@@ -30,7 +31,7 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
         private VolunteerRequest(
             VolunteerRequestId id,
             Guid userId,
-            string volunteerInfo,
+            VolunteerRequestInfo volunteerInfo,
             DateTime createdAt) : base(id)
         {
             UserId = userId;
@@ -43,7 +44,7 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
         public static Result<VolunteerRequest, Error> Createt(
             VolunteerRequestId id,
             Guid userId,
-            string volunteerInfo,
+            VolunteerRequestInfo volunteerInfo,
             DateTime createdAt)
         {
 
