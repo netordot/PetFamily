@@ -10,7 +10,7 @@ namespace PetFamily.VolunteerRequest.Domain.Enums
     {
         Submited,
         Rejected,
-        ResivionRequired,
+        RevisionRequired,
         Approved,
         Waiting
     }

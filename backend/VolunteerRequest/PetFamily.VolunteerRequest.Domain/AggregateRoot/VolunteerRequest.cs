@@ -41,7 +41,7 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
             Status = VolunteerRequestStatus.Waiting;
         }
 
-        public static Result<VolunteerRequest, Error> Createt(
+        public static Result<VolunteerRequest, Error> Create(
             VolunteerRequestId id,
             Guid userId,
             VolunteerRequestInfo volunteerInfo,
@@ -55,6 +55,7 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
                 createdAt);
         }
 
+        // взять на рассмотрение
         public UnitResult<Error> TakeOnReview(Guid adminId, Guid discussionId)
         {
             if (Status != VolunteerRequestStatus.Waiting)
@@ -69,6 +70,7 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
             return Result.Success<Error>();
         }
 
+        // отправить на доработку
         public UnitResult<Error> SetOnRevision(string rejectionComment)
         {
             if (Status != VolunteerRequestStatus.Submited)
@@ -81,11 +83,12 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
                 return Errors.General.ValueIsInvalid("rejection comment");
             }
 
-            Status = VolunteerRequestStatus.ResivionRequired;
+            Status = VolunteerRequestStatus.RevisionRequired;
             RejectionComment = rejectionComment;
 
             return Result.Success<Error>();
         }
+        // отклонить 
         public UnitResult<Error> Decline()
         {
             if (Status != VolunteerRequestStatus.Submited)
@@ -97,6 +100,7 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
 
             return Result.Success<Error>();
         }
+        // принять
         public UnitResult<Error> Approve()
         {
             if (Status != VolunteerRequestStatus.Submited)
@@ -105,6 +109,19 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
             }
 
             Status = VolunteerRequestStatus.Approved;
+
+            return Result.Success<Error>();
+        }
+
+        // взять на рассмотрение после доработки
+        public UnitResult<Error> SubmitAfterRevision()
+        {
+            if (Status != VolunteerRequestStatus.RevisionRequired)
+            {
+                return Errors.General.ValueIsInvalid("status");
+            }
+
+            Status = VolunteerRequestStatus.Submited;
 
             return Result.Success<Error>();
         }

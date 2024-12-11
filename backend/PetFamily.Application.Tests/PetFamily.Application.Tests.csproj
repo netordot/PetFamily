@@ -37,7 +37,6 @@
     <ProjectReference Include="..\src\Volunteers\PetFamily.Volunteers.Domain\PetFamily.Volunteers.Domain.csproj" />
     <ProjectReference Include="..\src\Volunteers\PetFamily.Volunteers.Infrastructure\PetFamily.Volunteers.Infrastructure.csproj" />
     <ProjectReference Include="..\src\Volunteers\PetFamily.Volunteers.Presentation\PetFamily.Volunteers.Presentation.csproj" />
-    <ProjectReference Include="..\tests\PetFamily.Domain.Tests\PetFamily.Domain.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>
