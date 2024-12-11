@@ -1,9 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.SharedKernel.Other;
-using PetFamily.SharedKernel.ValueObjects;
 
-namespace PetFamily.Volunteers.Domain.ValueObjects;
+namespace PetFamily.SharedKernel.ValueObjects;
 
 public record Email
 {

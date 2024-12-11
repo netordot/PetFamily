@@ -4,7 +4,6 @@ using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Other;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Application.Commands.Create;
-using PetFamily.Volunteers.Domain.ValueObjects;
 
 namespace PetFamily.Application.PetManagement.Commands.Volunteers.Create.Validation;
 

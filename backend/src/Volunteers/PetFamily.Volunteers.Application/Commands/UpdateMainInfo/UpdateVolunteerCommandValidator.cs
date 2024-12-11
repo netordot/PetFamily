@@ -3,8 +3,8 @@ using PetFamily.Application.PetManagement.Commands.Volunteers.Create.Validation;
 using PetFamily.Core.Validation;
 using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.Other;
+using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.Volunteers.Application.Commands.UpdateMainInfo;
-using PetFamily.Volunteers.Domain.ValueObjects;
 
 namespace PetFamily.Application.PetManagement.Commands.Volunteers.UpdateMainInfo;
 
