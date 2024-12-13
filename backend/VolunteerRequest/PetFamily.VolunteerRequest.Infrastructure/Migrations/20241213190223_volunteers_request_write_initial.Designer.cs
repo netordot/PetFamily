@@ -13,8 +13,8 @@ using PetFamily.VolunteerRequest.Infrastructure.Data;
 namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
 {
     [DbContext(typeof(VolunteersRequestWriteDbContext))]
-    [Migration("20241213180612_voluteer_request_write_initial")]
-    partial class voluteer_request_write_initial
+    [Migration("20241213190223_volunteers_request_write_initial")]
+    partial class volunteers_request_write_initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,7 +70,7 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                             b1.Property<string>("Requisites")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("volunteer_info_requisites");
+                                .HasColumnName("requisites");
 
                             b1.ComplexProperty<Dictionary<string, object>>("Email", "PetFamily.VolunteerRequest.Domain.AggregateRoot.VolunteerRequest.VolunteerInfo#VolunteerRequestInfo.Email#Email", b2 =>
                                 {
@@ -79,7 +79,7 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                                     b2.Property<string>("Mail")
                                         .IsRequired()
                                         .HasColumnType("text")
-                                        .HasColumnName("volunteer_info_email_mail");
+                                        .HasColumnName("email");
                                 });
 
                             b1.ComplexProperty<Dictionary<string, object>>("FullName", "PetFamily.VolunteerRequest.Domain.AggregateRoot.VolunteerRequest.VolunteerInfo#VolunteerRequestInfo.FullName#FullName", b2 =>
@@ -107,7 +107,7 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                                     b2.Property<string>("Number")
                                         .IsRequired()
                                         .HasColumnType("text")
-                                        .HasColumnName("volunteer_info_phone_number_number");
+                                        .HasColumnName("phone_number");
                                 });
                         });
 

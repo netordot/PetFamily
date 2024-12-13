@@ -58,23 +58,33 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Configurations.Write
                 });
 
                 vb.Property(u => u.Requisites)
+                .HasColumnName("requisites")
                .HasConversion(
                u => JsonSerializer.Serialize(u, JsonSerializerOptions.Default),
                json => JsonSerializer.Deserialize<List<Requisite>>(json, JsonSerializerOptions.Default)!);
 
-                vb.ComplexProperty(v => v.Email, eb => { eb.Property(e => e.Mail).IsRequired(); });
-                vb.ComplexProperty(v => v.PhoneNumber, eb => { eb.Property(e => e.Number).IsRequired(); });
+                vb.ComplexProperty(v => v.Email, eb =>
+                { eb.Property(e => e.Mail)
+                    .IsRequired()
+                    .HasColumnName("email"); 
+                });
+
+                vb.ComplexProperty(v => v.PhoneNumber, eb =>
+                { eb.Property(e => e.Number)
+                    .IsRequired()
+                    .HasColumnName("phone_number"); 
+                });
             });
 
-             builder.Property(v => v.CreatedAt)
-            .HasConversion(
-                 src => src.Kind == DateTimeKind.Utc
-                 ? src
-                 : DateTime.SpecifyKind(src, DateTimeKind.Utc),
+            builder.Property(v => v.CreatedAt)
+           .HasConversion(
+                src => src.Kind == DateTimeKind.Utc
+                ? src
+                : DateTime.SpecifyKind(src, DateTimeKind.Utc),
 
-                dst => dst.Kind == DateTimeKind.Utc
-                ? dst
-                : DateTime.SpecifyKind(dst, DateTimeKind.Utc));
+               dst => dst.Kind == DateTimeKind.Utc
+               ? dst
+               : DateTime.SpecifyKind(dst, DateTimeKind.Utc));
 
         }
     }

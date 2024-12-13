@@ -67,7 +67,7 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                             b1.Property<string>("Requisites")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("volunteer_info_requisites");
+                                .HasColumnName("requisites");
 
                             b1.ComplexProperty<Dictionary<string, object>>("Email", "PetFamily.VolunteerRequest.Domain.AggregateRoot.VolunteerRequest.VolunteerInfo#VolunteerRequestInfo.Email#Email", b2 =>
                                 {
@@ -76,7 +76,7 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                                     b2.Property<string>("Mail")
                                         .IsRequired()
                                         .HasColumnType("text")
-                                        .HasColumnName("volunteer_info_email_mail");
+                                        .HasColumnName("email");
                                 });
 
                             b1.ComplexProperty<Dictionary<string, object>>("FullName", "PetFamily.VolunteerRequest.Domain.AggregateRoot.VolunteerRequest.VolunteerInfo#VolunteerRequestInfo.FullName#FullName", b2 =>
@@ -104,7 +104,7 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                                     b2.Property<string>("Number")
                                         .IsRequired()
                                         .HasColumnType("text")
-                                        .HasColumnName("volunteer_info_phone_number_number");
+                                        .HasColumnName("phone_number");
                                 });
                         });
 

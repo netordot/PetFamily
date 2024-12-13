@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class voluteer_request_write_initial : Migration
+    public partial class volunteer_request_read_initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,15 +24,17 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                     admin_id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     rejection_comment = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<int>(type: "integer", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    volunteer_info_requisites = table.Column<string>(type: "text", nullable: false),
-                    volunteer_info_email_mail = table.Column<string>(type: "text", nullable: false),
-                    last_name = table.Column<string>(type: "text", nullable: true),
-                    middle_name = table.Column<string>(type: "text", nullable: true),
                     first_name = table.Column<string>(type: "text", nullable: false),
-                    volunteer_info_phone_number_number = table.Column<string>(type: "text", nullable: false)
+                    second_name = table.Column<string>(type: "text", nullable: false),
+                    middle_name = table.Column<string>(type: "text", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: false),
+                    experience = table.Column<int>(type: "integer", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
+                    phone_number = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    requisites = table.Column<string>(type: "text", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
