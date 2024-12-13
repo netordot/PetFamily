@@ -482,3 +482,11 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+backend/src/discussion/PetFamily.Discusson.Application/PetFamily.Discusson.Application.csproj
+backend/src/discussion/PetFamily.Discusson.Infrastructure/PetFamily.Discusson.Infrastructure.csproj
+backend/src/discussion/PetFamily.Discusson.Infrastructure/Class1.cs
+backend/src/discussion/PetFamily.Discusson.Domain/PetFamily.Discusson.Domain.csproj
+backend/src/discussion/PetFamily.Discusson.Domain/Class1.cs
+backend/src/discussion/PetFamily.Discusson.Contracts/PetFamily.Discusson.Contracts.csproj
+backend/src/discussion/PetFamily.Discusson.Contracts/Class1.cs
+backend/src/discussion/PetFamily.Discusson.Application/Class1.cs
