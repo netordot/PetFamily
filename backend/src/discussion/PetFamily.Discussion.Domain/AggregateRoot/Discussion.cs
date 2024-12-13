@@ -20,8 +20,8 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
         public Guid RelationId { get; private set; }
         public DiscussionStatus Status { get; private set; } = DiscussionStatus.Active;
         public Users Users { get; private set; }
-        IReadOnlyList<Message> Messages => _messages;
-        private List<Message> _messages { get; set; }
+        public IReadOnlyList<Message> Messages => _messages;
+        private List<Message> _messages { get; set; } = new List<Message>();
 
         private Discussion(Users users, Guid relationId, DiscussionId discussionId)
             : base(discussionId)
@@ -30,7 +30,7 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
             RelationId = relationId;
         }
 
-        public Result<Discussion, Error> Create
+        public static Result<Discussion, Error> Create
             (Users users,
             Guid relationId,
             DiscussionId discussionId)
@@ -63,7 +63,7 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
 
         public UnitResult<Error> DeleteComment(Guid messageId, Guid userId)
         {
-            if (Users.UsersExists(userId))
+            if (Users.UsersExists(userId) == false)
             {
                 return Error.Conflict("access forbidden", "unable to delete unauthored messages");
             }
@@ -88,7 +88,7 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
         public UnitResult<Error> EditComment(Guid messageId, Guid userId, string text)
         {
             var comment = _messages.FirstOrDefault(m => m.Id.Value == messageId);
-            if (Users.UsersExists(userId))
+            if (Users.UsersExists(userId) == false)
             {
                 return Error.Conflict("access forbidden", "unable to delete unauthored messages");
             }

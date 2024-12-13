@@ -25,13 +25,11 @@ namespace PetFamily.Discussion.Domain.Entities
         private Message(
             string text,
             DateTime createdAt,
-            bool isDeleted,
             Guid userId,
             MessageId id) : base(id)
         {
             Text = text;
             CreatedAt = createdAt;
-            IsEdited = isDeleted;
             UserId = userId;
 
         }
@@ -39,7 +37,6 @@ namespace PetFamily.Discussion.Domain.Entities
         public static Result<Message, Error> Create(
             string text,
             DateTime createdAt,
-            bool isDeleted,
             Guid userId,
             MessageId id)
         {
@@ -48,7 +45,7 @@ namespace PetFamily.Discussion.Domain.Entities
                 return Errors.General.ValueIsRequired("message");
             }
 
-            return new Message(text, createdAt, isDeleted, userId, id);
+            return new Message(text, createdAt,  userId, id);
         }
 
         public UnitResult<Error> Edit(string text)
