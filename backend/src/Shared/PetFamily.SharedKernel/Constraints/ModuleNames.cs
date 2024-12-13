@@ -11,5 +11,7 @@ namespace PetFamily.SharedKernel.Constraints
         public const string Volunteers = "Volunteers";
         public const string Species = "Species";
         public const string Accounts = "Accounts";
+        public const string VolunteerRequest = "VolunteerRequest";
+        public const string Discussion = "Discussion";
     }
 }

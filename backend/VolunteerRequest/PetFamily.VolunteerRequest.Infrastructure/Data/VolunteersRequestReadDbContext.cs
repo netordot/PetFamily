@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PetFamily.Core.Dtos.VolunteerRequest;
+using PetFamily.VolunteerRequest.Application;
 
 namespace PetFamily.VolunteerRequest.Infrastructure.Data;
 
-public class VolunteersRequestReadDbContext(IConfiguration configuration) : DbContext
+public class VolunteersRequestReadDbContext(IConfiguration configuration) : DbContext, IVolunteersRequestReadDbContext
 {
     private const string DATABASE = nameof(Database);
     public DbSet<VolunteerRequestDto> VolunteerRequests { get; set; }
