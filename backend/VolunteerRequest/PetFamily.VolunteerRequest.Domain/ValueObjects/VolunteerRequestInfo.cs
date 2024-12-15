@@ -1,4 +1,4 @@
-﻿using PetFamily.SharedKernel.ValueObjects;
+﻿ using PetFamily.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +31,11 @@ namespace PetFamily.VolunteerRequest.Domain.ValueObjects
             PhoneNumber = phoneNumber;
             Description = description;
             Requisites = requisites;
+        }
+
+        private VolunteerRequestInfo()
+        {
+            
         }
     }
 }

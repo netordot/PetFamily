@@ -29,17 +29,20 @@ namespace PetFamily.Tests.Discussion.Domain
             var discussion = InitializeDiscussion().Value;
             var message = Message.Create("testwt message",
                 DateTime.UtcNow,
-                discussion.Users.AdminId, 
+                discussion.Users.AdminId,
+                discussion.Id,
                 MessageId.NewMessageId);
 
             var message1 = Message.Create("testwt message1",
              DateTime.UtcNow,
              discussion.Users.UserId,
+             discussion.Id,
              MessageId.NewMessageId);
 
             var message2 = Message.Create("testwt message2",
              DateTime.UtcNow,
              discussion.Users.AdminId,
+             discussion.Id,
              MessageId.NewMessageId);
             // act
             discussion.SendComment(message.Value);
@@ -58,16 +61,19 @@ namespace PetFamily.Tests.Discussion.Domain
             var message = Message.Create("testwt message",
                 DateTime.UtcNow,
                 discussion.Users.AdminId,
+                discussion.Id,
                 MessageId.NewMessageId);
 
             var message1 = Message.Create("testwt message1",
              DateTime.UtcNow,
              discussion.Users.UserId,
+             discussion.Id,
              MessageId.NewMessageId);
 
             var message2 = Message.Create("testwt message2",
              DateTime.UtcNow,
              discussion.Users.AdminId,
+             discussion.Id,
              MessageId.NewMessageId);
             // act
             discussion.SendComment(message.Value);
@@ -89,21 +95,25 @@ namespace PetFamily.Tests.Discussion.Domain
             var message = Message.Create("testwt message",
                 DateTime.UtcNow,
                 discussion.Users.AdminId,
+                discussion.Id,
                 MessageId.NewMessageId);
 
             var message1 = Message.Create("testwt message1",
              DateTime.UtcNow,
              discussion.Users.UserId,
+             discussion.Id,
              MessageId.NewMessageId);
 
             var message2 = Message.Create("testwt message2",
              DateTime.UtcNow,
              discussion.Users.AdminId,
+             discussion.Id,
              MessageId.NewMessageId);
 
             var message3 = Message.Create("testwt message3",
              DateTime.UtcNow,
              discussion.Users.AdminId,
+             discussion.Id,
              MessageId.NewMessageId);
             // act
             discussion.SendComment(message.Value);
@@ -127,7 +137,7 @@ namespace PetFamily.Tests.Discussion.Domain
             var discussionId = DiscussionId.NewDiscussionId;
 
             var discussion = PetFamily.Discussion.Domain.AggregateRoot.Discussion
-                .Create(users, relationId, discussionId);
+                .Create(DiscussionId.NewDiscussionId, relationId, users);
 
             return discussion;
         }

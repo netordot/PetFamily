@@ -100,7 +100,7 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
 
             return Result.Success<Error>();
         }
-        // принять
+        // принять  
         public UnitResult<Error> Approve()
         {
             if (Status != VolunteerRequestStatus.Submited)
