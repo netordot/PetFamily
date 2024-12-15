@@ -30,6 +30,8 @@
       <ProjectReference Include="..\..\VolunteerRequest\PetFamily.VolunteerRequest.Presentation\PetFamily.VolunteerRequest.Presentation.csproj" />
       <ProjectReference Include="..\Accounts\PetFamily.Accounts.Infrastructure\PetFamily.Accounts.Infrastructure.csproj" />
       <ProjectReference Include="..\Accounts\PetFamily.Accounts.Presentation\PetFamily.Accounts.Presentation.csproj" />
+      <ProjectReference Include="..\discussion\PetFamily.Discussion.Infrastructure\PetFamily.Discussion.Infrastructure.csproj" />
+      <ProjectReference Include="..\discussion\PetFamily.Discussion.Presentation\PetFamily.Discussion.Presentation.csproj" />
       <ProjectReference Include="..\Shared\PetFamily.Core\PetFamily.Core.csproj" />
       <ProjectReference Include="..\Species\PetFamily.Species.Infrastructure\PetFamily.Species.Infrastructure.csproj" />
       <ProjectReference Include="..\Species\PetFamily.Species.Presentation\PetFamily.Species.Presentation.csproj" />

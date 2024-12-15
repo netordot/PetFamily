@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.SharedKernel.Id
 {
-    public class MessageId
+    public record MessageId
     {
         public Guid Value { get; }
 

@@ -16,36 +16,30 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
 {
     public class Discussion : SharedKernel.ValueObjects.Entity<DiscussionId>
     {
-        private Discussion(DiscussionId discussionId) : base(discussionId) { }
+        private List<Message> _messages = [];
         public Guid RelationId { get; private set; }
-        public DiscussionStatus Status { get; private set; } = DiscussionStatus.Active;
-        public Users Users { get; private set; }
+        public DiscussionStatus Status { get; private set; }
+        public Users Users { get; set; }
         public IReadOnlyList<Message> Messages => _messages;
-        private List<Message> _messages { get; set; } = new List<Message>();
 
-        private Discussion(Users users, Guid relationId, DiscussionId discussionId)
-            : base(discussionId)
+        private Discussion(DiscussionId id) : base(id)
         {
-            Users = users;
-            RelationId = relationId;
         }
 
-        public static Result<Discussion, Error> Create
-            (Users users,
+        private Discussion(
+            DiscussionId discussionId,
             Guid relationId,
-            DiscussionId discussionId)
+            Users users,
+            DiscussionStatus status) : this(discussionId)
         {
-            if (users == null)
-            {
-                return Errors.General.ValueIsRequired("users");
-            }
+            RelationId = relationId;
+            Users = users;
+            Status = status;
+        }
 
-            if (users.UserId == Guid.Empty || users.AdminId == Guid.Empty)
-            {
-                return Errors.General.ValueIsInvalid("id is required");
-            }
-
-            return new Discussion(users, relationId, discussionId);
+        public static Discussion Create(DiscussionId id, Guid relationId, Users users)
+        {
+            return new Discussion(id, relationId, users, DiscussionStatus.Active);
         }
 
         public UnitResult<Error> SendComment(Message message)
@@ -58,7 +52,6 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
             _messages.Add(message);
 
             return Result.Success<Error>();
-
         }
 
         public UnitResult<Error> DeleteComment(Guid messageId, Guid userId)
@@ -69,7 +62,7 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
             }
 
             var message = _messages.FirstOrDefault(m => m.Id.Value == messageId);
-            if(message == null)
+            if (message == null)
             {
                 return Errors.General.NotFound(messageId);
             }
@@ -104,7 +97,7 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
             }
 
             var updateResult = comment.Edit(text);
-            if(updateResult.IsFailure)
+            if (updateResult.IsFailure)
             {
                 return updateResult.Error;
             }
@@ -116,6 +109,5 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
         {
             Status = DiscussionStatus.Inactive;
         }
-
     }
 }

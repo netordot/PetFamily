@@ -16,28 +16,30 @@ namespace PetFamily.Discussion.Domain.Entities
         public DateTime CreatedAt { get; private set; }
         public bool IsEdited { get; private set; } = false;
         public Guid UserId { get; private set; }
+        public DiscussionId DiscussionId { get; private set; }
 
         private Message(MessageId id) : base(id)
         {
-
         }
 
         private Message(
             string text,
             DateTime createdAt,
             Guid userId,
+            DiscussionId discusisonId,
             MessageId id) : base(id)
         {
             Text = text;
             CreatedAt = createdAt;
             UserId = userId;
-
+            DiscussionId = discusisonId;
         }
 
         public static Result<Message, Error> Create(
             string text,
             DateTime createdAt,
             Guid userId,
+            DiscussionId discusisonId,
             MessageId id)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -45,7 +47,7 @@ namespace PetFamily.Discussion.Domain.Entities
                 return Errors.General.ValueIsRequired("message");
             }
 
-            return new Message(text, createdAt,  userId, id);
+            return new Message(text, createdAt, userId, discusisonId, id);
         }
 
         public UnitResult<Error> Edit(string text)
@@ -54,12 +56,12 @@ namespace PetFamily.Discussion.Domain.Entities
             {
                 return Errors.General.ValueIsInvalid("message");
             }
+
             Text = text;
             CreatedAt = DateTime.UtcNow;
             IsEdited = true;
 
             return Result.Success<Error>();
         }
-
     }
 }

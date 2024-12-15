@@ -12,4 +12,8 @@
     <ProjectReference Include="..\PetFamily.Discussion.Contracts\PetFamily.Discussion.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Contracts\" />
+  </ItemGroup>
+
 </Project>

@@ -15,10 +15,10 @@ namespace PetFamily.SharedKernel.Id
             Value = value;
         }
 
-        private DiscussionId()
-        {
+        //private DiscussionId()
+        //{
 
-        }
+        //}
 
         public static DiscussionId NewDiscussionId => new(Guid.NewGuid());
         public static DiscussionId Empty => new(Guid.Empty);
