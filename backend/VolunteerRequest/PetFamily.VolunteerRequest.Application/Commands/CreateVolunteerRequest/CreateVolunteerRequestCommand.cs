@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using ICommand = PetFamily.Core.Abstractions.ICommand;
 
-namespace PetFamily.VolunteerRequest.Application.Commands
+namespace PetFamily.VolunteerRequest.Application.Commands.CreateVolunteerRequest
 {
     public record CreateVolunteerRequestCommand(
         Guid ParticipantId,

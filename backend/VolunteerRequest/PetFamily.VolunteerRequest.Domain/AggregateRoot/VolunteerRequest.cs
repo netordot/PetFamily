@@ -27,7 +27,6 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
             
         }
 
-
         private VolunteerRequest(
             VolunteerRequestId id,
             Guid userId,

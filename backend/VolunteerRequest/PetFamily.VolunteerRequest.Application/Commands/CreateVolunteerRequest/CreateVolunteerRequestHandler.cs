@@ -13,17 +13,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.VolunteerRequest.Application.Commands
+namespace PetFamily.VolunteerRequest.Application.Commands.CreateVolunteerRequest
 {
     public class CreateVolunteerRequestHandler : ICommandHandler<CreateVolunteerRequestCommand>
     {
         private readonly IVolunteerRequestRepository _requestRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateVolunteerRequestHandler(IVolunteerRequestRepository repository, 
-            [FromKeyedServices(ModuleNames.VolunteerRequest)]IUnitOfWork unitOfWork)
+        public CreateVolunteerRequestHandler(IVolunteerRequestRepository repository,
+            [FromKeyedServices(ModuleNames.VolunteerRequest)] IUnitOfWork unitOfWork)
         {
-            _requestRepository = repository;  
+            _requestRepository = repository;
             _unitOfWork = unitOfWork;
         }
         public async Task<UnitResult<ErrorList>> Handle(CreateVolunteerRequestCommand command, CancellationToken cancellation)
@@ -57,7 +57,7 @@ namespace PetFamily.VolunteerRequest.Application.Commands
                 requistes
                 );
 
-            var volunteerRequest  = VolunteerRequest.Domain.AggregateRoot.VolunteerRequest.Create
+            var volunteerRequest = Domain.AggregateRoot.VolunteerRequest.Create
                 (VolunteerRequestId.NewVolunteerRequestId,
                 command.ParticipantId,
                 volunteerInfo,
