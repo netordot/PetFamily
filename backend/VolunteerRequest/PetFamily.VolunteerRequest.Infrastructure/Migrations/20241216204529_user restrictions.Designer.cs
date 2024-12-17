@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetFamily.VolunteerRequest.Infrastructure.Data;
@@ -12,9 +13,11 @@ using PetFamily.VolunteerRequest.Infrastructure.Data;
 namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
 {
     [DbContext(typeof(VolunteersRequestWriteDbContext))]
-    partial class VolunteersRequestWriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241216204529_user restrictions")]
+    partial class userrestrictions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

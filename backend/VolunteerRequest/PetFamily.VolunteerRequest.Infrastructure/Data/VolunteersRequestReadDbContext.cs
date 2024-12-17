@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PetFamily.Core.Dtos.VolunteerRequest;
 using PetFamily.VolunteerRequest.Application;
+using PetFamily.VolunteerRequest.Domain.AggregateRoot;
 
 namespace PetFamily.VolunteerRequest.Infrastructure.Data;
 
@@ -14,6 +15,7 @@ public class VolunteersRequestReadDbContext(IConfiguration configuration) : DbCo
 {
     private const string DATABASE = nameof(Database);
     public DbSet<VolunteerRequestDto> VolunteerRequests { get; set; }
+    public DbSet<UserRestrictionDto> UserRestrictions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
