@@ -19,7 +19,7 @@ namespace PetFamily.Application.AccountManagement.DataModels
 
         private List<Requisite> _requisites { get; set; } = [];
 
-        public List<Requisite> Requisites  => _requisites;
+        public IReadOnlyList<Requisite> Requisites  => _requisites;
 
         public VolunteerAccount(Guid userId, Guid id, User user, int experience, FullName fullName, List<Requisite> requisites)
         {
