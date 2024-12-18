@@ -109,5 +109,17 @@ namespace PetFamily.Discussion.Domain.AggregateRoot
         {
             Status = DiscussionStatus.Inactive;
         }
+
+        public UnitResult<Error> UpdateMessages(IEnumerable<Message> messages)
+        {
+            if (messages == null)
+            {
+                return Errors.General.ValueIsRequired("message List");
+            }
+
+            _messages = messages.ToList();
+
+            return Result.Success<Error>(); 
+        }
     }
 }

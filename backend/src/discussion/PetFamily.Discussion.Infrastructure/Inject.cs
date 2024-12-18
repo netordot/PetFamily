@@ -47,6 +47,7 @@ namespace PetFamily.Discussion.Infrastructure
         {
             services.AddScoped<DiscussionWriteDbContext>();
             services.AddScoped<IDiscussionReadDbContext, DiscussionReadDbContext>();
+            services.AddScoped<IDiscussionWriteDbContext, DiscussionWriteDbContext>();
 
             return services;
         }
