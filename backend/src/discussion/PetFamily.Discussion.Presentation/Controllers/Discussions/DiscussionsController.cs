@@ -4,6 +4,7 @@ using PetFamily.Discussion.Application.Commands.CloseDiscussion;
 using PetFamily.Discussion.Application.Commands.CreateDiscussion;
 using PetFamily.Discussion.Application.Commands.EditMessage;
 using PetFamily.Discussion.Application.Commands.SendMessage;
+using PetFamily.Discussion.Application.Queries.GetDiscussionWithMessages;
 using PetFamily.Discussion.Presentation.Controllers.Contracts;
 using PetFamily.Framework;
 using System;
@@ -61,7 +62,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
            [FromForm] SendMessageRequest request,
            CancellationToken cancellation)
         {
-            var command = request.ToCommand(userId,id);
+            var command = request.ToCommand(userId, id);
 
             var result = await handler.Handle(command, cancellation);
             if (result.IsFailure)
@@ -81,7 +82,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
            [FromForm] EditMessageRequest request,
            CancellationToken cancellation)
         {
-            var command = request.ToCommand( id, userId, messageId);
+            var command = request.ToCommand(id, userId, messageId);
 
             var result = await handler.Handle(command, cancellation);
             if (result.IsFailure)
@@ -112,6 +113,20 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
             return new ObjectResult(result) { StatusCode = 200 };
         }
 
+        [HttpGet("discussion/{id:guid}/user/{userId:guid}/messages")]
+        public async Task<ActionResult> GetMessages(
+            [FromRoute] Guid id,
+            [FromRoute] Guid userId,
+            [FromServices] GetDiscussionWithMessagesHandler handler,
+            CancellationToken cancellation)
+        {
+            var query = new GetDiscussionWithMessagesQuery(id, userId);
+
+            var result = await handler.Handle(query, cancellation);
+
+            return new ObjectResult(result) { StatusCode = 200 };
+        }
+
     }
-    
+
 }
