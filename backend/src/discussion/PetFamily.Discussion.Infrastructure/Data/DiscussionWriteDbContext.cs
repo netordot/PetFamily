@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using PetFamily.Discussion.Application;
 using PetFamily.SharedKernel.Id;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Discussion.Infrastructure.Data;
 
-public class DiscussionWriteDbContext : DbContext
+public class DiscussionWriteDbContext : DbContext, IDiscussionWriteDbContext
 {
     private readonly IConfiguration _configuration;
 
