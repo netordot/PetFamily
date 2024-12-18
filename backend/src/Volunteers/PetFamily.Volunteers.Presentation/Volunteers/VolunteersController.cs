@@ -63,7 +63,7 @@ public class VolunteersController : ValuesController
             request.Street,
             request.BuildingNumber,
             request.CorpsNumber
-            );
+        );
 
         var result = await createVolunteerService.Handle(command, cancellationToken);
 
@@ -72,6 +72,7 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 201 };
     }
+
     [PermissionRequirement(Policies.PetManagement.Update)]
     [HttpPatch("{id:guid}/main-info")]
     public async Task<ActionResult> UpdateMainInfo(
@@ -126,9 +127,9 @@ public class VolunteersController : ValuesController
     [PermissionRequirement(Policies.PetManagement.Delete)]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(
-       [FromRoute] Guid id,
-       [FromServices] DeleteVolunteerHandler service,
-       CancellationToken cancellationToken)
+        [FromRoute] Guid id,
+        [FromServices] DeleteVolunteerHandler service,
+        CancellationToken cancellationToken)
     {
         var request = new DeleteVolunteerCommand(id);
 
@@ -141,9 +142,9 @@ public class VolunteersController : ValuesController
     [PermissionRequirement(Policies.PetManagement.Delete)]
     [HttpDelete("soft/{id:guid}")]
     public async Task<ActionResult> SoftDeleteVolunteer(
-       [FromRoute] Guid id,
-       [FromServices] SoftDeleteVolunteerHandler handler,
-       CancellationToken cancellation)
+        [FromRoute] Guid id,
+        [FromServices] SoftDeleteVolunteerHandler handler,
+        CancellationToken cancellation)
     {
         var command = new SoftDeleteVolunteerCommand(id);
 
@@ -159,12 +160,12 @@ public class VolunteersController : ValuesController
     [PermissionRequirement(Policies.PetManagement.CreatePet)]
     [HttpPost("{id:guid}/pet")]
     public async Task<ActionResult> AddPet
-        (
+    (
         [FromRoute] Guid id,
         [FromBody] AddPetRequest request,
         [FromServices] AddPetHandler addPetService,
         CancellationToken cancellationToken
-        )
+    )
     {
         var command = new AddPetCommand(
             id,
@@ -181,7 +182,7 @@ public class VolunteersController : ValuesController
             request.IsVaccinated,
             request.BirthDate,
             request.Requisites.ToList()
-            );
+        );
 
         var result = await addPetService.Handle(command, cancellationToken);
         if (result.IsFailure)
@@ -198,7 +199,7 @@ public class VolunteersController : ValuesController
         [FromServices] AddPetFilesHandler service,
         [FromForm] AddFilesRequest request,
         CancellationToken cancellation
-        )
+    )
     {
         await using var fileProcessor = new FormFileProcessor();
 
@@ -219,12 +220,13 @@ public class VolunteersController : ValuesController
         [FromForm] GetVolunteersWithPaginationRequest request,
         CancellationToken cancellationToken)
     {
-
-        var query = new GetVolunteersWithPaginationQuery(request.Page, request.PageSize, request.SortBy, request.SortDirection);
+        var query = new GetVolunteersWithPaginationQuery(request.Page, request.PageSize, request.SortBy,
+            request.SortDirection);
         var result = await handler.Handle(query, cancellationToken);
 
         return new ObjectResult(result) { StatusCode = 200 };
     }
+
     [PermissionRequirement(Policies.PetManagement.Get)]
     [HttpGet("{id:guid}/get")]
     public async Task<ActionResult> GetById(
@@ -241,8 +243,8 @@ public class VolunteersController : ValuesController
         }
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
-
     }
+
     [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPut("{volunteerId:guid}/pets/{petId:guid}/update")]
     public async Task<ActionResult> UpdatePetInfo(
@@ -273,7 +275,7 @@ public class VolunteersController : ValuesController
             request.IsVaccinated,
             request.BirthDate,
             request.Requisites
-            );
+        );
 
         var result = await handler.Handle(command, cancellation);
         if (result.IsFailure)
@@ -282,12 +284,12 @@ public class VolunteersController : ValuesController
         }
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
-
     }
+
     [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos/update")]
     public async Task<ActionResult> AddPetPhotos
-        ([FromRoute] Guid volunteerId,
+    ([FromRoute] Guid volunteerId,
         [FromRoute] Guid petId,
         [FromServices] AddNewPhotosToPetHandler handler,
         [FromForm] AddNewFilesToPetRequest request,
@@ -307,15 +309,16 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
+
     [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/photos/delete")]
     public async Task<ActionResult> DeletePetPhoto
-        ([FromForm] DeletePhotoRequest request,
+    ([FromForm] DeletePhotoRequest request,
         [FromRoute] Guid volunteerId,
         [FromRoute] Guid petId,
         [FromServices] DeletePetPhotoHandler handler,
         CancellationToken cancellation
-        )
+    )
     {
         var command = new DeletePetPhotoCommand(request.Path, petId, volunteerId);
 
@@ -326,7 +329,6 @@ public class VolunteersController : ValuesController
         }
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
-
     }
 
     [PermissionRequirement(Policies.PetManagement.UpdatePet)]
@@ -385,6 +387,7 @@ public class VolunteersController : ValuesController
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
     }
+
     [PermissionRequirement(Policies.PetManagement.UpdatePet)]
     [HttpPatch("{volunteerId:guid}/pets/{petId:guid}/status")]
     public async Task<ActionResult> ChangePetStaus(
@@ -402,7 +405,5 @@ public class VolunteersController : ValuesController
         }
 
         return new ObjectResult(result.Value) { StatusCode = 200 };
-
     }
-
 }

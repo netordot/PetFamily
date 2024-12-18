@@ -22,6 +22,8 @@ using PetFamily.Volunteers.Infrastructure;
 using PetFamily.VolunteerRequest.Application;
 using PetFamily.VolunteerRequest.Infrastructure;
 using PetFamily.Discussion.Presentation;
+using PetFamily.Discussion.Application;
+using PetFamily.Discussion.Infrastructure;
 
 DotNetEnv.Env.Load();
 
@@ -33,7 +35,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "My API",
+        Title = "PetFamily API",
         Version = "v1"
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -71,6 +73,8 @@ builder.Services
     .AddVolunteerRequestApplication()
     .AddVolunteerRequestInfrastructure(builder.Configuration)
     .AddDiscussionPresentation()
+    .AddDiscussionApplication()
+    .AddDiscussionInfrastructure(builder.Configuration)
     .AddVolunteerRequestInfrastructure(builder.Configuration)
     .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>()
     .AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
