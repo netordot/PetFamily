@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using PetFamily.Core.Extensions;
 using PetFamily.Core.Dtos.PetManagement;
 using PetFamily.CoreCore.Dtos.PetManagement;
+using System.Text.Json;
 
 namespace PetFamily.Accounts.Infrastructure.Configurations.Write;
 
@@ -26,9 +27,9 @@ public class VolunteerAccountConfiguration : IEntityTypeConfiguration<VolunteerA
         });
 
         builder.Property(v => v.Requisites)
-            .ValueObjectJsonConversion
-            (requisite => new RequisiteDto(requisite.Title, requisite.Description),
-             dto => Requisite.Create(dto.Title, dto.Description).Value)
+            .HasConversion(
+                u => JsonSerializer.Serialize(u, JsonSerializerOptions.Default),
+                json => JsonSerializer.Deserialize<List<Requisite>>(json, JsonSerializerOptions.Default)!)
             .HasColumnName("requisites");
 
         builder.ComplexProperty(v => v.FullName, nb =>

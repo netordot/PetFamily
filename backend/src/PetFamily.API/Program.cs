@@ -19,6 +19,9 @@ using PetFamily.Framework.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Accounts.Presentation;
 using PetFamily.Volunteers.Infrastructure;
+using PetFamily.VolunteerRequest.Application;
+using PetFamily.VolunteerRequest.Infrastructure;
+using PetFamily.Discussion.Presentation;
 
 DotNetEnv.Env.Load();
 
@@ -65,6 +68,10 @@ builder.Services
     .AddAuthorizationInfrastructure(builder.Configuration)
     .AddAccountApplication()
     .AddAccountsPresentation()
+    .AddVolunteerRequestApplication()
+    .AddVolunteerRequestInfrastructure(builder.Configuration)
+    .AddDiscussionPresentation()
+    .AddVolunteerRequestInfrastructure(builder.Configuration)
     .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>()
     .AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
 

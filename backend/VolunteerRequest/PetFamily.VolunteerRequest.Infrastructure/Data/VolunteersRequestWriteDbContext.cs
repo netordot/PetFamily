@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetFamily.VolunteerRequest.Domain.AggregateRoot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Data
     {
         private const string DATABASE = nameof(Database);
         public DbSet<VolunteerRequest.Domain.AggregateRoot.VolunteerRequest> VolunteerRequests { get; set; }
+        public DbSet<UserRestriction> UserRestrictions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

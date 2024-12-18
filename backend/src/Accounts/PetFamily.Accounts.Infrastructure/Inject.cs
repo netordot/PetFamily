@@ -87,6 +87,7 @@ namespace PetFamily.Accounts.Infrastructure
             services.AddScoped<IAccountManager, AccountManager>();
             services.AddScoped<PermissionManager>();
             services.AddScoped<RolePermissionManager>();
+            services.AddScoped<IVolunteerAccountManager, VolunteerAccountManager>();
 
             return services;    
         }

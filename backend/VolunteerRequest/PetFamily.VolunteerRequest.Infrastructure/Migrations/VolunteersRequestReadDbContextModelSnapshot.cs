@@ -23,6 +23,32 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("PetFamily.Core.Dtos.VolunteerRequest.UserRestrictionDto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("BanReason")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ban_reason");
+
+                    b.Property<DateTime>("BannedUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("banned_until");
+
+                    b.Property<Guid>("DiscussionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("discussion_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_restrictions");
+
+                    b.ToTable("user_restrictions", "volunteer_requests");
+                });
+
             modelBuilder.Entity("PetFamily.Core.Dtos.VolunteerRequest.VolunteerRequestDto", b =>
                 {
                     b.Property<Guid>("Id")

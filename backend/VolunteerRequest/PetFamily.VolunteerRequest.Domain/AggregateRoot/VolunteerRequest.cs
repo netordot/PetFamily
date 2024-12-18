@@ -27,7 +27,6 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
             
         }
 
-
         private VolunteerRequest(
             VolunteerRequestId id,
             Guid userId,
@@ -126,6 +125,18 @@ namespace PetFamily.VolunteerRequest.Domain.AggregateRoot
             return Result.Success<Error>();
         }
 
+        // пользователь повторно отправляет на рассмотрение
+        public UnitResult<Error> ResendAfterRevision(Guid userId, VolunteerRequestInfo requestInfo)
+        {
+            if(UserId!= userId)
+            {
+                return Errors.General.ValueIsInvalid("user id");
+            }
+
+            VolunteerInfo  = requestInfo;
+
+            return Result.Success<Error>();
+        }
 
     }
 }

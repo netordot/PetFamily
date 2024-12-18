@@ -14,7 +14,13 @@
       "species-management.species.delete",
       "species-management.breed.read",
       "species-management.breed.create",
-      "species-management.breed.delete"
+      "species-management.breed.delete",
+      "volunteer-request.request.create",
+      "volunteer-request.request.approve",
+      "volunteer-request.request.decline",
+      "volunteer-request.request.sendtoremake",
+      "volunteer-request.request.get",
+      "volunteer-request.request.getforadmin"
     ],
     "Volunteer": [
       "pet-management.volunteers.read",
@@ -30,7 +36,11 @@
     ],
     "Participant": [
       "pet-management.volunteers.read",
-      "pet-management.pets.read"
+      "pet-management.pets.read",
+      "volunteer-request.request.get",
+      "volunteer-request.request.getforuser",
+      "volunteer-request.request.update",
+      "volunteer-request.request.create"
     ]
   },
   "Permissions": {
@@ -51,6 +61,16 @@
       "species-management.breed.read",
       "species-management.breed.create",
       "species-management.breed.delete"
+    ],
+    "VolunteerRequest": [
+      "volunteer-request.request.create",
+      "volunteer-request.request.approve",
+      "volunteer-request.request.decline",
+      "volunteer-request.request.sendtoremake",
+      "volunteer-request.request.update",
+      "volunteer-request.request.get",
+      "volunteer-request.request.getforadmin",
+      "volunteer-request.request.getforuser"
     ]
   }
 }

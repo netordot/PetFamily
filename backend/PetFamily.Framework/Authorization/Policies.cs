@@ -29,5 +29,18 @@ namespace PetFamily.Framework.Authorization
             public const string UpdatePet = "pet-management.pets.update";
             public const string DeletePet = "pet-management.pets.delete";
         }
+
+        public static class VolunteerRequest
+        {
+            public const string Create = "volunteer-request.request.create"; 
+            public const string Approve = "volunteer-request.request.approve"; 
+            public const string Decline = "volunteer-request.request.decline";
+            public const string SendToRemake = "volunteer-request.request.sendtoremake";
+            public const string Update = "volunteer-request.request.update";
+            public const string Get = "volunteer-request.request.get";
+            public const string GetForAdmin = "volunteer-request.request.getforadmin";
+            public const string GetForUser = "volunteer-request.request.getforuser";
+            
+        }
     }
 }

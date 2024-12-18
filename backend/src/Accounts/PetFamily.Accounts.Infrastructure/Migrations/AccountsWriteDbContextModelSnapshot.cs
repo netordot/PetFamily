@@ -470,7 +470,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
 
                     b.Property<string>("Requisites")
                         .IsRequired()
-                        .HasColumnType("jsonb")
+                        .HasColumnType("text")
                         .HasColumnName("requisites");
 
                     b.Property<Guid>("UserId")
