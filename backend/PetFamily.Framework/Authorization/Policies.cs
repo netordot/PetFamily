@@ -42,5 +42,16 @@ namespace PetFamily.Framework.Authorization
             public const string GetForUser = "volunteer-request.request.getforuser";
             
         }
+
+        public static class Discussion
+        {
+            public const string Create = "discussion.discussion.create";
+            public const string Close = "discussion.discussion.close";
+            public const string SendMessage = "discussion.discussion.sendmessage";
+            public const string EditMessage = "discussion.discussion.editmessage";
+            public const string DeleteMessage = "discussion.discussion.deletemessage";
+            public const string Get = "discussion.discussion.get";
+
+        }
     }
 }

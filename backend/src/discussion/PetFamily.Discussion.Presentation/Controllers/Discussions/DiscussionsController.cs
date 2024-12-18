@@ -7,6 +7,8 @@ using PetFamily.Discussion.Application.Commands.SendMessage;
 using PetFamily.Discussion.Application.Queries.GetDiscussionWithMessages;
 using PetFamily.Discussion.Presentation.Controllers.Contracts;
 using PetFamily.Framework;
+using PetFamily.Framework.Authorization;
+using PetFamily.Framework.Authorization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
     [Route("[controller]")]
     public class DiscussionsController : ValuesController
     {
-
+        [PermissionRequirement(Policies.Discussion.Create)]
         [HttpPost("discussion/")]
         public async Task<ActionResult> Create(
             [FromForm] CreateDiscussionRequest request,
@@ -36,6 +38,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
 
         }
 
+        [PermissionRequirement(Policies.Discussion.Close)]
         [HttpPatch("discussion/{id:guid}/closure")]
         public async Task<ActionResult> Close(
             [FromRoute] Guid id,
@@ -53,7 +56,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
 
             return new ObjectResult(result) { StatusCode = 200 };
         }
-
+        [PermissionRequirement(Policies.Discussion.SendMessage)]
         [HttpPatch("discussion/{id:guid}/user{userId:guid}/message")]
         public async Task<ActionResult> SendMessage(
            [FromRoute] Guid id,
@@ -72,7 +75,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
 
             return new ObjectResult(result) { StatusCode = 200 };
         }
-
+        [PermissionRequirement(Policies.Discussion.EditMessage)]
         [HttpPatch("discussion/{id:guid}/user{userId:guid}/message/{messageId:guid}/edit")]
         public async Task<ActionResult> EditMessage(
            [FromRoute] Guid id,
@@ -92,7 +95,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
 
             return new ObjectResult(result) { StatusCode = 200 };
         }
-
+        [PermissionRequirement(Policies.Discussion.DeleteMessage)]
         [HttpPatch("discussion/{id:guid}/user{userId:guid}/message/{messageId:guid}/delete")]
         public async Task<ActionResult> DeleteMessage(
            [FromRoute] Guid id,
@@ -112,7 +115,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
 
             return new ObjectResult(result) { StatusCode = 200 };
         }
-
+        [PermissionRequirement(Policies.Discussion.Get)]
         [HttpGet("discussion/{id:guid}/user/{userId:guid}/messages")]
         public async Task<ActionResult> GetMessages(
             [FromRoute] Guid id,

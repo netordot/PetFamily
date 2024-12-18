@@ -20,7 +20,13 @@
       "volunteer-request.request.decline",
       "volunteer-request.request.sendtoremake",
       "volunteer-request.request.get",
-      "volunteer-request.request.getforadmin"
+      "volunteer-request.request.getforadmin",
+      "discussion.discussion.create",
+      "discussion.discussion.close",
+      "discussion.discussion.sendmessage",
+      "discussion.discussion.editmessage",
+      "discussion.discussion.deletemessage",
+      "discussion.discussion.get"
     ],
     "Volunteer": [
       "pet-management.volunteers.read",
@@ -40,7 +46,11 @@
       "volunteer-request.request.get",
       "volunteer-request.request.getforuser",
       "volunteer-request.request.update",
-      "volunteer-request.request.create"
+      "volunteer-request.request.create",
+      "discussion.discussion.sendmessage",
+      "discussion.discussion.editmessage",
+      "discussion.discussion.deletemessage",
+      "discussion.discussion.get"
     ]
   },
   "Permissions": {
@@ -71,6 +81,14 @@
       "volunteer-request.request.get",
       "volunteer-request.request.getforadmin",
       "volunteer-request.request.getforuser"
+    ],
+    "Discussion": [
+      "discussion.discussion.create",
+      "discussion.discussion.close",
+      "discussion.discussion.sendmessage",
+      "discussion.discussion.editmessage",
+      "discussion.discussion.deletemessage",
+      "discussion.discussion.get"
     ]
   }
 }
