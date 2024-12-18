@@ -1,8 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Accounts.Contracts;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Providers;
 using PetFamily.Discussion.Contracts;
+using PetFamily.SharedKernel.Constraints;
 using PetFamily.SharedKernel.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.VolunteerRequest.Application.Commands.ApproveVolunteerRequest
 {
-    public class ApproveVolunteerRequestHandler : ICommandHandler<ApproveVolunteerCommand>
+    public class ApproveVolunteerRequestHandler : ICommandHandler<ApproveVolunteerRequestCommand>
     {
         private readonly IVolunteerRequestRepository _requestRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +27,7 @@ namespace PetFamily.VolunteerRequest.Application.Commands.ApproveVolunteerReques
             IUserRestrictionsRepository userRestrictionsRepository,
             IDiscussionContract discussionContract,
             IAccountsContract accountsContract,
-            IUnitOfWork unitOfWork)
+            [FromKeyedServices(ModuleNames.VolunteerRequest)]IUnitOfWork unitOfWork)
         {
             _requestRepository = repository;
             _unitOfWork = unitOfWork;
@@ -34,7 +36,7 @@ namespace PetFamily.VolunteerRequest.Application.Commands.ApproveVolunteerReques
             _accountsContract = accountsContract;
         }
 
-        public async Task<UnitResult<ErrorList>> Handle(ApproveVolunteerCommand command, CancellationToken cancellation)
+        public async Task<UnitResult<ErrorList>> Handle(ApproveVolunteerRequestCommand command, CancellationToken cancellation)
         {
             // валидация 
 

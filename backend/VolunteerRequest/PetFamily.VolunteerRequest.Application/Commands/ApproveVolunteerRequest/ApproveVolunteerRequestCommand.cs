@@ -8,7 +8,6 @@ using System.Windows.Input;
 
 namespace PetFamily.VolunteerRequest.Application.Commands.ApproveVolunteerRequest
 {
-    public record ApproveVolunteerCommand(Guid AdminId, Guid VolunteerRequestId) : Core.Abstractions.ICommand;
-    {
-    }
+    public record ApproveVolunteerRequestCommand(Guid AdminId, Guid VolunteerRequestId) : Core.Abstractions.ICommand;
+    
 }

@@ -69,6 +69,7 @@ builder.Services
     .AddAccountApplication()
     .AddAccountsPresentation()
     .AddVolunteerRequestApplication()
+    .AddVolunteerRequestInfrastructure(builder.Configuration)
     .AddDiscussionPresentation()
     .AddVolunteerRequestInfrastructure(builder.Configuration)
     .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>()

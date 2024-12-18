@@ -17,9 +17,12 @@ namespace PetFamily.Application.AccountManagement.DataModels
         // TODO: после разделения на read write db Context сделать конфигурацию через конвертер
         public FullName FullName { get; set; }
 
-        private List<Requisite> _requisites { get; set; } = [];
+        public List<Requisite> Requisites { get; set; }
 
-        public IReadOnlyList<Requisite> Requisites  => _requisites;
+        private VolunteerAccount()
+        {
+            
+        }
 
         public VolunteerAccount(Guid userId, Guid id, User user, int experience, FullName fullName, List<Requisite> requisites)
         {
@@ -28,12 +31,8 @@ namespace PetFamily.Application.AccountManagement.DataModels
             Id = id;
             Experience = experience;
             FullName = fullName;
-            _requisites = requisites;
+            Requisites = requisites;
         }
 
-        public void UpdateRequisites(IEnumerable<Requisite> requisites)
-        {
-            _requisites = requisites.ToList();  
-        }
     }
 }

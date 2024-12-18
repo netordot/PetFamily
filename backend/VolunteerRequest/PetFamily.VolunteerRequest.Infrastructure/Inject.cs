@@ -38,6 +38,7 @@ namespace PetFamily.VolunteerRequest.Infrastructure
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IVolunteerRequestRepository, VolunteerRequestRepository>();
+            services.AddScoped<IUserRestrictionsRepository, UserRestrictionsRepository>();
 
             return services;
         }
