@@ -35,7 +35,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
 
             var result = await handler.Handle(command, cancellation);
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return Ok();
 
         }
 
@@ -55,7 +55,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return Ok();
         }
         [PermissionRequirement(Policies.Discussion.SendMessage)]
         [HttpPatch("discussion/{id:guid}/user{userId:guid}/message")]
@@ -74,7 +74,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return Ok();
         }
         [PermissionRequirement(Policies.Discussion.EditMessage)]
         [HttpPatch("discussion/{id:guid}/user{userId:guid}/message/{messageId:guid}/edit")]
@@ -94,7 +94,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return Ok();
         }
         [PermissionRequirement(Policies.Discussion.DeleteMessage)]
         [HttpPatch("discussion/{id:guid}/user{userId:guid}/message/{messageId:guid}/delete")]
@@ -103,7 +103,6 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
            [FromRoute] Guid userId,
            [FromRoute] Guid messageId,
            [FromServices] DeleteMessageHandler handler,
-           [FromForm] EditMessageRequest request,
            CancellationToken cancellation)
         {
             var command = new DeleteMessageCommand(id, messageId, userId);
@@ -114,7 +113,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(result.IsSuccess) { StatusCode = 200 };
+            return Ok();
         }
         [PermissionRequirement(Policies.Discussion.Get)]
         [HttpGet("discussion/{id:guid}/user/{userId:guid}/messages")]
@@ -128,7 +127,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
 
             var result = await handler.Handle(query, cancellation);
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return Ok();
         }
 
     }
