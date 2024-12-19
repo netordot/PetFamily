@@ -9,6 +9,7 @@ using PetFamily.VolunteerRequest.Application.Commands.ApproveVolunteerRequest;
 using PetFamily.VolunteerRequest.Application.Commands.CreateVolunteerRequest;
 using PetFamily.VolunteerRequest.Application.Commands.DeclineRequest;
 using PetFamily.VolunteerRequest.Application.Commands.SetRequestForRemake;
+using PetFamily.VolunteerRequest.Application.Commands.TakeForReview;
 using PetFamily.VolunteerRequest.Application.Commands.UpdateVolunteerRequest;
 using PetFamily.VolunteerRequest.Application.Queries.GetUnsubmittedVolunteerRequestsWithPagination;
 using PetFamily.VolunteerRequest.Application.Queries.GetVolunteerRequestsForAdmin;
@@ -87,7 +88,7 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
         }
 
         [PermissionRequirement(Policies.VolunteerRequest.SendToRemake)]
-        [HttpPatch("/admin/{adminId:guid}/application/{volunteerRequestId:guid}/remake")]
+        [HttpPatch("/admin/{adminId:guid}/application/{requestId:guid}/remake")]
         public async Task<ActionResult> SetRequestForRemake(
            [FromRoute] Guid adminId,
            [FromRoute] Guid requestId,
@@ -142,6 +143,24 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
 
             return new ObjectResult(result) { StatusCode = 200 };
 
+        }
+
+        [HttpPatch("{id:guid}/review")]
+        public async Task<ActionResult> TakeOnReview(
+            [FromServices] TakeRequestOnReviewHandler handler,
+            [FromBody] TakeRequestOnReviewRequest request,
+            [FromRoute] Guid id,
+            CancellationToken cancellation)
+        {
+            var command = request.ToCommand(id);
+
+            var result = await handler.Handle(command, cancellation);
+            if(result.IsFailure)
+            {
+                return result.Error.ToResponse();
+            }
+
+            return new ObjectResult(result) { StatusCode = 200 };
         }
 
 

@@ -31,7 +31,7 @@ namespace PetFamily.Discussion.Infrastructure.Repositories
         {
             var discussion = await _context.Discussions
                 .Include(d => d.Messages)
-                .FirstOrDefaultAsync(ds => ds.Id.Value == Id, cancellation);
+                .FirstOrDefaultAsync(ds => ds.Id == Id, cancellation);
 
             if (discussion == null)
             {

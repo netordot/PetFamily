@@ -2,6 +2,7 @@
 using PetFamily.Core.Extensions;
 using PetFamily.Discussion.Application.Commands.CloseDiscussion;
 using PetFamily.Discussion.Application.Commands.CreateDiscussion;
+using PetFamily.Discussion.Application.Commands.DeleteMessage;
 using PetFamily.Discussion.Application.Commands.EditMessage;
 using PetFamily.Discussion.Application.Commands.SendMessage;
 using PetFamily.Discussion.Application.Queries.GetDiscussionWithMessages;
@@ -101,11 +102,11 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
            [FromRoute] Guid id,
            [FromRoute] Guid userId,
            [FromRoute] Guid messageId,
-           [FromServices] EditMessageHandler handler,
+           [FromServices] DeleteMessageHandler handler,
            [FromForm] EditMessageRequest request,
            CancellationToken cancellation)
         {
-            var command = request.ToCommand(id, userId, messageId);
+            var command = new DeleteMessageCommand(id, messageId, userId);
 
             var result = await handler.Handle(command, cancellation);
             if (result.IsFailure)
@@ -113,7 +114,7 @@ namespace PetFamily.Discussion.Presentation.Controllers.Discussions
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return new ObjectResult(result.IsSuccess) { StatusCode = 200 };
         }
         [PermissionRequirement(Policies.Discussion.Get)]
         [HttpGet("discussion/{id:guid}/user/{userId:guid}/messages")]
