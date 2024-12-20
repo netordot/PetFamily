@@ -43,7 +43,7 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(result.IsSuccess) { StatusCode = 200 };
+            return Ok();
         }
 
         [PermissionRequirement(Policies.VolunteerRequest.Approve)]
@@ -63,7 +63,8 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(null) { StatusCode = 200 };
+            return Ok();
+
         }
 
         [PermissionRequirement(Policies.VolunteerRequest.Decline)]
@@ -84,7 +85,7 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(null) { StatusCode = 200 };
+            return Ok();
         }
 
         [PermissionRequirement(Policies.VolunteerRequest.SendToRemake)]
@@ -105,7 +106,7 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(null) { StatusCode = 200 };
+            return Ok();
         }
 
         [PermissionRequirement(Policies.VolunteerRequest.Update)]
@@ -126,7 +127,7 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(null) { StatusCode = 200 };
+            return Ok();
         }
 
         [PermissionRequirement(Policies.VolunteerRequest.Get)]
@@ -141,10 +142,11 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
 
             var result = await handler.Handle(query, cancellation);
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return Ok();
 
         }
 
+        [PermissionRequirement(Policies.VolunteerRequest.Approve)]
         [HttpPatch("{id:guid}/review")]
         public async Task<ActionResult> TakeOnReview(
             [FromServices] TakeRequestOnReviewHandler handler,
@@ -155,17 +157,17 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
             var command = request.ToCommand(id);
 
             var result = await handler.Handle(command, cancellation);
-            if(result.IsFailure)
+            if (result.IsFailure)
             {
                 return result.Error.ToResponse();
             }
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return Ok();
         }
 
 
         [PermissionRequirement(Policies.VolunteerRequest.GetForAdmin)]
-        [HttpGet("admin/{adminId:guid}/applications")]
+        [HttpPost("admin/{adminId:guid}/applications")]
         public async Task<ActionResult> GetAdminRequests(
            [FromForm] GetWithPaginationForAdminRequest request,
            [FromRoute] Guid adminId,
@@ -181,7 +183,7 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
         }
 
         [PermissionRequirement(Policies.VolunteerRequest.GetForUser)]
-        [HttpGet("user/{userId:guid}/applications")]
+        [HttpPost("user/{userId:guid}/applications")]
         public async Task<ActionResult> GetUserRequests(
           [FromForm] GetWithPaginationForUserRequest request,
           [FromRoute] Guid userId,
@@ -193,7 +195,7 @@ namespace PetFamily.VolunteerRequest.Presentation.VolunteerRequest
 
             var result = await handler.Handle(query, cancellation);
 
-            return new ObjectResult(result) { StatusCode = 200 };
+            return new ObjectResult(result) { StatusCode = 200};
         }
 
 

@@ -55,7 +55,11 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Configurations.Write
 
                     fb.Property(vb => vb.LastName)
                     .HasColumnName("last_name");
+
                 });
+
+                vb.Property(vb => vb.Experience)
+                .HasColumnName("experience");
 
                 vb.Property(u => u.Requisites)
                 .HasColumnName("requisites")
@@ -64,15 +68,17 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Configurations.Write
                json => JsonSerializer.Deserialize<List<Requisite>>(json, JsonSerializerOptions.Default)!);
 
                 vb.ComplexProperty(v => v.Email, eb =>
-                { eb.Property(e => e.Mail)
+                {
+                    eb.Property(e => e.Mail)
                     .IsRequired()
-                    .HasColumnName("email"); 
+                    .HasColumnName("email");
                 });
 
                 vb.ComplexProperty(v => v.PhoneNumber, eb =>
-                { eb.Property(e => e.Number)
+                {
+                    eb.Property(e => e.Number)
                     .IsRequired()
-                    .HasColumnName("phone_number"); 
+                    .HasColumnName("phone_number");
                 });
             });
 
