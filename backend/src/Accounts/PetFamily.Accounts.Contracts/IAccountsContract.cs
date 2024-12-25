@@ -11,6 +11,7 @@ namespace PetFamily.Accounts.Contracts
            Guid userId,
            int experience,
            List<Requisite> requisites,
-           CancellationToken cancellation);
+           CancellationToken cancellation,
+            FullName fullName);
     }
 }

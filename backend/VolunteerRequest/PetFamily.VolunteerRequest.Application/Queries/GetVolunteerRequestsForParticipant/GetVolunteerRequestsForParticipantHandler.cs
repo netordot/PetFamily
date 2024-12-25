@@ -33,7 +33,7 @@ namespace PetFamily.VolunteerRequest.Application.Queries.GetVolunteerRequestsFor
             return volunteerRequestsQuery
                 .WhereIf(query.VolunteerRequestStatus != null, v => v.Status == query.VolunteerRequestStatus)
                 .WhereIf(!string.IsNullOrEmpty(query.FirstName), v => v.FirstName.Contains(query.FirstName!))
-                .WhereIf(!string.IsNullOrEmpty(query.SecondName), v => v.SecondName.Contains(query.SecondName!))
+                .WhereIf(!string.IsNullOrEmpty(query.SecondName), v => v.MiddleName.Contains(query.SecondName!))
                 .WhereIf(!string.IsNullOrEmpty(query.LastName), v => v.LastName.Contains(query.LastName!))
                 .WhereIf(!string.IsNullOrEmpty(query.Email), v => v.Email.Contains(query.Email!))
                 .WhereIf(!string.IsNullOrEmpty(query.PhoneNumber), v => v.PhoneNumber.Contains(query.PhoneNumber!))

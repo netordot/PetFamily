@@ -17,7 +17,6 @@ namespace PetFamily.Core.Dtos.VolunteerRequest
         public Guid UserId { get; set; }
         public string RejectionComment { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty ;
-        public string SecondName { get; set; } = string.Empty ;
         public string MiddleName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public int Experience { get; set; }

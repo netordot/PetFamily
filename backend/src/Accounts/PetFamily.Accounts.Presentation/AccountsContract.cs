@@ -47,9 +47,13 @@ namespace PetFamily.Accounts.Presentation
             Guid userId,
             int experience,
             List<Requisite> requisites,
-            CancellationToken cancellation)
+            CancellationToken cancellation,
+            FullName fullName)
         {
-            var userExists = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId, cancellation);
+            var userExists = await _userManager.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Id == userId, cancellation);
+
             if (userExists == null)
             {
                 return Errors.General.NotFound(userId).ToErrorList();
@@ -67,7 +71,7 @@ namespace PetFamily.Accounts.Presentation
                 return Error.Failure("role.error", "unable to provide role").ToErrorList();
             }
 
-            var volunteerAccount = new VolunteerAccount(userId,Guid.NewGuid(), userExists, experience, userExists.FullName, requisites);
+            var volunteerAccount = new VolunteerAccount(userId,Guid.NewGuid(), userExists, experience, fullName, requisites);
 
             await _accountManager.Add(volunteerAccount, cancellation);
 

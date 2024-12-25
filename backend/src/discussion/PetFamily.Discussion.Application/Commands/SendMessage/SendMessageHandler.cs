@@ -52,6 +52,8 @@ namespace PetFamily.Discussion.Application.Commands.SendMessage
                 return result.Error.ToErrorList();
             }
 
+            await _unitOfWork.SaveChanges(cancellation);
+
             return Result.Success<ErrorList>();
         }
     }

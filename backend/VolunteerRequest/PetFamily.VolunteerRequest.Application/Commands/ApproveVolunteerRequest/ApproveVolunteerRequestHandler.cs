@@ -27,7 +27,7 @@ namespace PetFamily.VolunteerRequest.Application.Commands.ApproveVolunteerReques
             IUserRestrictionsRepository userRestrictionsRepository,
             IDiscussionContract discussionContract,
             IAccountsContract accountsContract,
-            [FromKeyedServices(ModuleNames.VolunteerRequest)]IUnitOfWork unitOfWork)
+            [FromKeyedServices(ModuleNames.VolunteerRequest)] IUnitOfWork unitOfWork)
         {
             _requestRepository = repository;
             _unitOfWork = unitOfWork;
@@ -67,8 +67,9 @@ namespace PetFamily.VolunteerRequest.Application.Commands.ApproveVolunteerReques
             var userId = volunteerRequest.Value.UserId;
             var experience = volunteerRequest.Value.VolunteerInfo.Experience;
             var requisites = volunteerRequest.Value.VolunteerInfo.Requisites;
+            var fullName = volunteerRequest.Value.VolunteerInfo.FullName;
 
-            var createResult = await _accountsContract.CreateVolunteerAccount(userId, experience, requisites, cancellation);
+            var createResult = await _accountsContract.CreateVolunteerAccount(userId, experience, requisites, cancellation, fullName);
             if (createResult.IsFailure)
             {
                 return createResult.Error;
